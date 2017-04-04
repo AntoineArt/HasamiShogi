@@ -1,6 +1,5 @@
 #include "App.h"
 
-
 int main(int argc,char* argv[]){
   //Initialisation simple
   if (SDL_Init(SDL_INIT_VIDEO) != 0){
@@ -26,5 +25,4 @@ int main(int argc,char* argv[]){
   }
 
   SDL_Quit(); //Arrêt Propre
-  return 0;
 }
