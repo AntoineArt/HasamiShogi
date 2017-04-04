@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Board.h"
-#include <SDL/SDL.h>
+#include <SDL2.2.0.5/include/SDL.h>
 
 
 int main(int argc,char* argv[]){
@@ -10,6 +10,6 @@ int main(int argc,char* argv[]){
   SDL_SetVideoMode(640,480,8,SDL_DOUBLEBUF);
   
   
-  SDL_Quit(); //Arrêt Propre
+  SDL_Quit(); //Arrêt Propre de l'affichage
   return 0;
 }
