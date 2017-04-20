@@ -10,7 +10,7 @@ typedef struct {
 } matrice;
 
 /*
-  create a lxc matrice of Pieces
+  create a l*c matrice of Pieces
   warning : allocate memory
 */
 matrice allocateBoard(int l, int c);
@@ -46,14 +46,14 @@ int colNb(matrice m);
 */
 void displayBoard();
 
-/* 
+/*
   shut the display properly
   warning : do not destroy the matrice of pieces
 */
 void shutdownBoard();
 
 
-/* 
+/*
   update the Board display while checking for Piece took over and victory
 */
 void updateBoard();
