@@ -3,8 +3,8 @@
 #include <string.h>
 #include "SDL2/SDL.h"
 
-const int DEFAULT_WIDTH = 640;
-const int DEFAULT_HEIGTH = 480;
+const int DEFAULT_WIDTH = 1920;
+const int DEFAULT_HEIGTH = 1080;
 
 int main(int argc, char * argv[]);
 
@@ -15,7 +15,30 @@ int main(int argc, char * argv[]);
 void eventDetection(SDL_Window* pWindow, int fullscreen);
 
 /*
-  sets the window's resolution depending on the user's will
+  Sets the window's resolution depending on the user's will
   (will be updated when the menu will be on, for now just sets the resolution to default)
 */
-void setResolution(int *res);
+void selectResolution(int *res);
+
+/*
+  Updates the image on the screen to match with memory state
+*/
+void updateWindow(SDL_Window* pWindow, SDL_Surface* pImage);
+
+/*
+  Resizes a SDL_Surface
+  Copied from http://www.sdltutorials.com/sdl-scale-surface
+*/
+SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
+
+/*
+  Reads the pixels from a surface
+  Adapted from http://sdl.beuc.net/sdl.wiki/Pixel_Access
+*/
+Uint32 ReadPixel(SDL_Surface *surface, Sint16 x, Sint16 y);
+
+/*
+  Draws the pixels on a surface
+  Adapted from http://sdl.beuc.net/sdl.wiki/Pixel_Access
+*/
+void DrawPixel(SDL_Surface *surface, Sint16 x, Sint16 y, Uint16 pixel);
