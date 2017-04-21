@@ -11,7 +11,8 @@ int main(int argc,char* argv[]){
   SDL_Window* pWindow = NULL;
   int windowRes[2];
   selectResolution(windowRes);
-  SDL_Surface* pBackground = SDL_LoadBMP("Shogi_Board.bmp");
+  SDL_Surface* pBackgroundMenu = SDL_LoadBMP("BackgroundMenu.bmp");
+  SDL_Surface* pBackgroundBoard = SDL_LoadBMP("ShogiBoard.bmp");
 
 
   pWindow = SDL_CreateWindow("Hasami Shogi",SDL_WINDOWPOS_CENTERED,
@@ -21,9 +22,16 @@ int main(int argc,char* argv[]){
                                             SDL_WINDOW_RESIZABLE);
 
   if(pWindow){
+    int mode = 0;
     while(1){
-      updateWindow(pWindow, pBackground);
-      eventDetection(pWindow, 0);}
+      if(mode==0){
+        updateWindow(pWindow, pBackgroundMenu);
+      }
+      else if(mode==1){
+        updateWindow(pWindow, pBackgroundBoard);
+      }
+      eventDetection(pWindow);
+    }
   }
 
 
@@ -34,9 +42,9 @@ int main(int argc,char* argv[]){
 
 
 
-void eventDetection(SDL_Window* pWindow,int fullscreen){
+void eventDetection(SDL_Window* pWindow){
     // Interaction section
-    int quit = 0;
+    int quit = 0, fullscreen = 0;
     SDL_Event event;
     while (SDL_PollEvent(&event)) // Getting user's inputs
     {
@@ -45,10 +53,10 @@ void eventDetection(SDL_Window* pWindow,int fullscreen){
           case SDL_QUIT: // Clic on the cross
               quit=1;
               break;
-          case SDL_KEYUP: // Relâchement d'une touche
-              if ( event.key.keysym.sym == SDLK_f ) // Touche f
+          case SDL_KEYUP: // Key relaxing
+              if ( event.key.keysym.sym == SDLK_f ) // f key relaxed
               {
-                  // Alterne du mode plein écran au mode fenêtré
+                  // Alternate from fullscreen to windowed and vice versa
                   if ( fullscreen == 0 )
                   {
                       fullscreen = 1;
@@ -57,7 +65,7 @@ void eventDetection(SDL_Window* pWindow,int fullscreen){
                   else if ( fullscreen == 1 )
                   {
                       fullscreen = 0;
-                      SDL_SetWindowFullscreen(pWindow,0);
+                      SDL_SetWindowFullscreen(pWindow, 0);
                   }
               }
               break;

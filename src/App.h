@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "SDL2/SDL.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 const int DEFAULT_WIDTH = 1920;
 const int DEFAULT_HEIGTH = 1080;
@@ -12,7 +13,7 @@ int main(int argc, char * argv[]);
   Treats user's inputs
   pressing f sets the screen to fullscreen
 */
-void eventDetection(SDL_Window* pWindow, int fullscreen);
+void eventDetection(SDL_Window* pWindow);
 
 /*
   Sets the window's resolution depending on the user's will
