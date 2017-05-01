@@ -36,7 +36,8 @@ void freeBoard(board b)
 
 
 
-void write(int status, coordonates c)
+void write(int status, coordonnees c)
+
 {
 	b.map[c.x][c.y] = status;
 }
