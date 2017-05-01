@@ -1,36 +1,308 @@
 #include Rules.h
 
-void resetBoard(matrice m){
-	for(i=0;i<=9;i++){
-		for(j=0;j<=1;j++){
-			m.board[j][i]=1; //Pieces du J1
+void resetBoard(){
+	switch (var)
+	{
+		case 0:
+		for(i=0;i<=9;i++){
+			b.map[0][i]=2; //Pieces du J1
+			b.map[9][i]=1; //Pieces du J2
+			for(j=2;j<=7;j++){
+				b.map[j][i]=0;
+			}
 		}
-		for(j=2;j<=7;j++){
-			m.board[j][i]=0;
+		break;
+		case 1:
+		for(i=0;i<=9;i++){
+			for(j=0;j<=1;j++){
+				b.map[j][i]=1; //Pieces du J1
+			}
+			for(j=2;j<=7;j++){
+				b.map[j][i]=0;
+			}
+			for(j=8;j<=9;j++){
+				m.board[j][i]=2; //Pieces du J2
+			}
 		}
-		for(j=8;j<=9;j++){
-			m.board[j][i]=2; //Pieces du J2
-		}
+		break;
+		default:
+		printf("Invalid var");
 	}
 }
 
-int checkVictory()
+int checkVictory(int currentPlayer, coordonates c2)
 {
-	if ()
+	//We check if the opponent has loose every pieces but one
+	if (g.var==0)
+	{
+		if ((currentPlayer == 1)&&(b.countPlayer2==1))  
+		{
+			return 1;
+		}
+		else if ((currentPlayer == 2)&&(b.countPlayer1==1))  
+		{
+			return 2;
+		}
+		else if ((b.countPlayer1<1)||(b.countPlayer2<1))
+		{
+			return 3; //Both players loose ; TO BE CHECKED
+		}
+		else
+		{
+			return 0; //Game continue
+		}
+	}
+	else if(g.var==1)
+	{
+		if(((currentPlayer==1)&&(c2.y <= 6)) || ((currentPlayer==2)&&(c2.y >= 2)))
+		{
+			int i; int number=1;
+			//Check Collumn
+			//Up
+			i=1;
+			while(
+				  (((currentPlayer == 1)&&(b.map[c2.x][c2.y-i]==1)&&(c2.y-i>=0))
+				  ||
+				  ((currentPlayer == 2)&&(b.map[c2.x][c2.y-i]==1)&&(c2.y-i>=2))
+				  )&&(number<5)
+				 )
+			{
+				number++;
+				i++;
+			}
+			//Down
+			i=1;
+			while(
+				  (((currentPlayer == 1)&&(b.map[c2.x][c2.y+i]==1)&&(c2.y+i<=6))
+				   ||
+				   ((currentPlayer == 2)&&(b.map[c2.x][c2.y+i]==1)&&(c2.y+i<=8))
+				  )&&(number<5)
+				 )
+			{
+				number++;
+				i++;
+			}
+			if(number>=5){return currentPlayer;} //The current player win
+			else{number=1;}
+
+			//Check Diag UpL-DownR
+			//UpL
+			i=1;
+			while(
+				  (((currentPlayer == 1)&&(b.map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x-i>=0))
+				  ||
+				  ((currentPlayer == 2)&&(b.map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x-i>=0))
+				  )&&(number<5)
+				 )
+			{
+				number++;
+				i++;
+			}
+			//DownR
+			i=1;
+			while(
+				  (((currentPlayer == 1)&&(b.map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x+i<=8))
+				  ||
+				  ((currentPlayer == 2)&&(b.map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x+i<=8))
+				  )&&(number<5)
+				 )
+			{
+				number++;
+				i++;
+			}
+
+			if(number>=5){return currentPlayer;} //The current player win
+			else{number=1;}
+
+			//Check Diag UpR-DownL
+			//UpR
+			i=1;
+			while(
+				  (((currentPlayer == 1)&&(b.map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x+i<=8))
+				  ||
+				  ((currentPlayer == 2)&&(b.map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x+i<=8))
+				  )&&(number<5)
+				 )
+			{
+				number++;
+				i++;
+			}
+			//DownL
+			i=1;
+			while(
+				  (((currentPlayer == 1)&&(b.map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x-i>=0))
+				  ||
+				  ((currentPlayer == 2)&&(b.map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x-i>=0))
+				  )&&(number<5)
+				 )
+			{
+				number++;
+				i++;
+			}
+
+			if(number>=5){return currentPlayer;} //The current player win
+		}
+		else
+		{
+			return 0; //No one win this turn
+		}
+	}
+	else
+	{
+		return -1; //Error case
+	}
+
+	//Checking the var1 victory conditions
 }
 
-void checkCatch()
+void checkCatch(int currentPlayer, coordonates c2)
 {
+	//We identifie the number of pieces we will catch in the named direction
+	int up=0; int right=0; int down=0; int left=0;
+	int opponent = 3-currentPlayer;
+	int i;
 
+	//Up
+	i=1;
+	while((c2.y-i >= 0) && (b.map[c2.x][c2.y-i] == opponent))
+	{
+		up++;
+		i++;
+	}
+	if (c2.y-i == -1) || (b.map[c2.x][c2.y-i] != currentPlayer){up = 0;}
+
+	//Right
+	i=1;
+	while((c2.x+i <= 8) && (b.map[c2.x+i][c2.y] == opponent))
+	{
+		right++;
+		i++;
+	}
+	if (c2.x+i == 9) || (b.map[c2.x+i][c2.y] != currentPlayer){right = 0;}
+
+	//Down
+	i=1;
+	while((c2.y+i <= 8) && (b.map[c2.x][c2.y+i] == opponent))
+	{
+		down++;
+		i++;
+	}
+	if (c2.y+i == 9) || (b.map[c2.x][c2.y+i] != currentPlayer){down = 0;}
+
+	//Left
+	i=1;
+	while((c2.x-i >= 0) && (b.map[c2.x-i][c2.y] == opponent))
+	{
+		left++;
+		i++;
+	}
+	if (c2.x+i == -1) || (b.map[c2.x-i][c2.y] != currentPlayer){left = 0;}
+
+	i = up + right + down + left;
+
+	//We create the table who will contain the coordonates of the near-to-be caught pieces
+	coordonates *tab;
+	tab = (coordonates*) malloc(sizeof(coordonates)*(i+1));
+	tab[0]=i+1;
+
+	for(i=1;i<=up;i++)
+	{
+		tab[i].x = c2.x;
+		tab[i].y = c2.y-i;
+	}
+	for(i=1;i<=right;i++)
+	{
+		tab[i+up].x = c2.x+i;
+		tab[i+up].y = c2.y;
+	}
+	for(i=1;i<=down;i++)
+	{
+		tab[i+up+right].x = c2.x;
+		tab[i+up+right].y = c2.y+i;
+	}
+	for(i=1;i<=left;i++)
+	{
+		tab[i+up+right+down].x = c2.x-i;
+		tab[i+up+right+down].y = c2.y;
+	}
+
+	return tab;
 }
 
 bool checkMovement(coordonates c1, coordonates c2)
 {
-	bool boo = true;
-	//Check si case différente
+
+	//Check if the start isn't empty
+	if(b.map[c1.x][c1.y]==0){return false;}
+
+	//Check if the destination is empty
+	if(b.map[c2.x][c2.y]!=0){return false;}
+
 	//Check déplacement ligne ou colonne
-	//Check si quelqu'un sur le chemim
-		//Si var=1, check si c'est un saut
-	return boo
+	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return false;}
+	else
+	{
+		//1:Up, 2:Right, 3:Down, 4:Left
+		int typeMovement = 0;
+		if (c1.x>c2.x) {typeMovement=4;}
+		else if (c1.x<c2.x) {typeMovement=2;}
+		else if (c1.y>c2.y) {typeMovement=1;}
+		else if (c1.y<c2.y) {typeMovement=3;}
+
+		//Check if there is something on the way
+		//If Var=1, check if it's a jump
+		switch (typeMovement)
+		{
+			case 1:
+				if((g.var==1)&&(c1.y-c2.y==2)&&(b.map[c1.x][c1.y-1]!=0)){return true};
+				else
+				{
+					int i;
+					for(i=0 ; i<(c1.y-c2.y) ; i++)
+					{
+						if(b.map[c1.x][c1.y-i]!=0){return false;}
+					}
+				}
+			case 2:
+				if((g.var==1)&&(c1.x-c2.x==-2)&&(b.map[c1.x+1][c1.y]!=0)){return true};
+				else
+				{
+					int i;
+					for(i=0 ; i<(c2.x-c1.x) ; i++)
+					{
+						if(b.map[c1.x+i][c1.y]!=0){return false;}
+					}
+				}
+			case 3:
+				if((g.var==1)&&(c1.y-c2.y==-2)&&(b.map[c1.x][c1.y+1]!=0)){return true};
+				else
+				{
+					int i;
+					for(i=0 ; i<(c2.y-c1.y) ; i++)
+					{
+						if(b.map[c1.x][c1.y+i]!=0){return false;}
+					}
+				}
+			case 4:
+				if((g.var==1)&&(c1.x-c2.x==2)&&(b.map[c1.x-1][c1.y]!=0)){return true};
+				else
+				{
+					int i;
+					for(i=0 ; i<(c1.x-c2.x) ; i++)
+					{
+						if(b.map[c1.x-i][c1.y]!=0){return false;}
+					}
+				}
+		}
+		//Default case
+		return true;
+	}
+	//Never used
+	return false;
+}
+
+bool checkSuicide(currentPlayer, coordonates c2);
+{
+	opponent = 3-currentPlayer;
 }
 
