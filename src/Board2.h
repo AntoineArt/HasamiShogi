@@ -31,16 +31,6 @@ void write(int status, coordonnees c);
 void movePiece(coordonnees c1, coordonnees c2);
 
 /*
-	Update the board with the consequences of a move
-*/
-void furtherUpdate();
-
-/*
-	Check if a move is valid
-*/
-bool mouvementValide(int joueur, coordonnees c1, coordonnees c2);
-
-/*
 	 Update the board with the current player's move
 */
 void updateBoard(coordonnees c1, coordonnees c2);
