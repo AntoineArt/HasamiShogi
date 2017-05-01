@@ -19,14 +19,20 @@ void resetBoard(matrice m){
 	}
 }
 
-void updateBoard(coordonnees c1, coordonnees c2)
+void write(int status, coordonnees c)
 {
-
+	m.board[c.x][c.y]=status;
 }
 
-void furtherUpdate()
+void movePiece(c1, c2)
 {
+	write(m.board[c.x][c.y],c2);
+	write(0,c1);
+}
 
+void furtherUpdate(int joueur, coordonnees c2)
+{
+	
 }
 
 bool mouvementValide(int joueur, coordonnees c1, coordonnees c2)
@@ -34,3 +40,13 @@ bool mouvementValide(int joueur, coordonnees c1, coordonnees c2)
 	bool boo = true;
 	return boo
 }
+
+void updateBoard(int joueur, coordonnees c1, coordonnees c2)
+{
+	if(mouvementValide(c1,c2)){
+		movePiece(c1, c2);
+		furtherUpdate(joueur,c2);
+	}
+	else{printf("Invalid Movement!")}
+}
+
