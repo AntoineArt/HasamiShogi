@@ -7,13 +7,23 @@
 const int DEFAULT_WIDTH = 1920;
 const int DEFAULT_HEIGTH = 1080;
 
+const char texts[10][20] = {"Nouvelle partie", "Continuer", "Parametres", "Quitter", "Francais", "Anglais", "Plein ecran", "Son", "Pack de textures", "Precedent"};
+const char texts2[10][20] = {"New game", "Continue", "Parameters", "Quit", "French", "English", "Fullscreen", "Sound", "Texture pack", "Previous"};
+/*
+  Initializes SDL2
+*/
 int main(int argc, char * argv[]);
 
 /*
-  Treats user's inputs
-  pressing f sets the screen to fullscreen
+  Displays the BackgroundMenu and calls menu(...) for user's input
 */
-void eventDetection(SDL_Window* pWindow);
+void menu(SDL_Window* pWindow, TTF_Font* police);
+
+/*
+  Waits for user's input
+  Return : int
+*/
+int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface **textsMenu);
 
 /*
   Sets the window's resolution depending on the user's will
@@ -22,9 +32,21 @@ void eventDetection(SDL_Window* pWindow);
 void selectResolution(int *res);
 
 /*
-  Updates the image on the screen to match with memory state
+  Displays the surface on the screen according to position x and y
 */
-void updateWindow(SDL_Window* pWindow, SDL_Surface* pImage);
+void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage);
+
+void newGame();
+
+void continueGame();
+
+void parameters(SDL_Window* pWindow, TTF_Font* police);
+
+/*
+  Checks if (xM, yM) is in the box defined by x, y, w and h
+  returns 1 if true, 0 if false
+*/
+char isIn(int xM, int yM, int x, int y, int w, int h);
 
 /*
   Resizes a SDL_Surface

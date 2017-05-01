@@ -1,184 +1,151 @@
 #include "App.h"
 
-int main(int argc,char* argv[]){
-  // Simple Initialization
-  if (SDL_Init(SDL_INIT_VIDEO) != 0){
+int main(int argc, char* argv[]){
+  // Initialization
+  if(SDL_Init(SDL_INIT_VIDEO)){
     fprintf(stdout, "Echec de l'initialisation de la SDL (%s)\n", SDL_GetError());
     return -1;
   }
 
+  TTF_Init(); // Initializes the TTF library
+  TTF_Font* police = TTF_OpenFont("asman.ttf", 50);
+
   // Window creation
   SDL_Window* pWindow = NULL;
-  int windowRes[2];
-  selectResolution(windowRes);
+
+  // Launching the menu window
+  menu(pWindow, police);
+
+  // Closing everything
+
+  TTF_CloseFont(police);
+  TTF_Quit();
+
+  SDL_DestroyWindow(pWindow);
+  SDL_Quit();
+}
+
+void menu(SDL_Window* pWindow, TTF_Font* police){
   SDL_Surface* pBackgroundMenu = SDL_LoadBMP("BackgroundMenu.bmp");
-  SDL_Surface* pBackgroundBoard = SDL_LoadBMP("ShogiBoard.bmp");
+  pWindow = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
+                                              SDL_WINDOWPOS_CENTERED,
+                                              DEFAULT_WIDTH,
+                                              DEFAULT_HEIGTH,
+                                              0.);
 
+  updateWindow(0, 0, pWindow, pBackgroundMenu); // BackgroundMenu display
 
-  pWindow = SDL_CreateWindow("Hasami Shogi",SDL_WINDOWPOS_CENTERED,
-                                            SDL_WINDOWPOS_CENTERED,
-                                            windowRes[0],
-                                            windowRes[1],
-                                            SDL_WINDOW_RESIZABLE);
+  // Menu display
+    SDL_Surface *textsMenu[4];
+    SDL_Color textColor = {255, 255, 255};
 
-  if(pWindow){
-    int mode = 0;
-    while(1){
-      if(mode==0){
-        updateWindow(pWindow, pBackgroundMenu);
-      }
-      else if(mode==1){
-        updateWindow(pWindow, pBackgroundBoard);
-      }
-      eventDetection(pWindow);
+    for(int i = 0; i<4; i++){
+      textsMenu[i] = TTF_RenderText_Blended(police, texts[i], textColor);
     }
-  }
 
+    updateWindow(960 - textsMenu[0]->w/2, 540 - textsMenu[0]->h/2 - 300, pWindow, textsMenu[0]);
+    updateWindow(960 - textsMenu[1]->w/2, 540 - textsMenu[1]->h/2 - 200, pWindow, textsMenu[1]);
+    updateWindow(960 - textsMenu[2]->w/2, 540 - textsMenu[2]->h/2 - 100, pWindow, textsMenu[2]);
+    updateWindow(960 - textsMenu[3]->w/2, 540 - textsMenu[3]->h/2, pWindow, textsMenu[3]);
+
+
+  int mode;
+  if (pWindow){
+    mode = eventDetectionMenu(pWindow, textsMenu);
+    for(int i=0; i<4; i++){
+      SDL_FreeSurface(textsMenu[i]);
+    }
+
+    /*switch(mode){
+      case 0: newGame(); break;
+      case 1: continueGame(); break;
+      case 2: parameters(pWindow, police); break;
+      case 3: return; break;
+    }*/
+
+    if(mode==3){return;}
+    else if(mode == 2){parameters(pWindow, police);}
+  }
 
   else{
-    fprintf(stderr, "Erreur de création de la fenêtre : %s\n", SDL_GetError() );
+    fprintf(stderr, "Erreur de création de la fenêtre : %s\n", SDL_GetError());
   }
 }
 
+int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
+  char cont = 1; // Determines if yes or no we continue the loop
+  int n = sizeof(texts)/sizeof(texts[0]);
+  int x[n], y[n], w[n], h[n];
+  for(int i = 0; i<n; i++){
+    w[i] = texts[i]->w;
+    h[i] = texts[i]->h;
+    x[i] = 960 - w[i]/2;
+    y[i] = 540 - h[i]/2;
+  }
 
-
-void eventDetection(SDL_Window* pWindow){
-    // Interaction section
-    int quit = 0, fullscreen = 0;
+  while(cont){
     SDL_Event event;
-    while (SDL_PollEvent(&event)) // Getting user's inputs
-    {
-      switch(event.type)
-      {
-          case SDL_QUIT: // Clic on the cross
-              quit=1;
-              break;
-          case SDL_KEYUP: // Key relaxing
-              if ( event.key.keysym.sym == SDLK_f ) // f key relaxed
-              {
-                  // Alternate from fullscreen to windowed and vice versa
-                  if ( fullscreen == 0 )
-                  {
-                      fullscreen = 1;
-                      SDL_SetWindowFullscreen(pWindow,SDL_WINDOW_FULLSCREEN);
-                  }
-                  else if ( fullscreen == 1 )
-                  {
-                      fullscreen = 0;
-                      SDL_SetWindowFullscreen(pWindow, 0);
-                  }
-              }
-              break;
-      }
+    while(SDL_PollEvent(&event)){
+      // Event treatment
+      switch(event.type){ // Which type of event is it ?
+        case SDL_WINDOWEVENT: // Window event
+          if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
+            return 3;
+          }
+          break;
 
-      if(quit == 1){
-        SDL_DestroyWindow(pWindow);
-        SDL_Quit();
-      }
+        case SDL_MOUSEBUTTONUP: // Mouse event
+          if (event.button.button == SDL_BUTTON_LEFT){
+            int xM = event.button.x;
+            int yM = event.button.y;
 
+            if(isIn(xM, yM, x[0], y[0], w[0], h[0]))     {return 0;}       //Check New game
+            else if(isIn(xM, yM, x[1], y[1], w[1], h[1])){return 1;}  //Check Continue
+            else if(isIn(xM, yM, x[2], y[2], w[2], h[2])){return 2;}  //Check Parameters
+            else if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 3;}  //Check Quit
+          }
+      }
     }
   }
-
-void selectResolution(int *res){
-  res[0] = DEFAULT_WIDTH;
-  res[1] = DEFAULT_HEIGTH;
+  return 3;
 }
 
-void updateWindow(SDL_Window* pWindow, SDL_Surface* pImage){
+void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
   int *w = NULL, *h = NULL;
   SDL_GetWindowSize(pWindow, w, h); // Gets the width and the heigth of the current window
-  //SDL_Surface* pNewImage = ScaleSurface(pImage, (Uint16)(*w), (Uint16)(*h));
-  //if(!pNewImage || !w || !h){exit(1);} */
 
   SDL_Surface* pWinSurf = SDL_GetWindowSurface(pWindow);
-  SDL_Rect dest = {0, 0, 0, 0};
+  SDL_Rect dest = {x, y, 0, 0};
   SDL_BlitSurface(pImage, NULL, pWinSurf, &dest);
   SDL_UpdateWindowSurface(pWindow);
 }
 
+void newGame(){
 
-
-
-
-
-SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height){
-    if(!Surface || !Width || !Height)
-        return 0;
-
-    SDL_Surface *_ret = SDL_CreateRGBSurface(Surface->flags, Width, Height, Surface->format->BitsPerPixel,
-        Surface->format->Rmask, Surface->format->Gmask, Surface->format->Bmask, Surface->format->Amask);
-
-    double    _stretch_factor_x = ((double)(Width)  / (double)(Surface->w)),
-        _stretch_factor_y = ((double)(Height) / (double)(Surface->h));
-
-    for(Sint32 y = 0; y < Surface->h; y++)
-        for(Sint32 x = 0; x < Surface->w; x++)
-            for(Sint32 o_y = 0; o_y < _stretch_factor_y; ++o_y)
-                for(Sint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
-                    DrawPixel(_ret, (Sint32)(_stretch_factor_x * x) + o_x,
-                        (Sint32)(_stretch_factor_y * y) + o_y, ReadPixel(Surface, x, y));
-
-    return _ret;
 }
 
-Uint32 ReadPixel(SDL_Surface *surface, Sint16 x, Sint16 y){
-    int bpp = surface->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to retrieve */
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+void continueGame(){
 
-    switch(bpp) {
-    case 1:
-        return *p;
-        break;
-
-    case 2:
-        return *(Uint16 *)p;
-        break;
-
-    case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-            return p[0] << 16 | p[1] << 8 | p[2];
-        else
-            return p[0] | p[1] << 8 | p[2] << 16;
-        break;
-
-    case 4:
-        return *(Uint32 *)p;
-        break;
-
-    default:
-        return 0;       /* shouldn't happen, but avoids warnings */
-    }
 }
 
-void DrawPixel(SDL_Surface *surface, Sint16 x, Sint16 y, Uint16 pixel){
-    int bpp = surface->format->BytesPerPixel;
-    /* Here p is the address to the pixel we want to set */
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+void parameters(SDL_Window* pWindow, TTF_Font* police){
+  SDL_Surface* pBackgroundBoard = SDL_LoadBMP("ShogiBoard.bmp");
+  // Menu display
+  updateWindow(0, 0, pWindow, pBackgroundBoard); // BackgroundMenu display
 
-    switch(bpp) {
-    case 1:
-        *p = pixel;
-        break;
+    SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
+    SDL_Color textColor = {255, 255, 255};
 
-    case 2:
-        *(Uint16 *)p = pixel;
-        break;
-
-    case 3:
-        if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-            p[0] = (pixel >> 16) & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = pixel & 0xff;
-        } else {
-            p[0] = pixel & 0xff;
-            p[1] = (pixel >> 8) & 0xff;
-            p[2] = (pixel >> 16) & 0xff;
-        }
-        break;
-
-    case 4:
-        *(Uint32 *)p = pixel;
-        break;
+    for(int i = 0; i<6; i++){
+      textsParameters[i] = TTF_RenderText_Blended(police, texts[i + 4], textColor);
     }
+
+    //updateWindow(960 - textNewGame->w/2, 540 - textNewGame->h/2 - 300, pWindow, textNewGame);
+    //updateWindow(960 - textContinue->w/2, 540 - textContinue->h/2 - 200, pWindow, textContinue);
+    //updateWindow(960 - textParameters->w/2, 540 - textParameters->h/2 - 100, pWindow, textParameters);
+    //updateWindow(960 - textQuitGame->w/2, 540 - textQuitGame->h/2, pWindow, textQuitGame);
+}
+
+char isIn(int xM, int yM, int x, int y, int w, int h){
+  return ((xM > x && xM < x+w) && (yM > y && yM < y+h));
 }
