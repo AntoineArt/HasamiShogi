@@ -301,8 +301,17 @@ bool checkMovement(coordonates c1, coordonates c2)
 	return false;
 }
 
-bool checkSuicide(currentPlayer, coordonates c2);
-{
-	opponent = 3-currentPlayer;
-}
+/*bool checkSuicide(currentPlayer, coordonates c2);
+{	
+	if(g.var==1)
+	{
+		opponent = 3-currentPlayer;
+		if()
+	}
+	else
+	{
+		return false;
+	}
+	
+}*/
 
