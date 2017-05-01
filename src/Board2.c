@@ -2,25 +2,32 @@
 
 matrice allocateBoard()
 {
-	matrice m;
+	board m;
 }
 
+
 void write(int status, coordonnees c)
+
 {
-	m.board[c.x][c.y]=status;
+	m.board[c.x][c.y] = status;
 }
 
 void movePiece(c1, c2)
 {
-	write(m.board[c.x][c.y],c2);
+	write(m.board[c1.x][c1.y],c2);
 	write(0,c1);
 }
 
-void updateBoard(int joueur, coordonnees c1, coordonnees c2)
+void catchPiece(int currentPlayer, coordonates c2) 
 {
-	if(mouvementValide(c1,c2)){
+	
+}
+
+void updateBoard(int currentPlayer, coordonates c1, coordonates c2)
+{
+	if(checkMovement(c1,c2)){
 		movePiece(c1, c2);
-		furtherUpdate(joueur,c2);
+		catchPiece(currentPlayer,c2);
 	}
 	else{printf("Invalid Movement!")}
 }
