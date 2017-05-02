@@ -1,12 +1,14 @@
 #include "Rules.h"
 
-void resetBoard(){
-	switch (var)
+void resetBoard() {
+	switch (g.var)
 	{
+		int i;
 		case 0:
 		for(i=0;i<=9;i++){
-			b.map[0][i]=2; //Pieces du J1
-			b.map[9][i]=1; //Pieces du J2
+			b.map[0][i]=2; //First player's tokens
+			b.map[9][i]=1; //Second player's tokens
+			int j;
 			for(j=2;j<=7;j++){
 				b.map[j][i]=0;
 			}
@@ -14,14 +16,15 @@ void resetBoard(){
 		break;
 		case 1:
 		for(i=0;i<=9;i++){
+			int j;
 			for(j=0;j<=1;j++){
-				b.map[j][i]=1; //Pieces du J1
+				b.map[j][i]=1; //First player's tokens
 			}
 			for(j=2;j<=7;j++){
 				b.map[j][i]=0;
 			}
 			for(j=8;j<=9;j++){
-				m.board[j][i]=2; //Pieces du J2
+				b.map[j][i]=2; //Second player's tokens
 			}
 		}
 		break;
@@ -32,7 +35,7 @@ void resetBoard(){
 
 int checkVictory(int currentPlayer, coordonates c2)
 {
-	//We check if the opponent has loose every pieces but one
+	//We check if the opponent has loose every tokens but one
 	if (g.var==0)
 	{
 		if ((currentPlayer == 1)&&(b.countPlayer2==1))
@@ -151,13 +154,11 @@ int checkVictory(int currentPlayer, coordonates c2)
 	{
 		return -1; //Error case
 	}
-
-	//Checking the var1 victory conditions
 }
 
-void checkCatch(int currentPlayer, coordonates c2)
+coordonates* checkCatch(int currentPlayer, coordonates c2)
 {
-	//We identifie the number of pieces we will catch in the named direction
+	//We identifie the number of tokens we will catch in the named direction
 	int up=0; int right=0; int down=0; int left=0;
 	int opponent = 3-currentPlayer;
 	int i;
@@ -169,7 +170,7 @@ void checkCatch(int currentPlayer, coordonates c2)
 		up++;
 		i++;
 	}
-	if (c2.y-i == -1) || (b.map[c2.x][c2.y-i] != currentPlayer){up = 0;}
+	if ((c2.y-i == -1) || (b.map[c2.x][c2.y-i] != currentPlayer)){up = 0;}
 
 	//Right
 	i=1;
@@ -178,7 +179,7 @@ void checkCatch(int currentPlayer, coordonates c2)
 		right++;
 		i++;
 	}
-	if (c2.x+i == 9) || (b.map[c2.x+i][c2.y] != currentPlayer){right = 0;}
+	if ((c2.x+i == 9) || (b.map[c2.x+i][c2.y] != currentPlayer)){right = 0;}
 
 	//Down
 	i=1;
@@ -187,7 +188,7 @@ void checkCatch(int currentPlayer, coordonates c2)
 		down++;
 		i++;
 	}
-	if (c2.y+i == 9) || (b.map[c2.x][c2.y+i] != currentPlayer){down = 0;}
+	if ((c2.y+i == 9) || (b.map[c2.x][c2.y+i] != currentPlayer)){down = 0;}
 
 	//Left
 	i=1;
@@ -196,14 +197,16 @@ void checkCatch(int currentPlayer, coordonates c2)
 		left++;
 		i++;
 	}
-	if (c2.x+i == -1) || (b.map[c2.x-i][c2.y] != currentPlayer){left = 0;}
+	if ((c2.x+i == -1) || (b.map[c2.x-i][c2.y] != currentPlayer)){left = 0;}
 
 	i = up + right + down + left;
 
-	//We create the table who will contain the coordonates of the near-to-be caught pieces
+	//We create the table who will contain the coordonates of the near-to-be caught tokens
 	coordonates *tab;
 	tab = (coordonates*) malloc(sizeof(coordonates)*(i+1));
-	tab[0]=i+1;
+	coordonates c1;
+	c1.x = i+1;
+	tab[0] = c1;
 
 	for(i=1;i<=up;i++)
 	{
@@ -229,17 +232,16 @@ void checkCatch(int currentPlayer, coordonates c2)
 	return tab;
 }
 
-bool checkMovement(coordonates c1, coordonates c2)
-{
+int checkMovement(coordonates c1, coordonates c2) {
 
 	//Check if the start isn't empty
-	if(b.map[c1.x][c1.y]==0){return false;}
+	if(b.map[c1.x][c1.y]==0){return 0;}
 
 	//Check if the destination is empty
-	if(b.map[c2.x][c2.y]!=0){return false;}
+	if(b.map[c2.x][c2.y]!=0){return 0;}
 
 	//Check déplacement ligne ou colonne
-	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return false;}
+	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return 0;}
 	else
 	{
 		//1:Up, 2:Right, 3:Down, 4:Left
@@ -249,60 +251,65 @@ bool checkMovement(coordonates c1, coordonates c2)
 		else if (c1.y>c2.y) {typeMovement=1;}
 		else if (c1.y<c2.y) {typeMovement=3;}
 
-		//Check if there is something on the way
+		//Check if there is a token on the way
 		//If Var=1, check if it's a jump
 		switch (typeMovement)
 		{
 			case 1:
-				if((g.var==1)&&(c1.y-c2.y==2)&&(b.map[c1.x][c1.y-1]!=0)){return true};
+				if((g.var==1)&&(c1.y-c2.y==2)&&(b.map[c1.x][c1.y-1]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c1.y-c2.y) ; i++)
 					{
-						if(b.map[c1.x][c1.y-i]!=0){return false;}
+						if(b.map[c1.x][c1.y-i]!=0){return 0;}
 					}
 				}
 			case 2:
-				if((g.var==1)&&(c1.x-c2.x==-2)&&(b.map[c1.x+1][c1.y]!=0)){return true};
+				if((g.var==1)&&(c1.x-c2.x==-2)&&(b.map[c1.x+1][c1.y]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c2.x-c1.x) ; i++)
 					{
-						if(b.map[c1.x+i][c1.y]!=0){return false;}
+						if(b.map[c1.x+i][c1.y]!=0){return 0;}
 					}
 				}
 			case 3:
-				if((g.var==1)&&(c1.y-c2.y==-2)&&(b.map[c1.x][c1.y+1]!=0)){return true};
+				if((g.var==1)&&(c1.y-c2.y==-2)&&(b.map[c1.x][c1.y+1]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c2.y-c1.y) ; i++)
 					{
-						if(b.map[c1.x][c1.y+i]!=0){return false;}
+						if(b.map[c1.x][c1.y+i]!=0){return 0;}
 					}
 				}
 			case 4:
-				if((g.var==1)&&(c1.x-c2.x==2)&&(b.map[c1.x-1][c1.y]!=0)){return true};
+				if((g.var==1)&&(c1.x-c2.x==2)&&(b.map[c1.x-1][c1.y]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c1.x-c2.x) ; i++)
 					{
-						if(b.map[c1.x-i][c1.y]!=0){return false;}
+						if(b.map[c1.x-i][c1.y]!=0){return 0;}
 					}
 				}
 		}
 		//Default case
-		return true;
+		return 1;
 	}
 	//Never used
-	return false;
+	return 0;
 }
 
+<<<<<<< HEAD
 /*bool checkSuicide(currentPlayer, coordonates c2);
 {
+=======
+/*int checkSuicide(currentPlayer, coordonates c2);
+{	
+>>>>>>> 5495c791045b11331dde501c39ff69116213cd16
 	if(g.var==1)
 	{
 		opponent = 3-currentPlayer;
@@ -310,7 +317,12 @@ bool checkMovement(coordonates c1, coordonates c2)
 	}
 	else
 	{
-		return false;
+		return 0;
 	}
+<<<<<<< HEAD
 
 }*/
+=======
+	
+}*/
+>>>>>>> 5495c791045b11331dde501c39ff69116213cd16

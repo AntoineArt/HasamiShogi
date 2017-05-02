@@ -16,12 +16,10 @@ typedef struct {
   int countPlayer2; //the number of pieces owned by the second player
 } board;
 
-typedef struct{
-	int x,y;
-} coordonates;
 
 /*
-	Create a 9x9 matrix and all the related vars from struct Board() depending on the variante of ashami shogi being played
+	Create a 9x9 matrix and all the related vars from struct board depending on the variante of ashami shogi being played
+	the new board is referenced as b by the reste of the program
 	warning allocate memory !
 */
 board allocateBoard(int var);
