@@ -2,13 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <SDL2/SDL.h>
-//#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
+//#include "Game.c"
 
 const int DEFAULT_WIDTH = 1920;
 const int DEFAULT_HEIGTH = 1080;
 
-const char texts[10][20] = {"Nouvelle partie", "Continuer", "Parametres", "Quitter", "Francais", "Anglais", "Plein ecran", "Son", "Pack de textures", "Precedent"};
-const char texts2[10][20] = {"New game", "Continue", "Parameters", "Quit", "French", "English", "Fullscreen", "Sound", "Texture pack", "Previous"};
+const char texts[11][20] = {"Nouvelle partie", "Continuer", "Parametres", "Regles", "Quitter", "Francais", "Anglais", "Plein ecran", "Son", "Pack de textures", "Precedent"};
+const char texts2[11][20] = {"New game", "Continue", "Parameters", "Rules", "Quit", "French", "English", "Fullscreen", "Sound", "Texture pack", "Previous"};
 /*
   Initializes SDL2
 */
@@ -17,7 +18,7 @@ int main(int argc, char * argv[]);
 /*
   Displays the BackgroundMenu and calls menu(...) for user's input
 */
-void menu(SDL_Window* pWindow, TTF_Font* police);
+int menu(SDL_Window* pWindow, TTF_Font* police);
 
 /*
   Waits for user's input
@@ -41,6 +42,8 @@ void newGame();
 void continueGame();
 
 void parameters(SDL_Window* pWindow, TTF_Font* police);
+
+void rules();
 
 /*
   Checks if (xM, yM) is in the box defined by x, y, w and h

@@ -1,4 +1,4 @@
-#include Rules.h
+#include "Rules.h"
 
 void resetBoard(){
 	switch (var)
@@ -35,11 +35,11 @@ int checkVictory(int currentPlayer, coordonates c2)
 	//We check if the opponent has loose every pieces but one
 	if (g.var==0)
 	{
-		if ((currentPlayer == 1)&&(b.countPlayer2==1))  
+		if ((currentPlayer == 1)&&(b.countPlayer2==1))
 		{
 			return 1;
 		}
-		else if ((currentPlayer == 2)&&(b.countPlayer1==1))  
+		else if ((currentPlayer == 2)&&(b.countPlayer1==1))
 		{
 			return 2;
 		}
@@ -302,7 +302,7 @@ bool checkMovement(coordonates c1, coordonates c2)
 }
 
 /*bool checkSuicide(currentPlayer, coordonates c2);
-{	
+{
 	if(g.var==1)
 	{
 		opponent = 3-currentPlayer;
@@ -312,6 +312,5 @@ bool checkMovement(coordonates c1, coordonates c2)
 	{
 		return false;
 	}
-	
-}*/
 
+}*/

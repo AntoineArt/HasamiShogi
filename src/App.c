@@ -14,7 +14,16 @@ int main(int argc, char* argv[]){
   SDL_Window* pWindow = NULL;
 
   // Launching the menu window
-  menu(pWindow, police);
+  int mode;
+  mode = menu(pWindow, police);
+
+  switch(mode){
+    case 0: newGame();break;
+    case 1: continueGame();break;
+    case 2: parameters(pWindow, police);break;
+    case 3: rules();
+    case 4: break;
+  }
 
   // Closing everything
 
@@ -25,7 +34,7 @@ int main(int argc, char* argv[]){
   SDL_Quit();
 }
 
-void menu(SDL_Window* pWindow, TTF_Font* police){
+int menu(SDL_Window* pWindow, TTF_Font* police){
   SDL_Surface* pBackgroundMenu = SDL_LoadBMP("BackgroundMenu.bmp");
   pWindow = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
@@ -36,18 +45,13 @@ void menu(SDL_Window* pWindow, TTF_Font* police){
   updateWindow(0, 0, pWindow, pBackgroundMenu); // BackgroundMenu display
 
   // Menu display
-    SDL_Surface *textsMenu[4];
+    SDL_Surface *textsMenu[5];
     SDL_Color textColor = {255, 255, 255};
 
-    for(int i = 0; i<4; i++){
+    for(int i = 0; i<5; i++){
       textsMenu[i] = TTF_RenderText_Blended(police, texts[i], textColor);
+      updateWindow(960 - textsMenu[i]->w/2, 540 - textsMenu[i]->h/2 - (300-100*i), pWindow, textsMenu[i]);
     }
-
-    updateWindow(960 - textsMenu[0]->w/2, 540 - textsMenu[0]->h/2 - 300, pWindow, textsMenu[0]);
-    updateWindow(960 - textsMenu[1]->w/2, 540 - textsMenu[1]->h/2 - 200, pWindow, textsMenu[1]);
-    updateWindow(960 - textsMenu[2]->w/2, 540 - textsMenu[2]->h/2 - 100, pWindow, textsMenu[2]);
-    updateWindow(960 - textsMenu[3]->w/2, 540 - textsMenu[3]->h/2, pWindow, textsMenu[3]);
-
 
   int mode;
   if (pWindow){
@@ -55,32 +59,24 @@ void menu(SDL_Window* pWindow, TTF_Font* police){
     for(int i=0; i<4; i++){
       SDL_FreeSurface(textsMenu[i]);
     }
-
-    /*switch(mode){
-      case 0: newGame(); break;
-      case 1: continueGame(); break;
-      case 2: parameters(pWindow, police); break;
-      case 3: return; break;
-    }*/
-
-    if(mode==3){return;}
-    else if(mode == 2){parameters(pWindow, police);}
+    return mode;
   }
 
   else{
     fprintf(stderr, "Erreur de création de la fenêtre : %s\n", SDL_GetError());
   }
+  return 3;
 }
 
 int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
   char cont = 1; // Determines if yes or no we continue the loop
-  int n = sizeof(texts)/sizeof(texts[0]);
+  int n = 5;
   int x[n], y[n], w[n], h[n];
   for(int i = 0; i<n; i++){
     w[i] = texts[i]->w;
     h[i] = texts[i]->h;
     x[i] = 960 - w[i]/2;
-    y[i] = 540 - h[i]/2;
+    y[i] = 540 - h[i]/2-(300-100*i);
   }
 
   while(cont){
@@ -90,7 +86,7 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
       switch(event.type){ // Which type of event is it ?
         case SDL_WINDOWEVENT: // Window event
           if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
-            return 3;
+            cont = 0;
           }
           break;
 
@@ -98,16 +94,18 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
           if (event.button.button == SDL_BUTTON_LEFT){
             int xM = event.button.x;
             int yM = event.button.y;
+            printf("%d et %d\n", xM, yM);
 
-            if(isIn(xM, yM, x[0], y[0], w[0], h[0]))     {return 0;}       //Check New game
-            else if(isIn(xM, yM, x[1], y[1], w[1], h[1])){return 1;}  //Check Continue
-            else if(isIn(xM, yM, x[2], y[2], w[2], h[2])){return 2;}  //Check Parameters
-            else if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 3;}  //Check Quit
+            if(isIn(xM, yM, x[0], y[0], w[0], h[0])){return 0;}  //Check New game
+            if(isIn(xM, yM, x[1], y[1], w[1], h[1])){return 1;}  //Check Continue
+            if(isIn(xM, yM, x[2], y[2], w[2], h[2])){return 2;}  //Check Parameters
+            if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 3;}  //Check Rules
+            if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 4;}  //Check Quit
           }
       }
     }
   }
-  return 3;
+  return 4;
 }
 
 void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
@@ -128,22 +126,29 @@ void continueGame(){
 
 }
 
-void parameters(SDL_Window* pWindow, TTF_Font* police){
-  SDL_Surface* pBackgroundBoard = SDL_LoadBMP("ShogiBoard.bmp");
-  // Menu display
-  updateWindow(0, 0, pWindow, pBackgroundBoard); // BackgroundMenu display
+void rules(){
 
+}
+
+void parameters(SDL_Window* pWindow, TTF_Font* police){
+  SDL_Surface* pBackgroundParameters = SDL_LoadBMP("BackgroundMenu.bmp");
+  SDL_Window *pWinParam = SDL_CreateWindow("Parameters",  SDL_WINDOWPOS_CENTERED,
+                                              SDL_WINDOWPOS_CENTERED,
+                                              DEFAULT_WIDTH,
+                                              DEFAULT_HEIGTH,
+                                              0.);
+
+  // Menu display
+  updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
     SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
     SDL_Color textColor = {255, 255, 255};
 
     for(int i = 0; i<6; i++){
-      textsParameters[i] = TTF_RenderText_Blended(police, texts[i + 4], textColor);
+      textsParameters[i] = TTF_RenderText_Blended(police, texts[i + 5], textColor);
+      updateWindow(960 - textsParameters[i]->w/2, 540 - textsParameters[i]->h/2 - (300-100*i), pWinParam, textsParameters[i]);
     }
+    SDL_Delay(2000);
 
-    //updateWindow(960 - textNewGame->w/2, 540 - textNewGame->h/2 - 300, pWindow, textNewGame);
-    //updateWindow(960 - textContinue->w/2, 540 - textContinue->h/2 - 200, pWindow, textContinue);
-    //updateWindow(960 - textParameters->w/2, 540 - textParameters->h/2 - 100, pWindow, textParameters);
-    //updateWindow(960 - textQuitGame->w/2, 540 - textQuitGame->h/2, pWindow, textQuitGame);
 }
 
 char isIn(int xM, int yM, int x, int y, int w, int h){
