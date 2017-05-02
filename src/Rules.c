@@ -6,8 +6,8 @@ void resetBoard() {
 		int i;
 		case 0:
 		for(i=0;i<=9;i++){
-			b.map[0][i]=2; //Pieces du J1
-			b.map[9][i]=1; //Pieces du J2
+			b.map[0][i]=2; //First player's tokens
+			b.map[9][i]=1; //Second player's tokens
 			int j;
 			for(j=2;j<=7;j++){
 				b.map[j][i]=0;
@@ -18,13 +18,13 @@ void resetBoard() {
 		for(i=0;i<=9;i++){
 			int j;
 			for(j=0;j<=1;j++){
-				b.map[j][i]=1; //Pieces du J1
+				b.map[j][i]=1; //First player's tokens
 			}
 			for(j=2;j<=7;j++){
 				b.map[j][i]=0;
 			}
 			for(j=8;j<=9;j++){
-				b.map[j][i]=2; //Pieces du J2
+				b.map[j][i]=2; //Second player's tokens
 			}
 		}
 		break;
@@ -35,7 +35,7 @@ void resetBoard() {
 
 int checkVictory(int currentPlayer, coordonates c2)
 {
-	//We check if the opponent has loose every pieces but one
+	//We check if the opponent has loose every tokens but one
 	if (g.var==0)
 	{
 		if ((currentPlayer == 1)&&(b.countPlayer2==1))  
@@ -154,13 +154,11 @@ int checkVictory(int currentPlayer, coordonates c2)
 	{
 		return -1; //Error case
 	}
-
-	//Checking the var1 victory conditions
 }
 
 coordonates* checkCatch(int currentPlayer, coordonates c2)
 {
-	//We identifie the number of pieces we will catch in the named direction
+	//We identifie the number of tokens we will catch in the named direction
 	int up=0; int right=0; int down=0; int left=0;
 	int opponent = 3-currentPlayer;
 	int i;
@@ -203,7 +201,7 @@ coordonates* checkCatch(int currentPlayer, coordonates c2)
 
 	i = up + right + down + left;
 
-	//We create the table who will contain the coordonates of the near-to-be caught pieces
+	//We create the table who will contain the coordonates of the near-to-be caught tokens
 	coordonates *tab;
 	tab = (coordonates*) malloc(sizeof(coordonates)*(i+1));
 	coordonates c1;
@@ -253,7 +251,7 @@ int checkMovement(coordonates c1, coordonates c2) {
 		else if (c1.y>c2.y) {typeMovement=1;}
 		else if (c1.y<c2.y) {typeMovement=3;}
 
-		//Check if there is something on the way
+		//Check if there is a token on the way
 		//If Var=1, check if it's a jump
 		switch (typeMovement)
 		{
@@ -305,7 +303,6 @@ int checkMovement(coordonates c1, coordonates c2) {
 	return 0;
 }
 
-
 /*int checkSuicide(currentPlayer, coordonates c2);
 {	
 	if(g.var==1)
@@ -319,5 +316,3 @@ int checkMovement(coordonates c1, coordonates c2) {
 	}
 	
 }*/
-
-
