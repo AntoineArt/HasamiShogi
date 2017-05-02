@@ -1,12 +1,14 @@
-#include Rules.h
+#include "Rules.h"
 
-void resetBoard(){
-	switch (var)
+void resetBoard() {
+	switch (g.var)
 	{
+		int i;
 		case 0:
 		for(i=0;i<=9;i++){
 			b.map[0][i]=2; //Pieces du J1
 			b.map[9][i]=1; //Pieces du J2
+			int j;
 			for(j=2;j<=7;j++){
 				b.map[j][i]=0;
 			}
@@ -14,6 +16,7 @@ void resetBoard(){
 		break;
 		case 1:
 		for(i=0;i<=9;i++){
+			int j;
 			for(j=0;j<=1;j++){
 				b.map[j][i]=1; //Pieces du J1
 			}
@@ -21,7 +24,7 @@ void resetBoard(){
 				b.map[j][i]=0;
 			}
 			for(j=8;j<=9;j++){
-				m.board[j][i]=2; //Pieces du J2
+				b.map[j][i]=2; //Pieces du J2
 			}
 		}
 		break;
@@ -229,17 +232,16 @@ void checkCatch(int currentPlayer, coordonates c2)
 	return tab;
 }
 
-bool checkMovement(coordonates c1, coordonates c2)
-{
+int checkMovement(coordonates c1, coordonates c2) {
 
 	//Check if the start isn't empty
-	if(b.map[c1.x][c1.y]==0){return false;}
+	if(b.map[c1.x][c1.y]==0){return 0;}
 
 	//Check if the destination is empty
-	if(b.map[c2.x][c2.y]!=0){return false;}
+	if(b.map[c2.x][c2.y]!=0){return 0;}
 
 	//Check déplacement ligne ou colonne
-	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return false;}
+	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return 0;}
 	else
 	{
 		//1:Up, 2:Right, 3:Down, 4:Left
@@ -254,54 +256,55 @@ bool checkMovement(coordonates c1, coordonates c2)
 		switch (typeMovement)
 		{
 			case 1:
-				if((g.var==1)&&(c1.y-c2.y==2)&&(b.map[c1.x][c1.y-1]!=0)){return true};
+				if((g.var==1)&&(c1.y-c2.y==2)&&(b.map[c1.x][c1.y-1]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c1.y-c2.y) ; i++)
 					{
-						if(b.map[c1.x][c1.y-i]!=0){return false;}
+						if(b.map[c1.x][c1.y-i]!=0){return 0;}
 					}
 				}
 			case 2:
-				if((g.var==1)&&(c1.x-c2.x==-2)&&(b.map[c1.x+1][c1.y]!=0)){return true};
+				if((g.var==1)&&(c1.x-c2.x==-2)&&(b.map[c1.x+1][c1.y]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c2.x-c1.x) ; i++)
 					{
-						if(b.map[c1.x+i][c1.y]!=0){return false;}
+						if(b.map[c1.x+i][c1.y]!=0){return 0;}
 					}
 				}
 			case 3:
-				if((g.var==1)&&(c1.y-c2.y==-2)&&(b.map[c1.x][c1.y+1]!=0)){return true};
+				if((g.var==1)&&(c1.y-c2.y==-2)&&(b.map[c1.x][c1.y+1]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c2.y-c1.y) ; i++)
 					{
-						if(b.map[c1.x][c1.y+i]!=0){return false;}
+						if(b.map[c1.x][c1.y+i]!=0){return 0;}
 					}
 				}
 			case 4:
-				if((g.var==1)&&(c1.x-c2.x==2)&&(b.map[c1.x-1][c1.y]!=0)){return true};
+				if((g.var==1)&&(c1.x-c2.x==2)&&(b.map[c1.x-1][c1.y]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c1.x-c2.x) ; i++)
 					{
-						if(b.map[c1.x-i][c1.y]!=0){return false;}
+						if(b.map[c1.x-i][c1.y]!=0){return 0;}
 					}
 				}
 		}
 		//Default case
-		return true;
+		return 1;
 	}
 	//Never used
-	return false;
+	return 0;
 }
 
-/*bool checkSuicide(currentPlayer, coordonates c2);
+
+/*int checkSuicide(currentPlayer, coordonates c2);
 {	
 	if(g.var==1)
 	{
@@ -310,7 +313,7 @@ bool checkMovement(coordonates c1, coordonates c2)
 	}
 	else
 	{
-		return false;
+		return 0;
 	}
 	
 }*/
