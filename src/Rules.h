@@ -29,6 +29,6 @@ coordonates* checkCatch(int currentPlayer, coordonates c2);
 int checkMovement(coordonates c1, coordonates c2);
 
 /*
-	Check if a piece die at the end of a turn
+	Check if the piece who has been moved should die at the end of a turn
 */
 //bool checkSuicide(currentPlayer, coordonates c2);
