@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct{
+	int x,y;
+} coordonates;
+
 /*
 	Reset the board to it's basic state
 */
@@ -22,7 +26,7 @@ void checkCatch(int currentPlayer, coordonates c2);
 /*
 	Check if a move is valid
 */
-bool checkMovement(coordonates c1, coordonates c2);
+int checkMovement(coordonates c1, coordonates c2);
 
 /*
 	Check if a piece die at the end of a turn
