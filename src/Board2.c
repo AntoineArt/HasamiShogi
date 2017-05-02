@@ -53,7 +53,7 @@ void catchPiece(int currentPlayer, coordonates c2)
 	coordonates *tab;
 	tab = checkCatch(int currentPlayer, coordonates c2);
 	int i;
-	for (i = 1; i<tab[0]; i++) {
+	for (i = 1; i<tab[0].x; i++) {
 		if !((tab[i].x==-1)||(tab[i].y==-1)) {
 			write(0,b.map[tab[i].x][tab[i].y]);
 			if (currentPlayer==1) {

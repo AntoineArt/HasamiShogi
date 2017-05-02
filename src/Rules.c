@@ -158,7 +158,7 @@ int checkVictory(int currentPlayer, coordonates c2)
 	//Checking the var1 victory conditions
 }
 
-void checkCatch(int currentPlayer, coordonates c2)
+coordonates* checkCatch(int currentPlayer, coordonates c2)
 {
 	//We identifie the number of pieces we will catch in the named direction
 	int up=0; int right=0; int down=0; int left=0;
@@ -172,7 +172,7 @@ void checkCatch(int currentPlayer, coordonates c2)
 		up++;
 		i++;
 	}
-	if (c2.y-i == -1) || (b.map[c2.x][c2.y-i] != currentPlayer){up = 0;}
+	if ((c2.y-i == -1) || (b.map[c2.x][c2.y-i] != currentPlayer)){up = 0;}
 
 	//Right
 	i=1;
@@ -181,7 +181,7 @@ void checkCatch(int currentPlayer, coordonates c2)
 		right++;
 		i++;
 	}
-	if (c2.x+i == 9) || (b.map[c2.x+i][c2.y] != currentPlayer){right = 0;}
+	if ((c2.x+i == 9) || (b.map[c2.x+i][c2.y] != currentPlayer)){right = 0;}
 
 	//Down
 	i=1;
@@ -190,7 +190,7 @@ void checkCatch(int currentPlayer, coordonates c2)
 		down++;
 		i++;
 	}
-	if (c2.y+i == 9) || (b.map[c2.x][c2.y+i] != currentPlayer){down = 0;}
+	if ((c2.y+i == 9) || (b.map[c2.x][c2.y+i] != currentPlayer)){down = 0;}
 
 	//Left
 	i=1;
@@ -199,14 +199,16 @@ void checkCatch(int currentPlayer, coordonates c2)
 		left++;
 		i++;
 	}
-	if (c2.x+i == -1) || (b.map[c2.x-i][c2.y] != currentPlayer){left = 0;}
+	if ((c2.x+i == -1) || (b.map[c2.x-i][c2.y] != currentPlayer)){left = 0;}
 
 	i = up + right + down + left;
 
 	//We create the table who will contain the coordonates of the near-to-be caught pieces
 	coordonates *tab;
 	tab = (coordonates*) malloc(sizeof(coordonates)*(i+1));
-	tab[0]=i+1;
+	coordonates c1;
+	c1.x = i+1;
+	tab[0] = c1;
 
 	for(i=1;i<=up;i++)
 	{
@@ -317,4 +319,5 @@ int checkMovement(coordonates c1, coordonates c2) {
 	}
 	
 }*/
+
 

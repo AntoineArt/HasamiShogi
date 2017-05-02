@@ -16,9 +16,6 @@ typedef struct {
   int countPlayer2; //the number of pieces owned by the second player
 } board;
 
-typedef struct{
-	int x,y;
-} coordonates;
 
 /*
 	Create a 9x9 matrix and all the related vars from struct Board() depending on the variante of ashami shogi being played
