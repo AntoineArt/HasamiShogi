@@ -33,7 +33,7 @@ void resetBoard() {
 	}
 }
 
-int checkVictory(int currentPlayer, coordonates c2)
+int checkVictory(int currentPlayer, coordinates c2)
 {
 	//We check if the opponent has loose every tokens but one
 	if (g.var==0)
@@ -156,7 +156,7 @@ int checkVictory(int currentPlayer, coordonates c2)
 	}
 }
 
-coordonates* checkCatch(int currentPlayer, coordonates c2)
+coordonates* checkCatch(int currentPlayer, coordinates c2)
 {
 	//We identifie the number of tokens we will catch in the named direction
 	int up=0; int right=0; int down=0; int left=0;
@@ -203,8 +203,8 @@ coordonates* checkCatch(int currentPlayer, coordonates c2)
 
 	//We create the table who will contain the coordonates of the near-to-be caught tokens
 	coordonates *tab;
-	tab = (coordonates*) malloc(sizeof(coordonates)*(i+1));
-	coordonates c1;
+	tab = (coordinates*) malloc(sizeof(coordinates)*(i+1));
+	coordinates c1;
 	c1.x = i+1;
 	tab[0] = c1;
 
@@ -232,7 +232,7 @@ coordonates* checkCatch(int currentPlayer, coordonates c2)
 	return tab;
 }
 
-int checkMovement(coordonates c1, coordonates c2) {
+int checkMovement(coordinates c1, coordinates c2) {
 
 	//Check if the start isn't empty
 	if(b.map[c1.x][c1.y]==0){return 0;}
@@ -302,27 +302,3 @@ int checkMovement(coordonates c1, coordonates c2) {
 	//Never used
 	return 0;
 }
-
-<<<<<<< HEAD
-/*bool checkSuicide(currentPlayer, coordonates c2);
-{
-=======
-/*int checkSuicide(currentPlayer, coordonates c2);
-{	
->>>>>>> 5495c791045b11331dde501c39ff69116213cd16
-	if(g.var==1)
-	{
-		opponent = 3-currentPlayer;
-		if()
-	}
-	else
-	{
-		return 0;
-	}
-<<<<<<< HEAD
-
-}*/
-=======
-	
-}*/
->>>>>>> 5495c791045b11331dde501c39ff69116213cd16

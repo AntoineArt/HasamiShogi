@@ -37,19 +37,20 @@ void resetBoard(matrice m)
 /*
 	Change le statut de la case de coordonnées c1
 */
-void write(int status, coordonnees c);
+void write(int status, coordinnees c);
 
 /*
 	Move a piece from c1 to c2
 */
-void movePiece(coordonnees c1, coordonnees c2);
+void movePiece(coordinnees c1, coordinnees c2);
 
 /*
 	catch eventualy the pieces around c2, using checkCatch from Rules.c
 */
-void catchPiece(int currentPlayer, coordonates c2);
+void catchPiece(int currentPlayer, coordinates c2);
 
 /*
 	 Update the board with the current player's move from c1 to c2
 */
-void updateBoard(int currentPlayer, coordonnees c1, coordonnees c2);
+
+void updateBoard(int currentPlayer, coordinates c1, coordinates c2);
