@@ -170,6 +170,7 @@ coordonates* checkCatch(int currentPlayer, coordinates c2)
 		up++;
 		i++;
 	}
+	//If the opposing token isn't a current player's one, no token can be catch
 	if ((c2.y-i == -1) || (b.map[c2.x][c2.y-i] != currentPlayer)){up = 0;}
 
 	//Right
@@ -199,36 +200,78 @@ coordonates* checkCatch(int currentPlayer, coordinates c2)
 	}
 	if ((c2.x+i == -1) || (b.map[c2.x-i][c2.y] != currentPlayer)){left = 0;}
 
-	i = up + right + down + left;
-
 	//We create the table who will contain the coordonates of the near-to-be caught tokens
+	return createTable(c2, up, right, down, left, 1);
+}
+
+coordinates* createTable(coordinates c, int up, int right, int down, int left, int catch){
+	
+	int i = up + right + down + left;
 	coordonates *tab;
 	tab = (coordinates*) malloc(sizeof(coordinates)*(i+1));
-	coordinates c1;
-	c1.x = i+1;
-	tab[0] = c1;
+	coordinates ct;
+	ct.x = i+1;
+	tab[0] = ct;
 
-	for(i=1;i<=up;i++)
+	//Up
+	if ( (catch==0)&&(up==1)&&(b.map[c.x][c.y-1]!=0) )
 	{
-		tab[i].x = c2.x;
-		tab[i].y = c2.y-i;
+		tab[i].x = c.x;
+		tab[i].y = c.y-2;
 	}
-	for(i=1;i<=right;i++)
-	{
-		tab[i+up].x = c2.x+i;
-		tab[i+up].y = c2.y;
-	}
-	for(i=1;i<=down;i++)
-	{
-		tab[i+up+right].x = c2.x;
-		tab[i+up+right].y = c2.y+i;
-	}
-	for(i=1;i<=left;i++)
-	{
-		tab[i+up+right+down].x = c2.x-i;
-		tab[i+up+right+down].y = c2.y;
+	else{
+		for(i=1;i<=up;i++)
+		{
+			tab[i].x = c.x;
+			tab[i].y = c.y-i;
+		}
 	}
 
+	//Right
+	if ( (catch==0)&&(right==1)&&(b.map[c.x+1][c.y]!=0) )
+	{
+		tab[i].x = c.x+2;
+		tab[i].y = c.y;
+	}
+	else
+	{
+		for(i=1;i<=right;i++)
+		{
+		tab[i+up].x = c.x+i;
+		tab[i+up].y = c.y;
+		}
+	}
+
+	//Down
+	if ( (catch==0)&&(down==1)&&(b.map[c.x][c.y+1]!=0) )
+	{
+		tab[i].x = c.x;
+		tab[i].y = c.y+2;
+	}
+	else
+	{
+		for(i=1;i<=down;i++)
+		{
+		tab[i+up+right].x = c.x;
+		tab[i+up+right].y = c.y+i;
+		}
+	}
+
+	//Left
+	if ( (catch==0)&&(left==1)&&(b.map[c.x-1][c.y]!=0) )
+	{
+		tab[i].x = c.x-2;
+		tab[i].y = c.y;
+	}
+	else
+	{
+		for(i=1;i<=left;i++)
+		{
+		tab[i+up+right+down].x = c.x-i;
+		tab[i+up+right+down].y = c.y;
+		}
+	}
+	
 	return tab;
 }
 
@@ -302,3 +345,64 @@ int checkMovement(coordinates c1, coordinates c2) {
 	//Never used
 	return 0;
 }
+
+coordonates* showPossible(coordonates c1)
+{
+	//We identifie the number of cases
+	int i=0; int up=0; int right=0; int down=0; int left=0;
+
+	//Up
+	i=1;
+	for(i=1 ; c1.y-i >= 0 ; i++)
+	{
+		if (checkMovement(c1,c2)==1) {
+			up++;
+		}
+	}
+
+	//Right
+	for(i=1 ; c1.x+i <= 8 ; i++)
+	{
+		if (checkMovement(c1,c2)==1) {
+			right++;
+		}
+	}
+
+	//Down
+	for(i=1 ; c1.y+i <= 8 ; i++)
+	{
+		if (checkMovement(c1,c2)==1) {
+			down++;
+		}
+	}
+
+	//Left
+	for(i=1 ; c1.x-i >= 0 ; i++)
+	{
+		if (checkMovement(c1,c2)==1) {
+			left++;
+		}
+	}
+	
+	return createTable(c1, up, right, down, left, 0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
