@@ -1,18 +1,14 @@
-#include "Board2.c"
+//#include "Board2.c"
 #include "IA.c"
 
-typedef struct {
-	int gameMode; //the gameMode ie player vs player 1, player vs computer 2, computer vs player 3,  computer vs computer (watch mode) 4
-	int var; // variante of ashami shogi beeing played
-	board b; // board of the game
-} game;
-
+//GLOBAL VAR
+extern game g; //global variable (initialized in App.c)
 
 /*
 	function used to initialize a new game
 	referenced as g by the rest of the program
 */
-game initGame(int gameMode, int var);
+void initGame(game g, int gameMode, int var);
 
 
 
@@ -20,9 +16,7 @@ game initGame(int gameMode, int var);
 	function which update the game after a play
 	! is lauchned by user input !
 */
-//void update(int currentPlayer, coordinates c1, coordinates c2);
+void update(int currentPlayer, coordinates c1, coordinates c2);
 
-/*
-	function that show off the possible play after selection of a token
-*/
-//coordinates* showPossible(coordinates c1);
+
+

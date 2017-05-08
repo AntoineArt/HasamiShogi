@@ -37,12 +37,12 @@ void freeBoard(board b)
 
 void write(int status, coordinates c)
 {
-	b.map[c.x][c.y] = status;
+	g.b.map[c.x][c.y] = status;
 }
 
 void movePiece(coordinates c1, coordinates c2)
 {
-	write(b.map[c1.x][c1.y],c2);
+	write(g.b.map[c1.x][c1.y],c2);
 	write(0,c1);
 }
 
@@ -52,18 +52,17 @@ void catchPiece(int currentPlayer, coordinates c2)
 	tab = checkCatch(currentPlayer, c2);
 	int i;
 	for (i = 1; i<tab[0].x; i++) {
-		if ( !((tab[i].x==-1)||(tab[i].y==-1)) ) {
-			write(0,b.map[tab[i].x][tab[i].y]);
+		//if ( !((tab[i].x==-1)||(tab[i].y==-1)) ) { TODO Check if necessary or artifact of previous codes
+			write(0,tab[i]);
 			if (currentPlayer==1) {
-				b.countPlayer1--;
+				g.b.countPlayer2--; //the opponant lose pieces
 				}
 			if (currentPlayer==2) {
-				b.countPlayer2--;
+				g.b.countPlayer1--; //the opponant lose pieces
 				}
-			}
+			//}
 		}
 	free(tab);
-	/*checkSuicide(currentPlayer, c2);*/
 }
 
 int updateBoard(int currentPlayer, coordinates c1, coordinates c2)

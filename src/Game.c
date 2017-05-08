@@ -1,18 +1,12 @@
 #include "Game.h"
 
-game initGame(int gameMode, int var)
+void initGame(game g, int gameMode, int var)
 {
-	game g;
 	g.gameMode = gameMode;
 	g.var = var;
 	g.b = allocateBoard(var);
-	return g;
 }
 
-/*void update(int currentPlayer, coordinates c1, coordinates c2) {
-	updateBoard(int currentPlayer, coordinates c1, coordinates c2);
+void update(int currentPlayer, coordinates c1, coordinates c2) {
+	updateBoard(currentPlayer, c1, c2);
 }
-
-coordinates* showPossible(coordinates c1) {
-
-}*/

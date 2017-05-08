@@ -3,18 +3,8 @@
 #include <string.h>
 #include "Rules.c"
 
-/*
-	structure that describe the board status
-	contains the map of pieces
-	contains the piece counter of both player
-	knows the gameMode
-	knows the variante that is currently being played
-*/
-typedef struct {
-  int **map;  //the game board with the pieces
-  int countPlayer1; //the number of pieces owned by the first player
-  int countPlayer2; //the number of pieces owned by the second player
-} board;
+//GLOBAL VAR
+extern game g; //global variable (initialized in App.c)
 
 /*
 	Create a 9x9 matrix and all the related vars from struct board depending on the variante of ashami shogi being played
@@ -47,4 +37,4 @@ void catchPiece(int currentPlayer, coordinates c2);
 	Update the board with the current player's move from c1 to c2
 */
 
-void updateBoard(int currentPlayer, coordinates c1, coordinates c2);
+int updateBoard(int currentPlayer, coordinates c1, coordinates c2);

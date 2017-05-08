@@ -15,7 +15,7 @@ int main(int argc, char* argv[]){
 
   // Launching the menu window
   int mode;
-  game g = initGame(GAME_MODE_DEFAULT, VARIANT_DEFAULT);
+  initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
   mode = menu(pWindow, police);
   parameters param = initParameters();
 
@@ -132,15 +132,19 @@ void newGame(game g, parameters param){
   setupBoard(g, pWinGame);
   //board b = allocateBoard(g.var);
   //resetBoard(b);
+  int currentPlayer = 1; //initialize the currentPlayer
 
+  //victory contains the player who won this turn (0 if none of them, 3 if both loosed)
   int victory = 0;
-  while (!victory){
+  while (victory==0){
     //ajouter IAplay
-    victory = inGameEvents();
+    victory = inGameEvents(currentPlayer);
+    currentPlayer = 3-currentPlayer; //switch the player
   }
 
-  if(victory == 1){victoryDisplay();}
-  else{defeatDisplay();}
+  if(victory == 1){victoryDisplay(1);}
+  else if (victory == 2){victoryDisplay(2);}
+  else{defeatDisplay();} //both loosed
 }
 
 void continueGame(){
@@ -195,14 +199,14 @@ void setupBoard(game g, SDL_Window* pWindow){
 void defeatDisplay(){
 
 }
-void victoryDisplay(){
+void victoryDisplay(int winner){
 
 }
 
-int inGameEvents(){
+int inGameEvents(int currentPlayer){
   int depth = 0;
   coordinates c1;
-  c1.x=-1; c2.y=-1;
+  c1.x=-1; c1.y=-1;
   coordinates c2;
   c2.x=-1; c2.y=-1;
 
@@ -227,12 +231,13 @@ int inGameEvents(){
                 }
               }
             }
-        }
+          }
       }
       if(depth==0){
         c1.x=c.x ; c1.y = c.y; depth++;
       }
       else if(depth==1){
+      //display available mouvement and catchs
         if(c.x==c1.x && c.y==c1.y){
           depth--;
         }
@@ -241,7 +246,7 @@ int inGameEvents(){
         }
       }
     }
-    moveRight = updateBoard(c1,c2);
+    moveRight = updateBoard(currentPlayer,c1,c2);
   }
   return checkVictory(1, c2);
 }

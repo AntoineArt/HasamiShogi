@@ -5,8 +5,12 @@
 #include <SDL2/SDL_ttf.h>
 #include "Game.c"
 
-const int DEFAULT_WIDTH = 1920;
-const int DEFAULT_HEIGTH = 1080;
+
+//GLOBAL VAR
+game g; //global variable (initialized in main)
+
+const int DEFAULT_WIDTH = 800;//1920;
+const int DEFAULT_HEIGTH = 600;//1080;
 const int GAME_MODE_DEFAULT = 0; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int DECAY_PIECES = 150;
@@ -14,11 +18,6 @@ const int DECAY_PIECES = 150;
 const char texts[11][20] = {"Nouvelle partie", "Continuer", "Parametres", "Regles", "Quitter", "Francais", "Anglais", "Plein ecran", "Son", "Pack de textures", "Precedent"};
 const char texts2[11][20] = {"New game", "Continue", "Parameters", "Rules", "Quit", "French", "English", "Fullscreen", "Sound", "Texture pack", "Previous"};
 
-typedef struct {
-  int fullscreen;
-  char soundLevel;
-  int texturePack;
-}parameters;
 
 parameters initParameters();
 
@@ -77,14 +76,15 @@ void setupBoard(game g, SDL_Window *pWindow);
 void defeatDisplay();
 
 /*
-  Displays the victory screen
+  Displays the victory screen for the winner (player)
+  might be adapted for computer ^^
 */
-void victoryDisplay();
+void victoryDisplay(int winner);
 
 /*
 
 */
-int inGameEvents();
+int inGameEvents(int currentPlayer);
 
 void rules();
 

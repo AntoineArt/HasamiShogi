@@ -28,14 +28,14 @@ App-dev: App.c
 
 
 
-App-deb: App.c
-	gcc -std=c99 -Wall -g App.c -lSDL2 -lSDL2_ttf -o App
+App-deb: Game-deb.o App.c
+	gcc -std=c99 -Wall -g App.c Game-deb.o -lSDL2 -o App -lSDL2_ttf 
 
-Game-deb.o: IA.o Game.c Board2-deb.o IA.o
+Game-deb.o: IA-deb.o Game.c Board2-deb.o IA.o
 	gcc -std=c99 -Wall Game.c -o Board2-deb.o IA-deb.o
 
-IA-deb.o: IA.c
-	gcc -std=c99 -Wall -c IA.c
+IA-deb.o: Board2-deb.o IA.c
+	gcc -std=c99 -Wall IA.c -o Board2-deb.o
 
 Board2-deb.o: Rules-deb.o Board2.c
 	gcc -std=c99 -Wall Board2.c -o Rules-deb.o
