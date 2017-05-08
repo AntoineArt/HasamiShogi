@@ -19,3 +19,4 @@ App-dev : App.c
 
 clean:
 	rm -rf *.o
+	rm -rf *.h.gch

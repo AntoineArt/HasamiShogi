@@ -3,7 +3,7 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-//#include "Game.c"
+#include "Game.c"
 
 const int DEFAULT_WIDTH = 1920;
 const int DEFAULT_HEIGTH = 1080;
@@ -13,6 +13,16 @@ const int DECAY_PIECES = 150;
 
 const char texts[11][20] = {"Nouvelle partie", "Continuer", "Parametres", "Regles", "Quitter", "Francais", "Anglais", "Plein ecran", "Son", "Pack de textures", "Precedent"};
 const char texts2[11][20] = {"New game", "Continue", "Parameters", "Rules", "Quit", "French", "English", "Fullscreen", "Sound", "Texture pack", "Previous"};
+
+typedef struct {
+  int fullscreen;
+  char soundLevel;
+  int texturePack;
+}parameters;
+
+parameters initParameters();
+
+//###########################//
 
 /*
   Initializes SDL2
@@ -44,7 +54,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage);
 /*
   Launches a new game
 */
-void newGame(int gameMode, int variant);
+void newGame(game g, parameters param);
 
 /*
   Loads an ancient game and launches it
@@ -54,12 +64,12 @@ void continueGame();
 /*
   Displays the parameters menu
 */
-void parameters(SDL_Window* pWindow, TTF_Font* police);
+void parametersMenu(SDL_Window* pWindow, TTF_Font* police, parameters p);
 
 /*
   Sets up the display for a new game
 */
-void setupBoard(int gameMode, int variant, SDL_Window *pWindow);
+void setupBoard(game g, SDL_Window *pWindow);
 
 /*
   Displays the defeat screen
@@ -72,9 +82,9 @@ void defeatDisplay();
 void victoryDisplay();
 
 /*
-  
+
 */
-int handleEvents();
+int inGameEvents();
 
 void rules();
 

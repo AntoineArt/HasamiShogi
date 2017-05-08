@@ -38,11 +38,11 @@ void resetBoard();
 int checkVictory(int currentPlayer, coordinates c2);
 
 /*
-	Return a table of the coordonates with the size of the table in first position
+	Return a table of the coordinates with the size of the table in first position
 	There isn't any interaction with the piece's previous position
 	WARNING : Allocate memory
 */
-coordonates* checkCatch(int currentPlayer, coordinates c2);
+coordinates* checkCatch(int currentPlayer, coordinates c2);
 
 /*
 	Check if a move is valid
@@ -52,4 +52,4 @@ int checkMovement(coordinates c1, coordinates c2);
 /*
 	Check if the piece who has been moved should die at the end of a turn
 */
-//bool checkSuicide(currentPlayer, coordonates c2);
+//bool checkSuicide(currentPlayer, coordinates c2);

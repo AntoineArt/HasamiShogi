@@ -156,7 +156,7 @@ int checkVictory(int currentPlayer, coordinates c2)
 	}
 }
 
-coordonates* checkCatch(int currentPlayer, coordinates c2)
+coordinates* checkCatch(int currentPlayer, coordinates c2)
 {
 	//We identifie the number of tokens we will catch in the named direction
 	int up=0; int right=0; int down=0; int left=0;
@@ -201,8 +201,8 @@ coordonates* checkCatch(int currentPlayer, coordinates c2)
 
 	i = up + right + down + left;
 
-	//We create the table who will contain the coordonates of the near-to-be caught tokens
-	coordonates *tab;
+	//We create the table who will contain the coordinates of the near-to-be caught tokens
+	coordinates *tab;
 	tab = (coordinates*) malloc(sizeof(coordinates)*(i+1));
 	coordinates c1;
 	c1.x = i+1;

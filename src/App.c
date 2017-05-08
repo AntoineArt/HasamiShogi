@@ -15,12 +15,15 @@ int main(int argc, char* argv[]){
 
   // Launching the menu window
   int mode;
+  game g = initGame(GAME_MODE_DEFAULT, VARIANT_DEFAULT);
   mode = menu(pWindow, police);
+  parameters param = initParameters();
+
 
   switch(mode){
-    case 0: newGame(GAME_MODE_DEFAULT, VARIANT_DEFAULT);break;
+    case 0: newGame(g, param);break;
     case 1: continueGame();break;
-    case 2: parameters(pWindow, police);break;
+    case 2: parametersMenu(pWindow, police, param);break;
     case 3: rules();
     case 4: break;
   }
@@ -69,7 +72,6 @@ int menu(SDL_Window* pWindow, TTF_Font* police){
 }
 
 int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
-  char cont = 1; // Determines if yes or no we continue the loop
   int n = 5;
   int x[n], y[n], w[n], h[n];
   for(int i = 0; i<n; i++){
@@ -79,14 +81,14 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
     y[i] = 540 - h[i]/2-(300-100*i);
   }
 
-  while(cont){
+  while(1){
     SDL_Event event;
     while(SDL_PollEvent(&event)){
       // Event treatment
       switch(event.type){ // Which type of event is it ?
         case SDL_WINDOWEVENT: // Window event
           if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
-            cont = 0;
+            return 4;
           }
           break;
 
@@ -117,7 +119,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
   SDL_UpdateWindowSurface(pWindow);
 }
 
-void newGame(int gameMode, int variant){
+void newGame(game g, parameters param){
   SDL_Surface* pBackgroundGame = SDL_LoadBMP("ShogiBoard.bmp");
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
@@ -127,11 +129,14 @@ void newGame(int gameMode, int variant){
 
   // Menu display
   updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
-  setupBoard(gameMode, variant, pWinGame);
+  setupBoard(g, pWinGame);
+  //board b = allocateBoard(g.var);
+  //resetBoard(b);
 
   int victory = 0;
   while (!victory){
-    victory = handleEvents();
+    //ajouter IAplay
+    victory = inGameEvents();
   }
 
   if(victory == 1){victoryDisplay();}
@@ -146,7 +151,7 @@ void rules(){
 
 }
 
-void parameters(SDL_Window* pWindow, TTF_Font* police){
+void parametersMenu(SDL_Window* pWindow, TTF_Font* police, parameters p){
   SDL_Surface* pBackgroundParameters = SDL_LoadBMP("BackgroundMenu.bmp");
   SDL_Window *pWinParam = SDL_CreateWindow("Parameters",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
@@ -164,32 +169,25 @@ void parameters(SDL_Window* pWindow, TTF_Font* police){
       updateWindow(960 - textsParameters[i]->w/2, 540 - textsParameters[i]->h/2 - (300-100*i), pWinParam, textsParameters[i]);
     }
     SDL_Delay(2000);
-
+    SDL_FreeSurface(pBackgroundParameters);
+    SDL_DestroyWindow(pWinParam);
 }
 
 char isIn(int xM, int yM, int x, int y, int w, int h){
   return ((xM > x && xM < x+w) && (yM > y && yM < y+h));
 }
 
-void setupBoard(int gameMode, int variant, SDL_Window* pWindow){
+void setupBoard(game g, SDL_Window* pWindow){
   SDL_Surface* pBlackPiece = SDL_LoadBMP("BlackPiece.bmp");
-  SDL_Surface* pWhitePiece = SDL_LoadBMP("WhitePiece.bmp");
+  SDL_Surface* pRedPiece = SDL_LoadBMP("RedPiece.bmp");
 
-  SDL_Surface* p1st = (gameMode == 2) ? pBlackPiece : pWhitePiece;
-  SDL_Surface* p2nd = (gameMode == 2) ? pWhitePiece : pBlackPiece;
+  SDL_Surface* p1st = (g.gameMode == 2) ? pBlackPiece : pRedPiece;
+  SDL_Surface* p2nd = (g.gameMode == 2) ? pRedPiece : pBlackPiece;
 
-  if(variant == 0){
-    for(int i = 0; i<9; i++ ){
-      updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8, pWindow, p1st);  //Positioning 1st player
-      updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8 + 8 * (131+4), pWindow, p2nd);  //Positioning 2nd player
-    }
-  }
-  else{
-    for(int i = 0; i<9; i++){
-      for(int j = 0; j<2; j++){
-        updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8 + j*131, pWindow, p1st);  //White pieces setup
-        updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8 + 8*(131+4) - j*131, pWindow, p2nd);  //Black pieces setup
-      }
+  for(int i = 0; i<9; i++){
+    for(int j=0; j<g.var+1; j++){
+      updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + j*131, pWindow, p1st);  //Positioning 1st player
+      updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + 8 * (131+4) - j*131, pWindow, p2nd);  //Positioning 2nd player
     }
   }
 }
@@ -201,6 +199,60 @@ void victoryDisplay(){
 
 }
 
-int handleEvents(){
+int inGameEvents(){
+  int depth = 0;
+  coordinates c1;
+  c1.x=-1; c2.y=-1;
+  coordinates c2;
+  c2.x=-1; c2.y=-1;
 
+  coordinates c;
+  int moveRight = 0;
+  while (!moveRight) {
+
+    while(depth<2){ //Clic detection
+      SDL_Event event;
+      while(SDL_PollEvent(&event)){
+        // Event treatment
+        switch(event.type){ // Which type of event is it ?
+          case SDL_MOUSEBUTTONUP: // Mouse event
+            if (event.button.button == SDL_BUTTON_LEFT){
+              int xM = event.button.x;
+              int yM = event.button.y;
+              for(int i=0; i<9; i++){
+                for(int j=0; j<9; j++){
+                  if(isIn(xM, yM, DECAY_PIECES + 67 + i*(115+5), 68+8 + j*131, 98, 120)){
+                    c.x = i ; c.y = j;
+                  }
+                }
+              }
+            }
+        }
+      }
+      if(depth==0){
+        c1.x=c.x ; c1.y = c.y; depth++;
+      }
+      else if(depth==1){
+        if(c.x==c1.x && c.y==c1.y){
+          depth--;
+        }
+        else{
+          c2.x = c.x ; c2.y = c.y; depth++;
+        }
+      }
+    }
+    moveRight = updateBoard(c1,c2);
+  }
+  return checkVictory(1, c2);
+}
+
+
+
+
+
+parameters initParameters(){
+  parameters p;
+  p.fullscreen = 0;
+  p.soundLevel = 255;
+  p.texturePack = 0;
 }
