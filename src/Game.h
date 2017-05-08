@@ -1,4 +1,3 @@
-#include "Board.c"
 #include "IA.c"
 
 typedef struct {

@@ -16,7 +16,6 @@ typedef struct {
   int countPlayer2; //the number of pieces owned by the second player
 } board;
 
-
 /*
 	Create a 9x9 matrix and all the related vars from struct board depending on the variante of ashami shogi being played
 	the new board is referenced as b by the reste of the program
@@ -35,7 +34,7 @@ void freeBoard(board b);
 void resetBoard(matrice m)
 
 /*
-	Change le statut de la case de coordonnées c1
+	Change the status of the case of coordonates c1
 */
 void write(int status, coordinnees c);
 
@@ -45,12 +44,12 @@ void write(int status, coordinnees c);
 void movePiece(coordinnees c1, coordinnees c2);
 
 /*
-	catch eventualy the pieces around c2, using checkCatch from Rules.c
+	Catch eventualy the pieces around c2, using checkCatch from Rules.c
 */
 void catchPiece(int currentPlayer, coordinates c2);
 
 /*
-	 Update the board with the current player's move from c1 to c2
+	Update the board with the current player's move from c1 to c2
 */
 void updateBoard(int currentPlayer, coordinnees c1, coordinnees c2);
 
