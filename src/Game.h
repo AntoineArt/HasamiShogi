@@ -11,7 +11,7 @@ typedef struct {
 	function used to initialize a new game
 	referenced as g by the rest of the program
 */
-game newGame(int, gameMode, int var);
+game initGame(int, gameMode, int var);
 
 
 /*

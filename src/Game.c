@@ -1,6 +1,6 @@
 #include "Game.h"
 
-game newGame(int gameMode, int var)
+game initGame(int gameMode, int var)
 {
 	game g;
 	g.gameMode = gameMode;

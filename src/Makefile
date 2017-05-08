@@ -1,21 +1,45 @@
-Rules.o: Rules.c
-	gcc -c Rules.c -std=c99
+all: App
 
-Board2.o: Rules.o Board2.c
-	gcc Board2.c -o Rules.o -std=c99
-
-IA.o: IA.c
-	gcc -c IA.c -std=c99
-
-Game.o: IA.o Game.c Board2.o IA.o
-	gcc Game.c -o Board2.o IA.o -std=c99
-
-
-App: Game.o  App.c
-	gcc App.c -lSDL2 -o App  Game.o -lSDL2_ttf -std=c99
-
-App-dev : App.c
-	gcc -g App.c -lSDL2 -o App -lSDL2_ttf -std=c99
+all-deb: App-deb
 
 clean:
 	rm -rf *.o
+
+Rules.o: Rules.c
+	gcc -std=c99 -c Rules.c
+
+Board2.o: Rules.o Board2.c
+	gcc -std=c99 Board2.c -o Rules.o
+
+IA.o: IA.c
+	gcc -std=c99 -c IA.c
+
+Game.o: IA.o Game.c Board2.o IA.o
+	gcc -std=c99 Game.c -o Board2.o IA.o
+
+App: Game.o  App.c
+	gcc -std=c99 App -lSDL2 -lSDL2_ttf -o App.c  Game.o
+
+
+
+App-dev: App.c
+	gcc -std=c99 -g App.c -lSDL2 -o App -lSDL2_ttf
+
+
+
+App-deb: App.c
+	gcc -std=c99 -Wall -g App.c -lSDL2 -lSDL2_ttf -o App 
+
+Game-deb.o: IA.o Game.c Board2-deb.o IA.o
+	gcc -std=c99 -Wall Game.c -o Board2-deb.o IA-deb.o
+
+IA-deb.o: IA.c
+	gcc -std=c99 -Wall -c IA.c
+
+Board2-deb.o: Rules-deb.o Board2.c
+	gcc -std=c99 -Wall Board2.c -o Rules-deb.o
+
+Rules-deb.o: Rules.c
+	gcc -std=c99 -Wall -c Rules.c
+
+

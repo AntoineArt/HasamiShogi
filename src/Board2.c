@@ -21,6 +21,7 @@ board allocateBoard(int var)
 		default:
 			printf("invalid var");
 	}
+	return b;
 }
 
 void freeBoard(board b)
