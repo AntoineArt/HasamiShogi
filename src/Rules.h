@@ -45,11 +45,17 @@ int checkVictory(int currentPlayer, coordinates c2);
 coordinates* checkCatch(int currentPlayer, coordinates c2);
 
 /*
+	Return a table of the coordinates surrounding c, according to the "catch" condition
+*/
+coordinates* createTable(coordinates c, int up, int right, int down, int left, int catching);
+
+/*
 	Check if a move is valid
 */
 int checkMovement(coordinates c1, coordinates c2);
 
 /*
-	Check if the piece who has been moved should die at the end of a turn
+	function that show off the possible play after selection of a token
 */
-//bool checkSuicide(currentPlayer, coordinates c2);
+
+coordinates* showPossible(coordinates c1);

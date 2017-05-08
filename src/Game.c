@@ -5,6 +5,7 @@ game initGame(int gameMode, int var)
 	game g;
 	g.gameMode = gameMode;
 	g.var = var;
+	g.b = allocateBoard(var);
 	return g;
 }
 
