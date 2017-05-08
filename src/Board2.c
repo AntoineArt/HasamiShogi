@@ -57,7 +57,7 @@ void catchPiece(int currentPlayer, coordinates c2)
 			if (currentPlayer==1) {
 				b.countPlayer1--;
 				}
-			if (currenPlayer==2) {
+			if (currentPlayer==2) {
 				b.countPlayer2--;
 				}
 			}
@@ -68,10 +68,11 @@ void catchPiece(int currentPlayer, coordinates c2)
 
 void updateBoard(int currentPlayer, coordinates c1, coordinates c2)
 {
-	if(checkMovement(c1,c2)){
+	if (g.b.map[c1.x][c1.y]!=currentPlayer){printf("Invalid Movement (Not your token !)");}
+	else if(checkMovement(c1,c2)){
 		movePiece(c1, c2);
 		catchPiece(currentPlayer,c2);
 	}
-	else{printf("Invalid Movement!");}
+	else{printf("Invalid Movement (Not in the rules !");}
 }
 
