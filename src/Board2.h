@@ -29,19 +29,14 @@ board allocateBoard(int var);
 void freeBoard(board b);
 
 /*
-	Reset the matrix to it's basic state
-*/
-void resetBoard(matrice m)
-
-/*
 	Change the status of the case of coordonates c1
 */
-void write(int status, coordinnees c);
+void write(int status, coordinates c);
 
 /*
 	Move a piece from c1 to c2
 */
-void movePiece(coordinnees c1, coordinnees c2);
+void movePiece(coordinates c1, coordinates c2);
 
 /*
 	Catch eventualy the pieces around c2, using checkCatch from Rules.c

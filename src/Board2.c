@@ -5,7 +5,7 @@ board allocateBoard(int var)
 	board b;
 	b.map = (int **) malloc(sizeof(int*)*9);
 	int i;
-	for (i=0; i<l; i++) {
+	for (i=0; i<9; i++) {
 		b.map[i] = (int *) malloc(sizeof(int)*9);
 		}
 	switch (var)
@@ -37,7 +37,7 @@ void freeBoard(board b)
 
 
 
-void write(int status, coordinnees c)
+void write(int status, coordinates c)
 
 {
 	b.map[c.x][c.y] = status;
