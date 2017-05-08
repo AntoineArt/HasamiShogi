@@ -35,15 +35,12 @@ void freeBoard(board b)
 	b.countPlayer2 = 0;
 }
 
-
-
 void write(int status, coordinates c)
-
 {
 	b.map[c.x][c.y] = status;
 }
 
-void movePiece(c1, c2)
+void movePiece(coordinates c1, coordinates c2)
 {
 	write(b.map[c1.x][c1.y],c2);
 	write(0,c1);
@@ -52,10 +49,10 @@ void movePiece(c1, c2)
 void catchPiece(int currentPlayer, coordinates c2) 
 {
 	coordinates *tab;
-	tab = checkCatch(int currentPlayer, coordinates c2);
+	tab = checkCatch(currentPlayer, c2);
 	int i;
 	for (i = 1; i<tab[0].x; i++) {
-		if !((tab[i].x==-1)||(tab[i].y==-1)) {
+		if ( !((tab[i].x==-1)||(tab[i].y==-1)) ) {
 			write(0,b.map[tab[i].x][tab[i].y]);
 			if (currentPlayer==1) {
 				b.countPlayer1--;
@@ -75,6 +72,6 @@ void updateBoard(int currentPlayer, coordinates c1, coordinates c2)
 		movePiece(c1, c2);
 		catchPiece(currentPlayer,c2);
 	}
-	else{printf("Invalid Movement!")}
+	else{printf("Invalid Movement!");}
 }
 

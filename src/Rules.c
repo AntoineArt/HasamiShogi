@@ -350,35 +350,47 @@ coordinates* showPossible(coordinates c1)
 {
 	//We identifie the number of cases
 	int i=0; int up=0; int right=0; int down=0; int left=0;
+	coordinates c2;
 
 	//Up
-	i=1;
+	c2.x = c1.x;
+	c2.y = c1.y;
 	for(i=1 ; c1.y-i >= 0 ; i++)
 	{
+		c2.y = c1.y-i;
 		if (checkMovement(c1,c2)==1) {
 			up++;
 		}
 	}
 
 	//Right
+	c2.x = c1.x;
+	c2.y = c1.y;
 	for(i=1 ; c1.x+i <= 8 ; i++)
 	{
+		c2.x = c1.x+i;
 		if (checkMovement(c1,c2)==1) {
 			right++;
 		}
 	}
 
 	//Down
+	c2.x = c1.x;
+	c2.y = c1.y;
 	for(i=1 ; c1.y+i <= 8 ; i++)
 	{
+		c2.y = c1.y+i;
 		if (checkMovement(c1,c2)==1) {
 			down++;
 		}
 	}
 
 	//Left
+	c2.x = c1.x;
+	c2.y = c1.y;
 	for(i=1 ; c1.x-i >= 0 ; i++)
 	{
+		c2.x = c1.x-i;
 		if (checkMovement(c1,c2)==1) {
 			left++;
 		}
