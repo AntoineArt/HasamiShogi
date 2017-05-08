@@ -214,7 +214,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	tab[0] = ct;
 
 	//Up
-	if ( (catch==0)&&(up==1)&&(b[c.x][c.y-1]!=0) )
+	if ( (catch==0)&&(up==1)&&(b.map[c.x][c.y-1]!=0) )
 	{
 		tab[i].x = c.x;
 		tab[i].y = c.y-2;
@@ -228,7 +228,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	}
 
 	//Right
-	if ( (catch==0)&&(right==1)&&(b[c.x+1][c.y]!=0) )
+	if ( (catch==0)&&(right==1)&&(b.map[c.x+1][c.y]!=0) )
 	{
 		tab[i].x = c.x+2;
 		tab[i].y = c.y;
@@ -243,7 +243,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	}
 
 	//Down
-	if ( (catch==0)&&(down==1)&&(b[c.x][c.y+1]!=0) )
+	if ( (catch==0)&&(down==1)&&(b.map[c.x][c.y+1]!=0) )
 	{
 		tab[i].x = c.x;
 		tab[i].y = c.y+2;
@@ -258,7 +258,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	}
 
 	//Left
-	if ( (catch==0)&&(left==1)&&(b[c.x-1][c.y]!=0) )
+	if ( (catch==0)&&(left==1)&&(b.map[c.x-1][c.y]!=0) )
 	{
 		tab[i].x = c.x-2;
 		tab[i].y = c.y;
