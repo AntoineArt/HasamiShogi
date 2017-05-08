@@ -1,44 +1,53 @@
-all: App
+CFLAGS = -std=c99
+CFLAGSDEB = $(CFLAGS) -Wall
 
-all-deb: App-deb
+LIB = -lSDL2 -lSDL2-ttf
 
-clean:
-	rm -rf *.o
-	rm -rf *.h.gch
+#includeDirs = -rsc not used at this time
+src=App.c Game.c IA.c Board2.c Rules.c
+heads=App.h Game.h IA.h Board2.h Rules.h Types.h
 
-Rules.o: Rules.c
-	gcc -std=c99 -c Rules.c
+all : App
 
-Board2.o: Rules.o Board2.c
-	gcc -std=c99 Board2.c -o Rules.o
+all-deb : App-deb
 
-IA.o: IA.c
-	gcc -std=c99 -c IA.c
+Rules.o : Rules.c Types.h
+	gcc -c $< $(CFLAGS)
 
-Game.o: IA.o Game.c Board2.o IA.o
-	gcc -std=c99 Game.c -o Board2.o IA.o
+Board2.o : Rules.o Board2.c
+	gcc -o $^ $(CFLAGS)
 
-App: Game.o  App.c
-	gcc -std=c99 App -lSDL2 -lSDL2_ttf -o App.c  Game.o
+IA.o : IA.c
+	gcc -c $^ $(CFLAGS)
+
+Game.o : IA.o Game.c Board2.o IA.o
+	gcc -o $^ $(CFLAGS)
+
+App : Game.o  App.c
+	gcc  App -o $@ $^  $(LIB) $(CFLAGS)
 
 
+App-deb : Game-deb.o App.c
+	gcc -g -o $@ $^ $(LIB) $(CFLAGSDEB) 
 
-App-dev: App.c
+Game-deb.o : IA-deb.o Game.c Board2-deb.o IA-deb.o
+	gcc -o $^ $(CFLAGSDEB)
+
+IA-deb.o : Board2-deb.o IA.c
+	gcc -o $^ $(CFLAGSDEB)
+
+Board2-deb.o : Rules-deb.o Board2.c
+	gcc -o $^ $(CFLAGSDEB)
+
+Rules-deb.o : Rules.c Types.h
+	gcc  -c $< $(CFLAGSDEB)
+	
+
+App-dev : App.c
 	gcc -std=c99 -g App.c -lSDL2 -o App -lSDL2_ttf
 
 
-
-App-deb: Game-deb.o App.c
-	gcc -std=c99 -Wall -g App.c Game-deb.o -lSDL2 -o App -lSDL2_ttf 
-
-Game-deb.o: IA-deb.o Game.c Board2-deb.o IA.o
-	gcc -std=c99 -Wall Game.c -o Board2-deb.o IA-deb.o
-
-IA-deb.o: Board2-deb.o IA.c
-	gcc -std=c99 -Wall IA.c -o Board2-deb.o
-
-Board2-deb.o: Rules-deb.o Board2.c
-	gcc -std=c99 -Wall Board2.c -o Rules-deb.o
-
-Rules-deb.o: Rules.c
-	gcc -std=c99 -Wall -c Rules.c
+.PHONY : clean
+clean :
+	rm -rf *.o
+	rm -rf *.h.gch
