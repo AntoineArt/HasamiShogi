@@ -1,6 +1,6 @@
 #include "Game.h"
 
-game newGame(int gameMode, int var) 
+game newGame(int gameMode, int var)
 {
 	game g;
 	g.gameMode = gameMode;
@@ -8,12 +8,10 @@ game newGame(int gameMode, int var)
 	return g;
 }
 
-void update(int currentPlayer, coordonates c1, coordonates c2) {
-	updateBoard(int currentPlayer, coordonates c1, coordonates c2);
-	
-	
+void update(int currentPlayer, coordinates c1, coordinates c2) {
+	updateBoard(int currentPlayer, coordinates c1, coordinates c2);
 }
 
-coordonates* showPossible(coordonates c1) {
-	
+coordinates* showPossible(coordinates c1) {
+
 }

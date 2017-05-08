@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
   mode = menu(pWindow, police);
 
   switch(mode){
-    case 0: newGame();break;
+    case 0: newGame(GAME_MODE_DEFAULT, VARIANT_DEFAULT);break;
     case 1: continueGame();break;
     case 2: parameters(pWindow, police);break;
     case 3: rules();
@@ -94,7 +94,6 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
           if (event.button.button == SDL_BUTTON_LEFT){
             int xM = event.button.x;
             int yM = event.button.y;
-            printf("%d et %d\n", xM, yM);
 
             if(isIn(xM, yM, x[0], y[0], w[0], h[0])){return 0;}  //Check New game
             if(isIn(xM, yM, x[1], y[1], w[1], h[1])){return 1;}  //Check Continue
@@ -118,8 +117,25 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
   SDL_UpdateWindowSurface(pWindow);
 }
 
-void newGame(){
+void newGame(int gameMode, int variant){
+  SDL_Surface* pBackgroundGame = SDL_LoadBMP("ShogiBoard.bmp");
+  SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
+                                              SDL_WINDOWPOS_CENTERED,
+                                              1500,
+                                              1353,
+                                              0.);
 
+  // Menu display
+  updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
+  setupBoard(gameMode, variant, pWinGame);
+
+  int victory = 0;
+  while (!victory){
+    victory = handleEvents();
+  }
+
+  if(victory == 1){victoryDisplay();}
+  else{defeatDisplay();}
 }
 
 void continueGame(){
@@ -153,4 +169,38 @@ void parameters(SDL_Window* pWindow, TTF_Font* police){
 
 char isIn(int xM, int yM, int x, int y, int w, int h){
   return ((xM > x && xM < x+w) && (yM > y && yM < y+h));
+}
+
+void setupBoard(int gameMode, int variant, SDL_Window* pWindow){
+  SDL_Surface* pBlackPiece = SDL_LoadBMP("BlackPiece.bmp");
+  SDL_Surface* pWhitePiece = SDL_LoadBMP("WhitePiece.bmp");
+
+  SDL_Surface* p1st = (gameMode == 2) ? pBlackPiece : pWhitePiece;
+  SDL_Surface* p2nd = (gameMode == 2) ? pWhitePiece : pBlackPiece;
+
+  if(variant == 0){
+    for(int i = 0; i<9; i++ ){
+      updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8, pWindow, p1st);  //Positioning 1st player
+      updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8 + 8 * (131+4), pWindow, p2nd);  //Positioning 2nd player
+    }
+  }
+  else{
+    for(int i = 0; i<9; i++){
+      for(int j = 0; j<2; j++){
+        updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8 + j*131, pWindow, p1st);  //White pieces setup
+        updateWindow(DECAY_PIECES + 67 + i*(115+4), 68+8 + 8*(131+4) - j*131, pWindow, p2nd);  //Black pieces setup
+      }
+    }
+  }
+}
+
+void defeatDisplay(){
+
+}
+void victoryDisplay(){
+
+}
+
+int handleEvents(){
+
 }
