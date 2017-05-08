@@ -66,13 +66,22 @@ void catchPiece(int currentPlayer, coordinates c2)
 	/*checkSuicide(currentPlayer, c2);*/
 }
 
-void updateBoard(int currentPlayer, coordinates c1, coordinates c2)
+int updateBoard(int currentPlayer, coordinates c1, coordinates c2)
 {
-	if (g.b.map[c1.x][c1.y]!=currentPlayer){printf("Invalid Movement (Not your token !)");}
+	if (g.b.map[c1.x][c1.y]!=currentPlayer)
+	{
+		printf("Invalid Movement (Not your token !)");
+		return 0;
+	}
 	else if(checkMovement(c1,c2)){
 		movePiece(c1, c2);
 		catchPiece(currentPlayer,c2);
+		return 1;
 	}
-	else{printf("Invalid Movement (Not in the rules !");}
+	else
+	{
+		printf("Invalid Movement (Not in the rules !");
+		return 0;
+	}
 }
 
