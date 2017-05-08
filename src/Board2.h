@@ -51,6 +51,5 @@ void catchPiece(int currentPlayer, coordinates c2);
 /*
 	Update the board with the current player's move from c1 to c2
 */
-void updateBoard(int currentPlayer, coordinnees c1, coordinnees c2);
 
-
+void updateBoard(int currentPlayer, coordinates c1, coordinates c2);

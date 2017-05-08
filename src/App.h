@@ -7,9 +7,13 @@
 
 const int DEFAULT_WIDTH = 1920;
 const int DEFAULT_HEIGTH = 1080;
+const int GAME_MODE_DEFAULT = 0; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
+const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
+const int DECAY_PIECES = 150;
 
 const char texts[11][20] = {"Nouvelle partie", "Continuer", "Parametres", "Regles", "Quitter", "Francais", "Anglais", "Plein ecran", "Son", "Pack de textures", "Precedent"};
 const char texts2[11][20] = {"New game", "Continue", "Parameters", "Rules", "Quit", "French", "English", "Fullscreen", "Sound", "Texture pack", "Previous"};
+
 /*
   Initializes SDL2
 */
@@ -37,11 +41,40 @@ void selectResolution(int *res);
 */
 void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage);
 
-void newGame();
+/*
+  Launches a new game
+*/
+void newGame(int gameMode, int variant);
 
+/*
+  Loads an ancient game and launches it
+*/
 void continueGame();
 
+/*
+  Displays the parameters menu
+*/
 void parameters(SDL_Window* pWindow, TTF_Font* police);
+
+/*
+  Sets up the display for a new game
+*/
+void setupBoard(int gameMode, int variant, SDL_Window *pWindow);
+
+/*
+  Displays the defeat screen
+*/
+void defeatDisplay();
+
+/*
+  Displays the victory screen
+*/
+void victoryDisplay();
+
+/*
+  
+*/
+int handleEvents();
 
 void rules();
 
@@ -50,21 +83,3 @@ void rules();
   returns 1 if true, 0 if false
 */
 char isIn(int xM, int yM, int x, int y, int w, int h);
-
-/*
-  Resizes a SDL_Surface
-  Copied from http://www.sdltutorials.com/sdl-scale-surface
-*/
-SDL_Surface *ScaleSurface(SDL_Surface *Surface, Uint16 Width, Uint16 Height);
-
-/*
-  Reads the pixels from a surface
-  Adapted from http://sdl.beuc.net/sdl.wiki/Pixel_Access
-*/
-Uint32 ReadPixel(SDL_Surface *surface, Sint16 x, Sint16 y);
-
-/*
-  Draws the pixels on a surface
-  Adapted from http://sdl.beuc.net/sdl.wiki/Pixel_Access
-*/
-void DrawPixel(SDL_Surface *surface, Sint16 x, Sint16 y, Uint16 pixel);
