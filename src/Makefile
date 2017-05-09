@@ -1,4 +1,4 @@
-CFLAGS = -std=c99 -g -Wall
+CFLAGS = -std=c99 -g -Wall -I $(heads)
 LIB = -lSDL2 -lSDL2_ttf
 
 #includeDirs = -rsc not used at this time
@@ -8,30 +8,25 @@ objects=$(src:.c=.o)
 
 all : App
 
-Rules.o : Rules.c Types.h
-	gcc $(CFLAGS) -c $< 
-
-Board2.o : Board2.c Rules.o
-	gcc $(CFLAGS) -o $^
-
-IA.o : IA.c Board2.o
-	gcc $(CFLAGS) -o $^ 
-
-Game.o : Game.c IA.o 
-	gcc $(CFLAGS) -o $^
-
-App : App.c Game.o
+App : App.c
 	gcc $(CFLAGS) -o $@ $^ $(LIB)
+
+Rules.o : Types.h
+
+%.o : %.c
+	gcc $(CFLAGS) -o $^
 	
 App-test : App.c
 	gcc $(CFLAGS) $^ -o App $(LIB)
 	
-
 App-dev : App.c
 	gcc -std=c99 -g App.c -lSDL2 -o App -lSDL2_ttf
 
 
-.PHONY : clean
+.PHONY : clean, mrproper
 clean :
 	rm -rf *.o
 	rm -rf *.h.gch
+
+mrproper : clean
+	rm -rf App
