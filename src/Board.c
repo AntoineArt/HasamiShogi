@@ -1,4 +1,4 @@
-#include "Board2.h"
+#include "./headers/Board.h"
 
 board allocateBoard(int var)
 {

@@ -1,4 +1,4 @@
-#include "App.h"
+#include "./headers/App.h"
 
 int main(int argc, char* argv[]){
   // Initialization

@@ -1,5 +1,4 @@
-//#include "Board2.c"
-#include "IA.c"
+#include "../IA.c"
 
 //GLOBAL VAR
 extern game g; //global variable (initialized in App.c)

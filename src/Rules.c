@@ -1,4 +1,4 @@
-#include "Rules.h"
+#include "./headers/Rules.h"
 
 void resetBoard() {
 	switch (g.var)

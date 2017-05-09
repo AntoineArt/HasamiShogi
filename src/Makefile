@@ -1,9 +1,9 @@
-CFLAGS = -std=c99 -g -Wall -I $(heads)
+CFLAGS = -std=c99 -g -Wall -I $(INCLUDES)
 LIB = -lSDL2 -lSDL2_ttf
 
-#includeDirs = -rsc not used at this time
-src=App.c Game.c IA.c Board2.c Rules.c
-heads=App.h Game.h IA.h Board2.h Rules.h Types.h
+INCLUDES = headers #ressources objects
+src=App.c Game.c IA.c Board.c Rules.c
+heads=App.h Game.h IA.h Board.h Rules.h Types.h
 objects=$(src:.c=.o)
 
 all : App

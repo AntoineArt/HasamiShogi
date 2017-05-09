@@ -3,7 +3,7 @@
 #include <string.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
-#include "Game.c"
+#include "../Game.c"
 
 
 //GLOBAL VAR

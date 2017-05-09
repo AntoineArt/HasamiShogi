@@ -1,4 +1,4 @@
-#include "Game.h"
+#include "./headers/Game.h"
 
 void initGame(game g, int gameMode, int var)
 {
