@@ -1,7 +1,5 @@
 #include "Rules.h"
 
-
-
 void resetBoard() {
 	switch (g.var)
 	{

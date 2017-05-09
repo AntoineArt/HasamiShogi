@@ -260,4 +260,5 @@ parameters initParameters(){
   p.fullscreen = 0;
   p.soundLevel = 255;
   p.texturePack = 0;
+  return p;
 }

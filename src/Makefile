@@ -1,46 +1,30 @@
-CFLAGS = -std=c99
-CFLAGSDEB = $(CFLAGS) -Wall
-
-LIB = -lSDL2 -lSDL2-ttf
+CFLAGS = -std=c99 -g -Wall
+LIB = -lSDL2 -lSDL2_ttf
 
 #includeDirs = -rsc not used at this time
 src=App.c Game.c IA.c Board2.c Rules.c
 heads=App.h Game.h IA.h Board2.h Rules.h Types.h
+objects=$(src:.c=.o)
 
 all : App
 
-all-deb : App-deb
-
 Rules.o : Rules.c Types.h
-	gcc -c $< $(CFLAGS)
+	gcc $(CFLAGS) -c $< 
 
-Board2.o : Rules.o Board2.c
-	gcc -o $^ $(CFLAGS)
+Board2.o : Board2.c Rules.o
+	gcc $(CFLAGS) -o $^
 
-IA.o : IA.c
-	gcc -c $^ $(CFLAGS)
+IA.o : IA.c Board2.o
+	gcc $(CFLAGS) -o $^ 
 
-Game.o : IA.o Game.c Board2.o IA.o
-	gcc -o $^ $(CFLAGS)
+Game.o : Game.c IA.o 
+	gcc $(CFLAGS) -o $^
 
-App : Game.o  App.c
-	gcc  App -o $@ $^  $(LIB) $(CFLAGS)
-
-
-App-deb : Game-deb.o App.c
-	gcc -g -o $@ $^ $(LIB) $(CFLAGSDEB) 
-
-Game-deb.o : IA-deb.o Game.c Board2-deb.o IA-deb.o
-	gcc -o $^ $(CFLAGSDEB)
-
-IA-deb.o : Board2-deb.o IA.c
-	gcc -o $^ $(CFLAGSDEB)
-
-Board2-deb.o : Rules-deb.o Board2.c
-	gcc -o $^ $(CFLAGSDEB)
-
-Rules-deb.o : Rules.c Types.h
-	gcc  -c $< $(CFLAGSDEB)
+App : App.c Game.o
+	gcc $(CFLAGS) -o $@ $^ $(LIB)
+	
+App-test : App.c
+	gcc $(CFLAGS) $^ -o App $(LIB)
 	
 
 App-dev : App.c

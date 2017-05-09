@@ -17,6 +17,3 @@ void initGame(game g, int gameMode, int var);
 	! is lauchned by user input !
 */
 void update(int currentPlayer, coordinates c1, coordinates c2);
-
-
-

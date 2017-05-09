@@ -9,8 +9,8 @@
 //GLOBAL VAR
 game g; //global variable (initialized in main)
 
-const int DEFAULT_WIDTH = 800;//1920;
-const int DEFAULT_HEIGTH = 600;//1080;
+const int DEFAULT_WIDTH = 1920;
+const int DEFAULT_HEIGTH = 1080;
 const int GAME_MODE_DEFAULT = 0; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int DECAY_PIECES = 150;
