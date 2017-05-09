@@ -35,4 +35,4 @@ typedef struct {
   int fullscreen;
   char soundLevel;
   int texturePack;
-}parameters;
+} parameters;

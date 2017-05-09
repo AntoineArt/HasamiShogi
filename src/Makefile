@@ -16,6 +16,7 @@ Rules.o : Types.h
 %.o : %.c
 	gcc $(CFLAGS) -o $^
 	
+	
 App-test : App.c
 	gcc $(CFLAGS) $^ -o App $(LIB)
 	
