@@ -52,7 +52,6 @@ void catchPiece(int currentPlayer, coordinates c2)
 	tab = checkCatch(currentPlayer, c2);
 	int i;
 	for (i = 1; i<tab[0].x; i++) {
-		//if ( !((tab[i].x==-1)||(tab[i].y==-1)) ) { TODO Check if necessary or artifact of previous codes
 			write(0,tab[i]);
 			if (currentPlayer==1) {
 				g.b.countPlayer2--; //the opponant lose pieces
@@ -60,7 +59,7 @@ void catchPiece(int currentPlayer, coordinates c2)
 			if (currentPlayer==2) {
 				g.b.countPlayer1--; //the opponant lose pieces
 				}
-			//}
+			
 		}
 	free(tab);
 }

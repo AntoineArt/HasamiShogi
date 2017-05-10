@@ -4,24 +4,16 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "../Game.c"
-
-
-//GLOBAL VAR
-game g; //global variable (initialized in main)
+#include "../ressources/lang.c"
 
 const int DEFAULT_WIDTH = 1920;
 const int DEFAULT_HEIGTH = 1080;
 const int GAME_MODE_DEFAULT = 0; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
+const int LANG_DEFAULT = 1; //means french
 const int DECAY_PIECES = 150;
 
-const char texts[11][20] = {"Nouvelle partie", "Continuer", "Parametres", "Regles", "Quitter", "Francais", "Anglais", "Plein ecran", "Son", "Pack de textures", "Precedent"};
-const char texts2[11][20] = {"New game", "Continue", "Parameters", "Rules", "Quit", "French", "English", "Fullscreen", "Sound", "Texture pack", "Previous"};
-
-
 parameters initParameters();
-
-//###########################//
 
 /*
   Initializes SDL2
@@ -31,7 +23,7 @@ int main(int argc, char * argv[]);
 /*
   Displays the BackgroundMenu and calls menu(...) for user's input
 */
-int menu(SDL_Window* pWindow, TTF_Font* police);
+int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts);
 
 /*
   Waits for user's input
@@ -63,7 +55,7 @@ void continueGame();
 /*
   Displays the parameters menu
 */
-void parametersMenu(SDL_Window* pWindow, TTF_Font* police, parameters p);
+void parametersMenu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts, parameters p);
 
 /*
   Sets up the display for a new game

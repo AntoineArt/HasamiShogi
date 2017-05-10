@@ -15,11 +15,11 @@ Rules.o : Types.h
 
 %.o : %.c
 	gcc $(CFLAGS) -o $^
-	
-	
+
+
 App-test : App.c
 	gcc $(CFLAGS) $^ -o App $(LIB)
-	
+
 App-dev : App.c
 	gcc -std=c99 -g App.c -lSDL2 -o App -lSDL2_ttf
 

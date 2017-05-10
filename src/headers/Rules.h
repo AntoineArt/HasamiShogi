@@ -3,6 +3,7 @@
 #include <string.h>
 #include "Types.h"
 
+
 //GLOBAL VAR
 extern game g; //global variable (initialized in App.c)
 

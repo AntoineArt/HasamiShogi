@@ -1,5 +1,9 @@
 #include "./headers/App.h"
 
+//GLOBAL VAR
+game g; //global variable (initialized in App.c)
+
+
 int main(int argc, char* argv[]){
   // Initialization
   if(SDL_Init(SDL_INIT_VIDEO)){
@@ -12,18 +16,20 @@ int main(int argc, char* argv[]){
 
   // Window creation
   SDL_Window* pWindow = NULL;
-
+ 
+  //Language choice
+  textsStruct texts[2] = {enText, frText};
   // Launching the menu window
   int mode;
-  initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
-  mode = menu(pWindow, police);
+  initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT, LANG_DEFAULT);
+  mode = menu(pWindow, police, texts);
   parameters param = initParameters();
 
 
   switch(mode){
     case 0: newGame(g, param);break;
     case 1: continueGame();break;
-    case 2: parametersMenu(pWindow, police, param);break;
+    case 2: parametersMenu(pWindow, police, texts, param);break;
     case 3: rules();
     case 4: break;
   }
@@ -37,8 +43,8 @@ int main(int argc, char* argv[]){
   SDL_Quit();
 }
 
-int menu(SDL_Window* pWindow, TTF_Font* police){
-  SDL_Surface* pBackgroundMenu = SDL_LoadBMP("BackgroundMenu.bmp");
+int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
+  SDL_Surface* pBackgroundMenu = SDL_LoadBMP("./resources/images/BackgroundMenu.bmp");
   pWindow = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               DEFAULT_WIDTH,
@@ -52,7 +58,7 @@ int menu(SDL_Window* pWindow, TTF_Font* police){
     SDL_Color textColor = {255, 255, 255};
 
     for(int i = 0; i<5; i++){
-      textsMenu[i] = TTF_RenderText_Blended(police, texts[i], textColor);
+      textsMenu[i] = TTF_RenderText_Blended(police, texts[g.lang].mainMenu[i], textColor);
       updateWindow(960 - textsMenu[i]->w/2, 540 - textsMenu[i]->h/2 - (300-100*i), pWindow, textsMenu[i]);
     }
 
@@ -120,7 +126,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 }
 
 void newGame(game g, parameters param){
-  SDL_Surface* pBackgroundGame = SDL_LoadBMP("ShogiBoard.bmp");
+  SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               1500,
@@ -155,8 +161,8 @@ void rules(){
 
 }
 
-void parametersMenu(SDL_Window* pWindow, TTF_Font* police, parameters p){
-  SDL_Surface* pBackgroundParameters = SDL_LoadBMP("BackgroundMenu.bmp");
+void parametersMenu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts, parameters p){
+  SDL_Surface* pBackgroundParameters = SDL_LoadBMP("./ressources/images/BackgroundMenu.bmp");
   SDL_Window *pWinParam = SDL_CreateWindow("Parameters",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               DEFAULT_WIDTH,
@@ -169,7 +175,7 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, parameters p){
     SDL_Color textColor = {255, 255, 255};
 
     for(int i = 0; i<6; i++){
-      textsParameters[i] = TTF_RenderText_Blended(police, texts[i + 5], textColor);
+      textsParameters[i] = TTF_RenderText_Blended(police, texts[g.lang].options[i + 5], textColor);
       updateWindow(960 - textsParameters[i]->w/2, 540 - textsParameters[i]->h/2 - (300-100*i), pWinParam, textsParameters[i]);
     }
     SDL_Delay(2000);
@@ -182,8 +188,8 @@ char isIn(int xM, int yM, int x, int y, int w, int h){
 }
 
 void setupBoard(game g, SDL_Window* pWindow){
-  SDL_Surface* pBlackPiece = SDL_LoadBMP("BlackPiece.bmp");
-  SDL_Surface* pRedPiece = SDL_LoadBMP("RedPiece.bmp");
+  SDL_Surface* pBlackPiece = SDL_LoadBMP("./ressources/images/BlackPiece.bmp");
+  SDL_Surface* pRedPiece = SDL_LoadBMP("./ressources/images/RedPiece.bmp");
 
   SDL_Surface* p1st = (g.gameMode == 2) ? pBlackPiece : pRedPiece;
   SDL_Surface* p2nd = (g.gameMode == 2) ? pRedPiece : pBlackPiece;
