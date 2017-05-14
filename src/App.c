@@ -1,30 +1,34 @@
 #include "./headers/App.h"
 
 //GLOBAL VAR
-game g; //global variable (initialized in App.c)
+
+game *g; //global variable (initialized in App.c)
 
 
 int main(int argc, char* argv[]){
   // Initialization
-  if(SDL_Init(SDL_INIT_VIDEO)){
+  if(SDL_Init(SDL_INIT_VIDEO) !=0){
     fprintf(stdout, "Echec de l'initialisation de la SDL (%s)\n", SDL_GetError());
-    return -1;
+    return 1;
   }
 
   TTF_Init(); // Initializes the TTF library
-  TTF_Font* police = TTF_OpenFont("asman.ttf", 50);
+  TTF_Font* police = TTF_OpenFont("./ressources/asman.ttf", 50);
 
   // Window creation
   SDL_Window* pWindow = NULL;
- 
+  pWindow = SDL_CreateWindow("Hasami Shogi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DEFAULT_WIDTH, DEFAULT_HEIGTH, 0.);
+                                              
   //Language choice
   textsStruct texts[2] = {enText, frText};
   // Launching the menu window
   int mode;
+  game *g = (game*) malloc(sizeof(game));
   initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT, LANG_DEFAULT);
-  mode = menu(pWindow, police, texts);
+  mode = 0; //used to debug game after menu
+  //mode = menu(pWindow, police, texts);
+  
   parameters param = initParameters();
-
 
   switch(mode){
     case 0: newGame(g, param);break;
@@ -33,7 +37,7 @@ int main(int argc, char* argv[]){
     case 3: rules();
     case 4: break;
   }
-
+  
   // Closing everything
 
   TTF_CloseFont(police);
@@ -41,6 +45,7 @@ int main(int argc, char* argv[]){
 
   SDL_DestroyWindow(pWindow);
   SDL_Quit();
+  return 0;
 }
 
 int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
@@ -55,10 +60,15 @@ int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
 
   // Menu display
     SDL_Surface *textsMenu[5];
-    SDL_Color textColor = {255, 255, 255};
-
-    for(int i = 0; i<5; i++){
-      textsMenu[i] = TTF_RenderText_Blended(police, texts[g.lang].mainMenu[i], textColor);
+    SDL_Color textColor ;
+    textColor.r = 255;
+    textColor.g = 255;
+    textColor.b = 255;
+    
+    printf("%s", texts[0].mainMenu[0]);
+    int i;
+    for(i = 0; i<5; i++){
+      textsMenu[i] = TTF_RenderText_Blended(police, texts[g->lang].mainMenu[i], textColor);
       updateWindow(960 - textsMenu[i]->w/2, 540 - textsMenu[i]->h/2 - (300-100*i), pWindow, textsMenu[i]);
     }
 
@@ -74,7 +84,7 @@ int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
   else{
     fprintf(stderr, "Erreur de création de la fenêtre : %s\n", SDL_GetError());
   }
-  return 3;
+  return -1;
 }
 
 int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
@@ -125,7 +135,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
   SDL_UpdateWindowSurface(pWindow);
 }
 
-void newGame(game g, parameters param){
+void newGame(game *g, parameters param){
   SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
@@ -172,10 +182,13 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts, p
   // Menu display
   updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
     SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
-    SDL_Color textColor = {255, 255, 255};
+    SDL_Color textColor ;
+    textColor.r = 255;
+    textColor.g = 255;
+    textColor.b = 255;
 
     for(int i = 0; i<6; i++){
-      textsParameters[i] = TTF_RenderText_Blended(police, texts[g.lang].options[i + 5], textColor);
+      textsParameters[i] = TTF_RenderText_Blended(police, texts[g->lang].options[i + 5], textColor);
       updateWindow(960 - textsParameters[i]->w/2, 540 - textsParameters[i]->h/2 - (300-100*i), pWinParam, textsParameters[i]);
     }
     SDL_Delay(2000);
@@ -187,15 +200,15 @@ char isIn(int xM, int yM, int x, int y, int w, int h){
   return ((xM > x && xM < x+w) && (yM > y && yM < y+h));
 }
 
-void setupBoard(game g, SDL_Window* pWindow){
+void setupBoard(game *g, SDL_Window* pWindow){
   SDL_Surface* pBlackPiece = SDL_LoadBMP("./ressources/images/BlackPiece.bmp");
   SDL_Surface* pRedPiece = SDL_LoadBMP("./ressources/images/RedPiece.bmp");
 
-  SDL_Surface* p1st = (g.gameMode == 2) ? pBlackPiece : pRedPiece;
-  SDL_Surface* p2nd = (g.gameMode == 2) ? pRedPiece : pBlackPiece;
+  SDL_Surface* p1st = (g->gameMode == 2) ? pBlackPiece : pRedPiece;
+  SDL_Surface* p2nd = (g->gameMode == 2) ? pRedPiece : pBlackPiece;
 
   for(int i = 0; i<9; i++){
-    for(int j=0; j<g.var+1; j++){
+    for(int j=0; j<(g->var)+1; j++){
       updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + j*131, pWindow, p1st);  //Positioning 1st player
       updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + 8 * (131+4) - j*131, pWindow, p2nd);  //Positioning 2nd player
     }
@@ -211,16 +224,17 @@ void victoryDisplay(int winner){
 
 int inGameEvents(int currentPlayer){
   int depth = 0;
+  coordinates c;
+  c.x=-1; c.y=-1;
   coordinates c1;
   c1.x=-1; c1.y=-1;
   coordinates c2;
   c2.x=-1; c2.y=-1;
-
-  coordinates c;
+  printf("%d : %d et %d : %d initial\n",c1.x,c1.y,c2.x,c2.y);
   int moveRight = 0;
-  while (!moveRight) {
+  while (!moveRight) {// no valid move has been done
 
-    while(depth<2){ //Clic detection
+    while(depth<2){ // 2 Clic necessary to continue
       SDL_Event event;
       while(SDL_PollEvent(&event)){
         // Event treatment
@@ -229,6 +243,11 @@ int inGameEvents(int currentPlayer){
             if (event.button.button == SDL_BUTTON_LEFT){
               int xM = event.button.x;
               int yM = event.button.y;
+              /*
+              things like this could work more efficiently
+              c.x = (xM-Marjx)/width
+              c.y = (xM-Marjy)/heigth
+              */
               for(int i=0; i<9; i++){
                 for(int j=0; j<9; j++){
                   if(isIn(xM, yM, DECAY_PIECES + 67 + i*(115+5), 68+8 + j*131, 98, 120)){
@@ -237,22 +256,30 @@ int inGameEvents(int currentPlayer){
                 }
               }
             }
+            default: //anything else happen
+            	break;
           }
+          printf("%d : %d et %d : %d afterswitch depth %d \n",c1.x,c1.y,c2.x,c2.y, depth);
       }
       if(depth==0){
         c1.x=c.x ; c1.y = c.y; depth++;
+        //display available mouvement and catchs
+        
       }
       else if(depth==1){
-      //display available mouvement and catchs
-        if(c.x==c1.x && c.y==c1.y){
+      
+        if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
+          c1.x=-1; c1.y=-1;
           depth--;
         }
-        else{
+        else{ //the player clicked on two different tiles
           c2.x = c.x ; c2.y = c.y; depth++;
         }
       }
     }
-    moveRight = updateBoard(currentPlayer,c1,c2);
+    printf("%d : %d et %d : %d final \n",c1.x,c1.y,c2.x,c2.y);
+    //moveRight = updateBoard(currentPlayer,c1,c2);
+    moveRight=1;
   }
   return checkVictory(1, c2);
 }

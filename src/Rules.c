@@ -1,16 +1,16 @@
 #include "./headers/Rules.h"
 
 void resetBoard() {
-	switch (g.var)
+	switch (g->var)
 	{
 		int i;
 		case 0:
 		for(i=0;i<=9;i++){
-			g.b.map[0][i]=2; //First player's tokens
-			g.b.map[9][i]=1; //Second player's tokens
+			g->map[0][i]=2; //First player's tokens
+			g->map[9][i]=1; //Second player's tokens
 			int j;
 			for(j=2;j<=7;j++){
-				g.b.map[j][i]=0;
+				g->map[j][i]=0;
 			}
 		}
 		break;
@@ -18,13 +18,13 @@ void resetBoard() {
 		for(i=0;i<=9;i++){
 			int j;
 			for(j=0;j<=1;j++){
-				g.b.map[j][i]=1; //First player's tokens
+				g->map[j][i]=1; //First player's tokens
 			}
 			for(j=2;j<=7;j++){
-				g.b.map[j][i]=0;
+				g->map[j][i]=0;
 			}
 			for(j=8;j<=9;j++){
-				g.b.map[j][i]=2; //Second player's tokens
+				g->map[j][i]=2; //Second player's tokens
 			}
 		}
 		break;
@@ -36,17 +36,17 @@ void resetBoard() {
 int checkVictory(int currentPlayer, coordinates c2)
 {
 	//We check if the opponent has loose every tokens but one
-	if (g.var==0)
+	if ((g->var)==0)
 	{
-		if ((currentPlayer == 1)&&(g.b.countPlayer2==1))
+		if ((currentPlayer == 1)&&(g->countPlayer2==1))
 		{
 			return 1;
 		}
-		else if ((currentPlayer == 2)&&(g.b.countPlayer1==1))
+		else if ((currentPlayer == 2)&&(g->countPlayer1==1))
 		{
 			return 2;
 		}
-		else if ((g.b.countPlayer1<1)||(g.b.countPlayer2<1))
+		else if ((g->countPlayer1<1)||(g->countPlayer2<1))
 		{
 			return 3; //Both players loose ; TO BE CHECKED
 		}
@@ -55,7 +55,7 @@ int checkVictory(int currentPlayer, coordinates c2)
 			return 0; //Game continue
 		}
 	}
-	else if(g.var==1)
+	else if(g->var==1)
 	{
 		if(((currentPlayer==1)&&(c2.y <= 6)) || ((currentPlayer==2)&&(c2.y >= 2)))
 		{
@@ -64,9 +64,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//Up
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g.b.map[c2.x][c2.y-i]==1)&&(c2.y-i>=0))
+				  (((currentPlayer == 1)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=0))
 				  ||
-				  ((currentPlayer == 2)&&(g.b.map[c2.x][c2.y-i]==1)&&(c2.y-i>=2))
+				  ((currentPlayer == 2)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=2))
 				  )&&(number<5)
 				 )
 			{
@@ -76,9 +76,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//Down
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g.b.map[c2.x][c2.y+i]==1)&&(c2.y+i<=6))
+				  (((currentPlayer == 1)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=6))
 				   ||
-				   ((currentPlayer == 2)&&(g.b.map[c2.x][c2.y+i]==1)&&(c2.y+i<=8))
+				   ((currentPlayer == 2)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=8))
 				  )&&(number<5)
 				 )
 			{
@@ -92,9 +92,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//UpL
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g.b.map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x-i>=0))
+				  (((currentPlayer == 1)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x-i>=0))
 				  ||
-				  ((currentPlayer == 2)&&(g.b.map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x-i>=0))
+				  ((currentPlayer == 2)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x-i>=0))
 				  )&&(number<5)
 				 )
 			{
@@ -104,9 +104,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//DownR
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g.b.map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x+i<=8))
+				  (((currentPlayer == 1)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x+i<=8))
 				  ||
-				  ((currentPlayer == 2)&&(g.b.map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x+i<=8))
+				  ((currentPlayer == 2)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x+i<=8))
 				  )&&(number<5)
 				 )
 			{
@@ -121,9 +121,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//UpR
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g.b.map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x+i<=8))
+				  (((currentPlayer == 1)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x+i<=8))
 				  ||
-				  ((currentPlayer == 2)&&(g.b.map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x+i<=8))
+				  ((currentPlayer == 2)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x+i<=8))
 				  )&&(number<5)
 				 )
 			{
@@ -133,9 +133,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//DownL
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g.b.map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x-i>=0))
+				  (((currentPlayer == 1)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x-i>=0))
 				  ||
-				  ((currentPlayer == 2)&&(g.b.map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x-i>=0))
+				  ((currentPlayer == 2)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x-i>=0))
 				  )&&(number<5)
 				 )
 			{
@@ -166,40 +166,40 @@ coordinates* checkCatch(int currentPlayer, coordinates c2)
 
 	//Up
 	i=1;
-	while((c2.y-i >= 0) && (g.b.map[c2.x][c2.y-i] == opponent))
+	while((c2.y-i >= 0) && (g->map[c2.x][c2.y-i] == opponent))
 	{
 		up++;
 		i++;
 	}
 	//If the opposing token isn't a current player's one, no token can be catch
-	if ((c2.y-i == -1) || (g.b.map[c2.x][c2.y-i] != currentPlayer)){up = 0;}
+	if ((c2.y-i == -1) || (g->map[c2.x][c2.y-i] != currentPlayer)){up = 0;}
 
 	//Right
 	i=1;
-	while((c2.x+i <= 8) && (g.b.map[c2.x+i][c2.y] == opponent))
+	while((c2.x+i <= 8) && (g->map[c2.x+i][c2.y] == opponent))
 	{
 		right++;
 		i++;
 	}
-	if ((c2.x+i == 9) || (g.b.map[c2.x+i][c2.y] != currentPlayer)){right = 0;}
+	if ((c2.x+i == 9) || (g->map[c2.x+i][c2.y] != currentPlayer)){right = 0;}
 
 	//Down
 	i=1;
-	while((c2.y+i <= 8) && (g.b.map[c2.x][c2.y+i] == opponent))
+	while((c2.y+i <= 8) && (g->map[c2.x][c2.y+i] == opponent))
 	{
 		down++;
 		i++;
 	}
-	if ((c2.y+i == 9) || (g.b.map[c2.x][c2.y+i] != currentPlayer)){down = 0;}
+	if ((c2.y+i == 9) || (g->map[c2.x][c2.y+i] != currentPlayer)){down = 0;}
 
 	//Left
 	i=1;
-	while((c2.x-i >= 0) && (g.b.map[c2.x-i][c2.y] == opponent))
+	while((c2.x-i >= 0) && (g->map[c2.x-i][c2.y] == opponent))
 	{
 		left++;
 		i++;
 	}
-	if ((c2.x+i == -1) || (g.b.map[c2.x-i][c2.y] != currentPlayer)){left = 0;}
+	if ((c2.x+i == -1) || (g->map[c2.x-i][c2.y] != currentPlayer)){left = 0;}
 
 	//We create the table who will contain the coordonates of the near-to-be caught tokens
 	return createTable(c2, up, right, down, left, 1);
@@ -215,7 +215,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	tab[0] = ct;
 
 	//Up
-	if ( (catching==0)&&(up==1)&&(g.b.map[c.x][c.y-1]!=0) )
+	if ( (catching==0)&&(up==1)&&(g->map[c.x][c.y-1]!=0) )
 	{
 		tab[i].x = c.x;
 		tab[i].y = c.y-2;
@@ -229,7 +229,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	}
 
 	//Right
-	if ( (catching==0)&&(right==1)&&(g.b.map[c.x+1][c.y]!=0) )
+	if ( (catching==0)&&(right==1)&&(g->map[c.x+1][c.y]!=0) )
 	{
 		tab[i].x = c.x+2;
 		tab[i].y = c.y;
@@ -244,7 +244,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	}
 
 	//Down
-	if ( (catching==0)&&(down==1)&&(g.b.map[c.x][c.y+1]!=0) )
+	if ( (catching==0)&&(down==1)&&(g->map[c.x][c.y+1]!=0) )
 	{
 		tab[i].x = c.x;
 		tab[i].y = c.y+2;
@@ -259,7 +259,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	}
 
 	//Left
-	if ( (catching==0)&&(left==1)&&(g.b.map[c.x-1][c.y]!=0) )
+	if ( (catching==0)&&(left==1)&&(g->map[c.x-1][c.y]!=0) )
 	{
 		tab[i].x = c.x-2;
 		tab[i].y = c.y;
@@ -279,10 +279,10 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 int checkMovement(coordinates c1, coordinates c2) {
 
 	//Check if the start isn't empty
-	if(g.b.map[c1.x][c1.y]==0){return 0;}
+	if(g->map[c1.x][c1.y]==0){return 0;}
 
 	//Check if the destination is empty
-	if(g.b.map[c2.x][c2.y]!=0){return 0;}
+	if(g->map[c2.x][c2.y]!=0){return 0;}
 
 	//Check déplacement ligne ou colonne
 	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return 0;}
@@ -300,43 +300,43 @@ int checkMovement(coordinates c1, coordinates c2) {
 		switch (typeMovement)
 		{
 			case 1:
-				if((g.var==1)&&(c1.y-c2.y==2)&&(g.b.map[c1.x][c1.y-1]!=0)){return 1;}
+				if((g->var==1)&&(c1.y-c2.y==2)&&(g->map[c1.x][c1.y-1]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c1.y-c2.y) ; i++)
 					{
-						if(g.b.map[c1.x][c1.y-i]!=0){return 0;}
+						if(g->map[c1.x][c1.y-i]!=0){return 0;}
 					}
 				}
 			case 2:
-				if((g.var==1)&&(c1.x-c2.x==-2)&&(g.b.map[c1.x+1][c1.y]!=0)){return 1;}
+				if((g->var==1)&&(c1.x-c2.x==-2)&&(g->map[c1.x+1][c1.y]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c2.x-c1.x) ; i++)
 					{
-						if(g.b.map[c1.x+i][c1.y]!=0){return 0;}
+						if(g->map[c1.x+i][c1.y]!=0){return 0;}
 					}
 				}
 			case 3:
-				if((g.var==1)&&(c1.y-c2.y==-2)&&(g.b.map[c1.x][c1.y+1]!=0)){return 1;}
+				if((g->var==1)&&(c1.y-c2.y==-2)&&(g->map[c1.x][c1.y+1]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c2.y-c1.y) ; i++)
 					{
-						if(g.b.map[c1.x][c1.y+i]!=0){return 0;}
+						if(g->map[c1.x][c1.y+i]!=0){return 0;}
 					}
 				}
 			case 4:
-				if((g.var==1)&&(c1.x-c2.x==2)&&(g.b.map[c1.x-1][c1.y]!=0)){return 1;}
+				if((g->var==1)&&(c1.x-c2.x==2)&&(g->map[c1.x-1][c1.y]!=0)){return 1;}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c1.x-c2.x) ; i++)
 					{
-						if(g.b.map[c1.x-i][c1.y]!=0){return 0;}
+						if(g->map[c1.x-i][c1.y]!=0){return 0;}
 					}
 				}
 		}

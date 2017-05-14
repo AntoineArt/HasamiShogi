@@ -5,7 +5,7 @@
 
 
 //GLOBAL VAR
-extern game g; //global variable (initialized in App.c)
+extern game *g; //global variable (initialized in App.c)
 
 
 /*

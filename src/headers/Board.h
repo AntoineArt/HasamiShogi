@@ -4,19 +4,8 @@
 #include "../Rules.c"
 
 //GLOBAL VAR
-extern game g; //global variable (initialized in App.c)
+extern game *g; //global variable (initialized in App.c)
 
-/*
-	Create a 9x9 matrix and all the related vars from struct board depending on the variante of ashami shogi being played
-	the new board is referenced as b by the reste of the program
-	warning allocate memory !
-*/
-board allocateBoard(int var);
-
-/*
-	Free the memory used by the board
-*/
-void freeBoard(board b);
 
 /*
 	Change the status of the case of coordonates c1

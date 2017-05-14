@@ -1,48 +1,13 @@
 #include "./headers/Board.h"
 
-board allocateBoard(int var)
-{
-	board b;
-	b.map = (int **) malloc(sizeof(int*)*9);
-	int i;
-	for (i=0; i<9; i++) {
-		b.map[i] = (int *) malloc(sizeof(int)*9);
-		}
-	switch (var)
-	{
-		case 0: //classical ashami shogi
-			b.countPlayer1 = 9;
-			b.countPlayer2 = 9;
-			break;
-		case 1: //dai ashami shogi
-			b.countPlayer1 = 18;
-			b.countPlayer2 = 18;
-			break;
-		default:
-			printf("invalid var");
-	}
-	return b;
-}
-
-void freeBoard(board b)
-{
-	int i;
-	for (i=0; i<9; i++) {
-		free(b.map[i]);
-		}
-	free(b.map);
-	b.countPlayer1 = 0;
-	b.countPlayer2 = 0;
-}
-
 void write(int status, coordinates c)
 {
-	g.b.map[c.x][c.y] = status;
+	g->map[c.x][c.y] = status;
 }
 
 void movePiece(coordinates c1, coordinates c2)
 {
-	write(g.b.map[c1.x][c1.y],c2);
+	write(g->map[c1.x][c1.y],c2);
 	write(0,c1);
 }
 
@@ -54,10 +19,10 @@ void catchPiece(int currentPlayer, coordinates c2)
 	for (i = 1; i<tab[0].x; i++) {
 			write(0,tab[i]);
 			if (currentPlayer==1) {
-				g.b.countPlayer2--; //the opponant lose pieces
+				g->countPlayer2--; //the opponant lose pieces
 				}
 			if (currentPlayer==2) {
-				g.b.countPlayer1--; //the opponant lose pieces
+				g->countPlayer1--; //the opponant lose pieces
 				}
 			
 		}
@@ -66,7 +31,15 @@ void catchPiece(int currentPlayer, coordinates c2)
 
 int updateBoard(int currentPlayer, coordinates c1, coordinates c2)
 {
-	if (g.b.map[c1.x][c1.y]!=currentPlayer)
+	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8)) 
+	{
+		printf("Invalid Movement (Source not in the board !)");
+		return 0;
+	} else if (!(c2.x>=0 && c2.x<=8 && c2.y>=0 && c2.y<=8)) 
+	{
+		printf("Invalid Movement (Destination not in the board !)");
+		return 0;
+	} else if ((g->map[c1.x][c1.y]) != currentPlayer)
 	{
 		printf("Invalid Movement (Not your token !)");
 		return 0;

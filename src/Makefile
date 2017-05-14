@@ -1,4 +1,4 @@
-CFLAGS = -std=c99 -g -Wall -I $(INCLUDES)
+CFLAGS = -std=c99 -g -Wall -Wextra  -I $(INCLUDES)
 LIB = -lSDL2 -lSDL2_ttf
 
 INCLUDES = headers #ressources objects
