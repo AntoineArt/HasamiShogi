@@ -14,7 +14,6 @@ typedef struct {
 	int **map;  //the game board with the pieces
 	int countPlayer1; //the number of pieces owned by the first player
 	int countPlayer2; //the number of pieces owned by the second player
-	int lang; //the language that should be used by the app
 } game;
 
 
@@ -27,7 +26,7 @@ typedef struct{
 	char* options[10];
 	char* inGame[10];
 	} textsStruct;
-	
+
 /*
 	a structure used to store parameters for the graphical interface
 */
@@ -35,7 +34,14 @@ typedef struct {
   int fullscreen;
   char soundLevel;
   int texturePack;
+	int lang; //the language that should be used by the app
 } parameters;
 
-
-
+typedef struct{
+	int xbegin;
+	int ybegin;
+	int caseWidth;
+	int caseHeigth;
+	int hMargin;
+	int vMargin;
+} BoardData;

@@ -1,8 +1,7 @@
 #include "./headers/Game.h"
 
-void initGame(game *g, int gameMode, int var, int lang)
+void initGame(game *g, int gameMode, int var)
 {
-	g->lang = lang;
 	g->gameMode = gameMode;
 	g->var = var;
 	g->map = (int **) malloc(sizeof(int*)*9);
@@ -10,7 +9,7 @@ void initGame(game *g, int gameMode, int var, int lang)
 	for (i=0; i<9; i++) {
 		g->map[i] = (int *) malloc(sizeof(int)*9);
 		}
-	
+
 	int j;
 	for (i=0; i<9; i++) { //init of the standart board
 		for (j=0; j<9; j++) {
@@ -23,8 +22,8 @@ void initGame(game *g, int gameMode, int var, int lang)
 			}
 		}
 	}
-	
-	
+
+
 	switch (g->var)
 	{
 		case 0: //classical ashami shogi
@@ -38,7 +37,6 @@ void initGame(game *g, int gameMode, int var, int lang)
 		default:
 			printf("invalid var");
 	}
-	printf("%d",g->lang);
 }
 
 void freeGame(game *g)

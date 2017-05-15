@@ -18,17 +18,17 @@ int main(int argc, char* argv[]){
   // Window creation
   SDL_Window* pWindow = NULL;
   pWindow = SDL_CreateWindow("Hasami Shogi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DEFAULT_WIDTH, DEFAULT_HEIGTH, 0.);
-                                              
+
   //Language choice
   textsStruct texts[2] = {enText, frText};
   // Launching the menu window
   int mode;
   game *g = (game*) malloc(sizeof(game));
-  initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT, LANG_DEFAULT);
-  mode = 0; //used to debug game after menu
-  //mode = menu(pWindow, police, texts);
-  
-  parameters param = initParameters();
+  initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
+  //mode = 0; //used to debug game after menu
+  mode = menu(pWindow, police, texts);
+
+  parameters param = initParameters(LANG_DEFAULT);
 
   switch(mode){
     case 0: newGame(g, param);break;
@@ -36,8 +36,9 @@ int main(int argc, char* argv[]){
     case 2: parametersMenu(pWindow, police, texts, param);break;
     case 3: rules();
     case 4: break;
+    default : break;
   }
-  
+
   // Closing everything
 
   TTF_CloseFont(police);
@@ -49,12 +50,13 @@ int main(int argc, char* argv[]){
 }
 
 int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
-  SDL_Surface* pBackgroundMenu = SDL_LoadBMP("./resources/images/BackgroundMenu.bmp");
-  pWindow = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
+  SDL_Surface* pBackgroundMenu = SDL_LoadBMP("./ressources/images/BackgroundMenu.bmp");
+  /*pWindow = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               DEFAULT_WIDTH,
                                               DEFAULT_HEIGTH,
                                               0.);
+                                              */
 
   updateWindow(0, 0, pWindow, pBackgroundMenu); // BackgroundMenu display
 
@@ -64,11 +66,11 @@ int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
     textColor.r = 255;
     textColor.g = 255;
     textColor.b = 255;
-    
+
     printf("%s", texts[0].mainMenu[0]);
     int i;
     for(i = 0; i<5; i++){
-      textsMenu[i] = TTF_RenderText_Blended(police, texts[g->lang].mainMenu[i], textColor);
+      textsMenu[i] = TTF_RenderText_Blended(police, texts[0].mainMenu[i], textColor);
       updateWindow(960 - textsMenu[i]->w/2, 540 - textsMenu[i]->h/2 - (300-100*i), pWindow, textsMenu[i]);
     }
 
@@ -122,7 +124,7 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
       }
     }
   }
-  return 4;
+  return -1;
 }
 
 void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
@@ -188,7 +190,7 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts, p
     textColor.b = 255;
 
     for(int i = 0; i<6; i++){
-      textsParameters[i] = TTF_RenderText_Blended(police, texts[g->lang].options[i + 5], textColor);
+      textsParameters[i] = TTF_RenderText_Blended(police, texts[p.lang].options[i + 5], textColor);
       updateWindow(960 - textsParameters[i]->w/2, 540 - textsParameters[i]->h/2 - (300-100*i), pWinParam, textsParameters[i]);
     }
     SDL_Delay(2000);
@@ -264,10 +266,10 @@ int inGameEvents(int currentPlayer){
       if(depth==0){
         c1.x=c.x ; c1.y = c.y; depth++;
         //display available mouvement and catchs
-        
+
       }
       else if(depth==1){
-      
+
         if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
           c1.x=-1; c1.y=-1;
           depth--;
@@ -288,10 +290,11 @@ int inGameEvents(int currentPlayer){
 
 
 
-parameters initParameters(){
+parameters initParameters(int lang){
   parameters p;
   p.fullscreen = 0;
   p.soundLevel = 255;
   p.texturePack = 0;
+  p.lang = lang;
   return p;
 }
