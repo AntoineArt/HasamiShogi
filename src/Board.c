@@ -24,18 +24,18 @@ void catchPiece(int currentPlayer, coordinates c2)
 			if (currentPlayer==2) {
 				g->countPlayer1--; //the opponant lose pieces
 				}
-			
+
 		}
 	free(tab);
 }
 
 int updateBoard(int currentPlayer, coordinates c1, coordinates c2)
 {
-	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8)) 
+	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8))
 	{
 		printf("Invalid Movement (Source not in the board !)");
 		return 0;
-	} else if (!(c2.x>=0 && c2.x<=8 && c2.y>=0 && c2.y<=8)) 
+	} else if (!(c2.x>=0 && c2.x<=8 && c2.y>=0 && c2.y<=8))
 	{
 		printf("Invalid Movement (Destination not in the board !)");
 		return 0;
