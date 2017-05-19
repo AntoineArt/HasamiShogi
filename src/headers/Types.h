@@ -35,6 +35,8 @@ typedef struct {
   char soundLevel;
   int texturePack;
 	int lang; //the language that should be used by the app
+	int screenResX;
+	int screenResY;
 } parameters;
 
 typedef struct{

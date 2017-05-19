@@ -25,17 +25,16 @@ int main(int argc, char* argv[]){
   int mode;
   game *g = (game*) malloc(sizeof(game));
   initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
-  //mode = 0; //used to debug game after menu
   mode = menu(pWindow, police, texts);
 
-  parameters param = initParameters(LANG_DEFAULT);
+  parameters param = initParameters(LANG_DEFAULT, DEFAULT_WIDTH, DEFAULT_HEIGTH);
 
   switch(mode){
     case 0: newGame(g, param);break;
     case 1: continueGame();break;
     case 2: parametersMenu(pWindow, police, texts, param);break;
     case 3: rules();
-    case 4: break;
+    case 4: SDL_Quit(); break;
     default : break;
   }
 
@@ -119,7 +118,7 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
             if(isIn(xM, yM, x[1], y[1], w[1], h[1])){return 1;}  //Check Continue
             if(isIn(xM, yM, x[2], y[2], w[2], h[2])){return 2;}  //Check Parameters
             if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 3;}  //Check Rules
-            if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 4;}  //Check Quit
+            if(isIn(xM, yM, x[4], y[4], w[4], h[4])){return 4;}  //Check Quit
           }
       }
     }
@@ -148,8 +147,6 @@ void newGame(game *g, parameters param){
   // Menu display
   updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
   setupBoard(g, pWinGame);
-  //board b = allocateBoard(g.var);
-  //resetBoard(b);
   int currentPlayer = 1; //initialize the currentPlayer
 
   //victory contains the player who won this turn (0 if none of them, 3 if both loosed)
@@ -241,6 +238,11 @@ int inGameEvents(int currentPlayer){
       while(SDL_PollEvent(&event)){
         // Event treatment
         switch(event.type){ // Which type of event is it ?
+          case SDL_WINDOWEVENT: // Window event
+            if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
+              return 4;
+            }
+            break;
           case SDL_MOUSEBUTTONUP: // Mouse event
             if (event.button.button == SDL_BUTTON_LEFT){
               int xM = event.button.x;
@@ -258,10 +260,7 @@ int inGameEvents(int currentPlayer){
                 }
               }
             }
-            default: //anything else happen
-            	break;
           }
-          printf("%d : %d et %d : %d afterswitch depth %d \n",c1.x,c1.y,c2.x,c2.y, depth);
       }
       if(depth==0){
         c1.x=c.x ; c1.y = c.y; depth++;
@@ -290,11 +289,13 @@ int inGameEvents(int currentPlayer){
 
 
 
-parameters initParameters(int lang){
+parameters initParameters(int lang, int resX, int resY){
   parameters p;
   p.fullscreen = 0;
   p.soundLevel = 255;
   p.texturePack = 0;
   p.lang = lang;
+  p.screenResX = resX;
+  p.screenResY = resY;
   return p;
 }

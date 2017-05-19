@@ -13,7 +13,7 @@ const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int LANG_DEFAULT = 0; // 0 means english , 1 means french
 const int DECAY_PIECES = 150;
 
-parameters initParameters(int lang);
+parameters initParameters(int lang, int resX, int resY);
 
 /*
   Initializes SDL2
