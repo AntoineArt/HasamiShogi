@@ -34,7 +34,7 @@ int main(int argc, char* argv[]){
     case 1: continueGame();break;
     case 2: parametersMenu(pWindow, police, texts, param);break;
     case 3: rules();
-    case 4: SDL_Quit(); break;
+    case 4: break;
     default : break;
   }
 
@@ -114,11 +114,9 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
             int xM = event.button.x;
             int yM = event.button.y;
 
-            if(isIn(xM, yM, x[0], y[0], w[0], h[0])){return 0;}  //Check New game
-            if(isIn(xM, yM, x[1], y[1], w[1], h[1])){return 1;}  //Check Continue
-            if(isIn(xM, yM, x[2], y[2], w[2], h[2])){return 2;}  //Check Parameters
-            if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 3;}  //Check Rules
-            if(isIn(xM, yM, x[4], y[4], w[4], h[4])){return 4;}  //Check Quit
+						for(int i = 0; i<=4; i++){
+							if(isIn(xM, yM, x[i], y[i], w[0], h[0])){return i;}
+						}
           }
       }
     }
@@ -151,7 +149,7 @@ void newGame(game *g, parameters param){
 
   //victory contains the player who won this turn (0 if none of them, 3 if both loosed)
   int victory = 0;
-  while (victory==0){
+  while (!victory){
     //ajouter IAplay
     victory = inGameEvents(currentPlayer);
     currentPlayer = 3-currentPlayer; //switch the player
@@ -243,10 +241,13 @@ int inGameEvents(int currentPlayer){
               return 4;
             }
             break;
+
           case SDL_MOUSEBUTTONUP: // Mouse event
+						printf("MousebuttonUp\n");
             if (event.button.button == SDL_BUTTON_LEFT){
               int xM = event.button.x;
               int yM = event.button.y;
+							printf("clic gauche %d %d\n", xM, yM );
               /*
               things like this could work more efficiently
               c.x = (xM-Marjx)/width
