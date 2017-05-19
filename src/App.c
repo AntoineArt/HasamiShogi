@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
   int mode;
   game *g = (game*) malloc(sizeof(game));
   initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
-  //mode = 0; //used to debug game after menu
+  
   mode = menu(pWindow, police, texts);
 
   parameters param = initParameters(LANG_DEFAULT);
@@ -34,8 +34,8 @@ int main(int argc, char* argv[]){
     case 0: newGame(g, param);break;
     case 1: continueGame();break;
     case 2: parametersMenu(pWindow, police, texts, param);break;
-    case 3: rules();
-    case 4: break;
+    case 3: rules();break;
+    case 4: break; //quit
     default : break;
   }
 
@@ -102,6 +102,7 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
   while(1){
     SDL_Event event;
     while(SDL_PollEvent(&event)){
+      
       // Event treatment
       switch(event.type){ // Which type of event is it ?
         case SDL_WINDOWEVENT: // Window event
@@ -114,17 +115,18 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
           if (event.button.button == SDL_BUTTON_LEFT){
             int xM = event.button.x;
             int yM = event.button.y;
-
+	printf("%d %d \n",xM,yM);
             if(isIn(xM, yM, x[0], y[0], w[0], h[0])){return 0;}  //Check New game
             if(isIn(xM, yM, x[1], y[1], w[1], h[1])){return 1;}  //Check Continue
             if(isIn(xM, yM, x[2], y[2], w[2], h[2])){return 2;}  //Check Parameters
             if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 3;}  //Check Rules
-            if(isIn(xM, yM, x[3], y[3], w[3], h[3])){return 4;}  //Check Quit
+            if(isIn(xM, yM, x[4], y[4], w[4], h[4])){return 4;}  //Check Quit
           }
+        default: break; //nothing happen
       }
     }
   }
-  return -1;
+  return -1; //error case
 }
 
 void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
@@ -142,14 +144,12 @@ void newGame(game *g, parameters param){
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               1500,
-                                              1353,
+                                              1366,
                                               0.);
 
   // Menu display
   updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
   setupBoard(g, pWinGame);
-  //board b = allocateBoard(g.var);
-  //resetBoard(b);
   int currentPlayer = 1; //initialize the currentPlayer
 
   //victory contains the player who won this turn (0 if none of them, 3 if both loosed)
@@ -236,17 +236,24 @@ int inGameEvents(int currentPlayer){
   int moveRight = 0;
   while (!moveRight) {// no valid move has been done
 
-    while(depth<2){ // 2 Clic necessary to continue
+   while(depth<2){ // 2 Clic necessary to continue
+    	if (c1.x == -1) {depth = 0;}
       SDL_Event event;
       while(SDL_PollEvent(&event)){
         // Event treatment
         switch(event.type){ // Which type of event is it ?
+       	case SDL_WINDOWEVENT: // Window event
+          if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
+            return 4;
+          }
+          break;
+          
           case SDL_MOUSEBUTTONUP: // Mouse event
             if (event.button.button == SDL_BUTTON_LEFT){
               int xM = event.button.x;
               int yM = event.button.y;
               /*
-              things like this could work more efficiently
+              //things like this could work more efficiently
               c.x = (xM-Marjx)/width
               c.y = (xM-Marjy)/heigth
               */
@@ -258,26 +265,27 @@ int inGameEvents(int currentPlayer){
                 }
               }
             }
-            default: //anything else happen
-            	break;
           }
-          printf("%d : %d et %d : %d afterswitch depth %d \n",c1.x,c1.y,c2.x,c2.y, depth);
+          printf("boucle");
       }
-      if(depth==0){
+      printf("%d : %d et %d : %d afterswitch %d \n",c1.x,c1.y,c2.x,c2.y,depth);
+      if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
+          c1.x=-1; c1.y=-1;
+          printf("twiced");
+        }
+      if (depth==1){
+        c2.x = c.x ; c2.y = c.y; depth++;
+        printf("Depth1");
+        }
+        
+      if (depth==0){
         c1.x=c.x ; c1.y = c.y; depth++;
         //display available mouvement and catchs
-
-      }
-      else if(depth==1){
-
-        if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
-          c1.x=-1; c1.y=-1;
-          depth--;
+        printf("Depth0");
         }
-        else{ //the player clicked on two different tiles
-          c2.x = c.x ; c2.y = c.y; depth++;
-        }
-      }
+        c.x=-1; c.y=-1;
+        
+	
     }
     printf("%d : %d et %d : %d final \n",c1.x,c1.y,c2.x,c2.y);
     //moveRight = updateBoard(currentPlayer,c1,c2);
