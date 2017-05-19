@@ -1,8 +1,4 @@
 #include "../IA.c"
-
-//GLOBAL VAR
-extern game *g; //global variable (initialized in App.c)
-
 /*
 	function used to initialize a new game
 	referenced as g by the rest of the program

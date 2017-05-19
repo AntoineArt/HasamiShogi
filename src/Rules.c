@@ -1,6 +1,6 @@
 #include "./headers/Rules.h"
 
-void resetBoard() {
+void resetBoard(game *g) {
 	switch (g->var)
 	{
 		int i;
@@ -33,16 +33,16 @@ void resetBoard() {
 	}
 }
 
-int checkVictory(int currentPlayer, coordinates c2)
+int checkVictory(game *g, coordinates c2)
 {
 	//We check if the opponent has loose every tokens but one
 	if ((g->var)==0)
 	{
-		if ((currentPlayer == 1)&&(g->countPlayer2==1))
+		if ((g->currentPlayer == 1)&&(g->countPlayer2==1))
 		{
 			return 1;
 		}
-		else if ((currentPlayer == 2)&&(g->countPlayer1==1))
+		else if ((g->currentPlayer == 2)&&(g->countPlayer1==1))
 		{
 			return 2;
 		}
@@ -57,16 +57,16 @@ int checkVictory(int currentPlayer, coordinates c2)
 	}
 	else if(g->var==1)
 	{
-		if(((currentPlayer==1)&&(c2.y <= 6)) || ((currentPlayer==2)&&(c2.y >= 2)))
+		if(((g->currentPlayer==1)&&(c2.y <= 6)) || ((g->currentPlayer==2)&&(c2.y >= 2)))
 		{
 			int i; int number=1;
 			//Check Collumn
 			//Up
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=0))
+				  (((g->currentPlayer == 1)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=0))
 				  ||
-				  ((currentPlayer == 2)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=2))
+				  ((g->currentPlayer == 2)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=2))
 				  )&&(number<5)
 				 )
 			{
@@ -76,25 +76,25 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//Down
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=6))
+				  (((g->currentPlayer == 1)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=6))
 				   ||
-				   ((currentPlayer == 2)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=8))
+				   ((g->currentPlayer == 2)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=8))
 				  )&&(number<5)
 				 )
 			{
 				number++;
 				i++;
 			}
-			if(number>=5){return currentPlayer;} //The current player win
+			if(number>=5){return g->currentPlayer;} //The current player win
 			else{number=1;}
 
 			//Check Diag UpL-DownR
 			//UpL
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x-i>=0))
+				  (((g->currentPlayer == 1)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x-i>=0))
 				  ||
-				  ((currentPlayer == 2)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x-i>=0))
+				  ((g->currentPlayer == 2)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x-i>=0))
 				  )&&(number<5)
 				 )
 			{
@@ -104,9 +104,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//DownR
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x+i<=8))
+				  (((g->currentPlayer == 1)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x+i<=8))
 				  ||
-				  ((currentPlayer == 2)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x+i<=8))
+				  ((g->currentPlayer == 2)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x+i<=8))
 				  )&&(number<5)
 				 )
 			{
@@ -114,16 +114,16 @@ int checkVictory(int currentPlayer, coordinates c2)
 				i++;
 			}
 
-			if(number>=5){return currentPlayer;} //The current player win
+			if(number>=5){return g->currentPlayer;} //The current player win
 			else{number=1;}
 
 			//Check Diag UpR-DownL
 			//UpR
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x+i<=8))
+				  (((g->currentPlayer == 1)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x+i<=8))
 				  ||
-				  ((currentPlayer == 2)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x+i<=8))
+				  ((g->currentPlayer == 2)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x+i<=8))
 				  )&&(number<5)
 				 )
 			{
@@ -133,9 +133,9 @@ int checkVictory(int currentPlayer, coordinates c2)
 			//DownL
 			i=1;
 			while(
-				  (((currentPlayer == 1)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x-i>=0))
+				  (((g->currentPlayer == 1)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x-i>=0))
 				  ||
-				  ((currentPlayer == 2)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x-i>=0))
+				  ((g->currentPlayer == 2)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x-i>=0))
 				  )&&(number<5)
 				 )
 			{
@@ -143,7 +143,7 @@ int checkVictory(int currentPlayer, coordinates c2)
 				i++;
 			}
 
-			if(number>=5){return currentPlayer;} //The current player win
+			if(number>=5){return g->currentPlayer;} //The current player win
 		}
 		else
 		{
@@ -157,11 +157,11 @@ int checkVictory(int currentPlayer, coordinates c2)
 	return -1; //Never used
 }
 
-coordinates* checkCatch(int currentPlayer, coordinates c2)
+coordinates* checkCatch(game *g, coordinates c2)
 {
 	//We identifie the number of tokens we will catch in the named direction
 	int up=0; int right=0; int down=0; int left=0;
-	int opponent = 3-currentPlayer;
+	int opponent = 3-(g->currentPlayer); // works fine : 3-1=2 and 3-2=1
 	int i;
 
 	//Up
@@ -172,7 +172,7 @@ coordinates* checkCatch(int currentPlayer, coordinates c2)
 		i++;
 	}
 	//If the opposing token isn't a current player's one, no token can be catch
-	if ((c2.y-i == -1) || (g->map[c2.x][c2.y-i] != currentPlayer)){up = 0;}
+	if ((c2.y-i == -1) || (g->map[c2.x][c2.y-i] != g->currentPlayer)){up = 0;}
 
 	//Right
 	i=1;
@@ -181,7 +181,7 @@ coordinates* checkCatch(int currentPlayer, coordinates c2)
 		right++;
 		i++;
 	}
-	if ((c2.x+i == 9) || (g->map[c2.x+i][c2.y] != currentPlayer)){right = 0;}
+	if ((c2.x+i == 9) || (g->map[c2.x+i][c2.y] != g->currentPlayer)){right = 0;}
 
 	//Down
 	i=1;
@@ -190,7 +190,7 @@ coordinates* checkCatch(int currentPlayer, coordinates c2)
 		down++;
 		i++;
 	}
-	if ((c2.y+i == 9) || (g->map[c2.x][c2.y+i] != currentPlayer)){down = 0;}
+	if ((c2.y+i == 9) || (g->map[c2.x][c2.y+i] != g->currentPlayer)){down = 0;}
 
 	//Left
 	i=1;
@@ -199,13 +199,13 @@ coordinates* checkCatch(int currentPlayer, coordinates c2)
 		left++;
 		i++;
 	}
-	if ((c2.x+i == -1) || (g->map[c2.x-i][c2.y] != currentPlayer)){left = 0;}
+	if ((c2.x+i == -1) || (g->map[c2.x-i][c2.y] != g->currentPlayer)){left = 0;}
 
 	//We create the table who will contain the coordonates of the near-to-be caught tokens
-	return createTable(c2, up, right, down, left, 1);
+	return createTable(g, c2, up, right, down, left, 1);
 }
 
-coordinates* createTable(coordinates c, int up, int right, int down, int left, int catching){
+coordinates* createTable(game *g, coordinates c, int up, int right, int down, int left, int catching){
 
 	int i = up + right + down + left;
 	coordinates *tab;
@@ -276,15 +276,18 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	return tab;
 }
 
-int checkMovement(coordinates c1, coordinates c2) {
+int checkMovement(game *g, coordinates c1, coordinates c2) {
 
 	//Check if the start isn't empty
 	if(g->map[c1.x][c1.y]==0){return 0;}
 
-	//Check if the destination is empty
+	//Check if the destination is friendly
+	if(g->map[c2.x][c2.y]==g->currentPlayer){return 2;}
+	
+	//Check if destination is not empty (means ennemy with previous check)
 	if(g->map[c2.x][c2.y]!=0){return 0;}
 
-	//Check déplacement ligne ou colonne
+	//Check deplacement lign or colonn 
 	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return 0;}
 	else
 	{
@@ -347,7 +350,7 @@ int checkMovement(coordinates c1, coordinates c2) {
 	return 0;
 }
 
-coordinates* showPossible(coordinates c1)
+coordinates* showPossible(game *g, coordinates c1)
 {
 	//We identifie the number of cases
 	int i=0; int up=0; int right=0; int down=0; int left=0;
@@ -359,7 +362,7 @@ coordinates* showPossible(coordinates c1)
 	for(i=1 ; c1.y-i >= 0 ; i++)
 	{
 		c2.y = c1.y-i;
-		if (checkMovement(c1,c2)==1) {
+		if (checkMovement(g,c1,c2)==1) {
 			up++;
 		}
 	}
@@ -370,7 +373,7 @@ coordinates* showPossible(coordinates c1)
 	for(i=1 ; c1.x+i <= 8 ; i++)
 	{
 		c2.x = c1.x+i;
-		if (checkMovement(c1,c2)==1) {
+		if (checkMovement(g,c1,c2)==1) {
 			right++;
 		}
 	}
@@ -381,7 +384,7 @@ coordinates* showPossible(coordinates c1)
 	for(i=1 ; c1.y+i <= 8 ; i++)
 	{
 		c2.y = c1.y+i;
-		if (checkMovement(c1,c2)==1) {
+		if (checkMovement(g,c1,c2)==1) {
 			down++;
 		}
 	}
@@ -392,10 +395,10 @@ coordinates* showPossible(coordinates c1)
 	for(i=1 ; c1.x-i >= 0 ; i++)
 	{
 		c2.x = c1.x-i;
-		if (checkMovement(c1,c2)==1) {
+		if (checkMovement(g,c1,c2)==1) {
 			left++;
 		}
 	}
 
-	return createTable(c1, up, right, down, left, 0);
+	return createTable(g, c1, up, right, down, left, 0);
 }

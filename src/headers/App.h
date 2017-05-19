@@ -17,8 +17,9 @@ parameters initParameters(int lang, int resX, int resY);
 
 /*
   Initializes SDL2
+  has yet no need of int argc, char * argv[]
 */
-int main(int argc, char * argv[]);
+int main(void);
 
 /*
   Displays the BackgroundMenu and calls menu(...) for user's input
@@ -76,7 +77,7 @@ void victoryDisplay(int winner);
 /*
   Fonction that handle the turn of currentPlayer from the beggining thil the end returning victory check
 */
-int inGameEvents(int currentPlayer);
+int inGameEvents(game *g);
 
 void rules();
 

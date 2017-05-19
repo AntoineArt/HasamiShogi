@@ -1,11 +1,6 @@
 #include "./headers/App.h"
 
-//GLOBAL VAR
-
-game *g; //global variable (initialized in App.c)
-
-
-int main(int argc, char* argv[]){
+int main(void){
   // Initialization
   if(SDL_Init(SDL_INIT_VIDEO) !=0){
     fprintf(stdout, "Echec de l'initialisation de la SDL (%s)\n", SDL_GetError());
@@ -38,7 +33,10 @@ int main(int argc, char* argv[]){
     case 4: break; //quit
     default : break;
   }
-
+  
+  //freeing memory
+  freeGame(g);
+  free(g);
   // Closing everything
 
   TTF_CloseFont(police);
@@ -67,7 +65,6 @@ int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
     textColor.g = 255;
     textColor.b = 255;
 
-    printf("%s", texts[0].mainMenu[0]);
     int i;
     for(i = 0; i<5; i++){
       textsMenu[i] = TTF_RenderText_Blended(police, texts[0].mainMenu[i], textColor);
@@ -115,10 +112,9 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
           if (event.button.button == SDL_BUTTON_LEFT){
             int xM = event.button.x;
             int yM = event.button.y;
-
-						for(int i = 0; i<=4; i++){
-							if(isIn(xM, yM, x[i], y[i], w[0], h[0])){return i;}
-						}
+            for(int i = 0; i<=4; i++){
+            	if(isIn(xM, yM, x[i], y[i], w[0], h[0])){return i;}
+		}
           }
         default: break; //nothing happen
       }
@@ -148,14 +144,13 @@ void newGame(game *g, parameters param){
   // Menu display
   updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
   setupBoard(g, pWinGame);
-  int currentPlayer = 1; //initialize the currentPlayer
 
   //victory contains the player who won this turn (0 if none of them, 3 if both loosed)
   int victory = 0;
   while (!victory){
     //ajouter IAplay
-    victory = inGameEvents(currentPlayer);
-    currentPlayer = 3-currentPlayer; //switch the player
+    victory = inGameEvents(g);
+    (g->currentPlayer) = 3-(g->currentPlayer); //switch the player 3-1=2 3-2=1
   }
 
   if(victory == 1){victoryDisplay(1);}
@@ -222,21 +217,29 @@ void victoryDisplay(int winner){
 
 }
 
-int inGameEvents(int currentPlayer){
-  int depth = 0;
+int inGameEvents(game *g){
+  int depth;
   coordinates c;
-  c.x=-1; c.y=-1;
   coordinates c1;
-  c1.x=-1; c1.y=-1;
   coordinates c2;
-  c2.x=-1; c2.y=-1;
+  
   int moveRight = 0;
-  while (!moveRight) {// no valid move has been done
-
-   while(depth<2){ // 2 Clic necessary to continue
-    	if (c1.x == -1) {depth = 0;}
+  while (moveRight!=1) {// no valid move has been done 1 : true 0 : false
+  c.x=-1; c.y=-1; //initialisation made so that a invalid move can be overwritten
+  if (moveRight==0) {
+  	c1.x=-1; c1.y=-1;
+  	c2.x=-1; c2.y=-1;
+  	depth = 0;
+  } else { //means moveRight==2
+  	c1.x=c2.x; c1.y=c2.y;
+  	c2.x=-1; c2.y=-1;
+  	depth = 1;
+  }
+   while (depth<2) { // 2 Clic necessary to continue
+    	
       SDL_Event event;
-      while(SDL_PollEvent(&event)){
+      while (SDL_PollEvent(&event)) {
+      	if (c1.x == -1) {depth = 0;}
         // Event treatment
         switch(event.type){ // Which type of event is it ?
           case SDL_WINDOWEVENT: // Window event
@@ -246,11 +249,9 @@ int inGameEvents(int currentPlayer){
             break;
 
           case SDL_MOUSEBUTTONUP: // Mouse event
-						printf("MousebuttonUp\n");
             if (event.button.button == SDL_BUTTON_LEFT){
               int xM = event.button.x;
               int yM = event.button.y;
-							printf("clic gauche %d %d\n", xM, yM );
               /*
               //things like this could work more efficiently
               c.x = (xM-Marjx)/width
@@ -266,27 +267,28 @@ int inGameEvents(int currentPlayer){
             }
           }
       }
-      if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
+      if (c.x != -1 && c.y != -1) {//assure we clicked on the board
+        if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
           c1.x=-1; c1.y=-1;
           depth=0;
         }
-      if (depth==1 && c.x!=-1){
-        c2.x = c.x ; c2.y = c.y; depth++;
+        if (depth==1 && (g->map[c.x][c.y]==0) ){
+          c2.x = c.x ; c2.y = c.y; depth++;
+          printf("second clic %d : %d \n",c2.x, c2.y);
         }
 
-      if (depth==0){
-        c1.x=c.x ; c1.y = c.y; depth++;
-        //display available mouvement and catchs
+        if ((depth==0)&&(g->map[c.x][c.y]!=0)) {
+          c1.x=c.x ; c1.y = c.y; depth++;
+          //display available mouvement and catchs
+          printf("first clic %d : %d \n",c1.x, c1.y);
         }
-        c.x=-1; c.y=-1;
-
-
+      }
+      c.x=-1; c.y=-1;
     }
-    printf("%d : %d et %d : %d final \n",c1.x,c1.y,c2.x,c2.y);
-    //moveRight = updateBoard(currentPlayer,c1,c2);
-    moveRight=1;
+    printf("final move %d : %d -> %d : %d \n", c1.x, c1.y, c2.x, c2.y);
+    moveRight = updateBoard(g, c1, c2);
   }
-  return checkVictory(1, c2);
+  return checkVictory(g, c2);
 }
 
 
