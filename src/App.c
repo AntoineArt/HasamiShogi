@@ -25,6 +25,7 @@ int main(int argc, char* argv[]){
   int mode;
   game *g = (game*) malloc(sizeof(game));
   initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
+
   mode = menu(pWindow, police, texts);
 
   parameters param = initParameters(LANG_DEFAULT, DEFAULT_WIDTH, DEFAULT_HEIGTH);
@@ -33,8 +34,8 @@ int main(int argc, char* argv[]){
     case 0: newGame(g, param);break;
     case 1: continueGame();break;
     case 2: parametersMenu(pWindow, police, texts, param);break;
-    case 3: rules();
-    case 4: break;
+    case 3: rules();break;
+    case 4: break; //quit
     default : break;
   }
 
@@ -101,6 +102,7 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
   while(1){
     SDL_Event event;
     while(SDL_PollEvent(&event)){
+
       // Event treatment
       switch(event.type){ // Which type of event is it ?
         case SDL_WINDOWEVENT: // Window event
@@ -118,10 +120,11 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
 							if(isIn(xM, yM, x[i], y[i], w[0], h[0])){return i;}
 						}
           }
+        default: break; //nothing happen
       }
     }
   }
-  return -1;
+  return -1; //error case
 }
 
 void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
@@ -227,11 +230,11 @@ int inGameEvents(int currentPlayer){
   c1.x=-1; c1.y=-1;
   coordinates c2;
   c2.x=-1; c2.y=-1;
-  printf("%d : %d et %d : %d initial\n",c1.x,c1.y,c2.x,c2.y);
   int moveRight = 0;
   while (!moveRight) {// no valid move has been done
 
-    while(depth<2){ // 2 Clic necessary to continue
+   while(depth<2){ // 2 Clic necessary to continue
+    	if (c1.x == -1) {depth = 0;}
       SDL_Event event;
       while(SDL_PollEvent(&event)){
         // Event treatment
@@ -249,7 +252,7 @@ int inGameEvents(int currentPlayer){
               int yM = event.button.y;
 							printf("clic gauche %d %d\n", xM, yM );
               /*
-              things like this could work more efficiently
+              //things like this could work more efficiently
               c.x = (xM-Marjx)/width
               c.y = (xM-Marjy)/heigth
               */
@@ -263,21 +266,21 @@ int inGameEvents(int currentPlayer){
             }
           }
       }
-      if(depth==0){
+      if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
+          c1.x=-1; c1.y=-1;
+          depth=0;
+        }
+      if (depth==1 && c.x!=-1){
+        c2.x = c.x ; c2.y = c.y; depth++;
+        }
+
+      if (depth==0){
         c1.x=c.x ; c1.y = c.y; depth++;
         //display available mouvement and catchs
-
-      }
-      else if(depth==1){
-
-        if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
-          c1.x=-1; c1.y=-1;
-          depth--;
         }
-        else{ //the player clicked on two different tiles
-          c2.x = c.x ; c2.y = c.y; depth++;
-        }
-      }
+        c.x=-1; c.y=-1;
+
+
     }
     printf("%d : %d et %d : %d final \n",c1.x,c1.y,c2.x,c2.y);
     //moveRight = updateBoard(currentPlayer,c1,c2);
