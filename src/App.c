@@ -144,7 +144,7 @@ void newGame(game *g, parameters param){
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               1500,
-                                              1366,
+                                              1353,
                                               0.);
 
   // Menu display
@@ -232,7 +232,6 @@ int inGameEvents(int currentPlayer){
   c1.x=-1; c1.y=-1;
   coordinates c2;
   c2.x=-1; c2.y=-1;
-  printf("%d : %d et %d : %d initial\n",c1.x,c1.y,c2.x,c2.y);
   int moveRight = 0;
   while (!moveRight) {// no valid move has been done
 
@@ -265,22 +264,18 @@ int inGameEvents(int currentPlayer){
               }
             }
           }
-          printf("boucle");
       }
-      printf("%d : %d et %d : %d afterswitch %d \n",c1.x,c1.y,c2.x,c2.y,depth);
       if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
           c1.x=-1; c1.y=-1;
-          printf("twiced");
+          depth=0;
         }
-      if (depth==1){
+      if (depth==1 && c.x!=-1){
         c2.x = c.x ; c2.y = c.y; depth++;
-        printf("Depth1");
         }
         
       if (depth==0){
         c1.x=c.x ; c1.y = c.y; depth++;
         //display available mouvement and catchs
-        printf("Depth0");
         }
         c.x=-1; c.y=-1;
         
