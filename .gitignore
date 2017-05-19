@@ -25,4 +25,12 @@ dependencies/
 ./SDL2-2.0.5
 *.gch
 src/App
+CMakeLists.txt
+.gitignore~
+*.aux
+*.synctex.gz(busy)
+*.tex
+src/Makefile~
+src/ReadMe.txt~
+
 
