@@ -224,7 +224,7 @@ int inGameEvents(game *g){
   coordinates c2;
   
   int moveRight = 0;
-  while (moveRight!=1) {// no valid move has been done 1 : true 0 : false
+  while (moveRight!=1) {// no valid move has been done 1 : true 0 : false 2 : another friendly token
   c.x=-1; c.y=-1; //initialisation made so that a invalid move can be overwritten
   if (moveRight==0) {
   	c1.x=-1; c1.y=-1;
@@ -239,7 +239,6 @@ int inGameEvents(game *g){
     	
       SDL_Event event;
       while (SDL_PollEvent(&event)) {
-      	if (c1.x == -1) {depth = 0;}
         // Event treatment
         switch(event.type){ // Which type of event is it ?
           case SDL_WINDOWEVENT: // Window event
@@ -272,20 +271,20 @@ int inGameEvents(game *g){
           c1.x=-1; c1.y=-1;
           depth=0;
         }
-        if (depth==1 && (g->map[c.x][c.y]==0) ){
-          c2.x = c.x ; c2.y = c.y; depth++;
+        if ((depth==1) && (g->map[c.x][c.y]==0) ){//means destination is empty
+          c2.x = c.x ; c2.y = c.y ; depth=2;
           printf("second clic %d : %d \n",c2.x, c2.y);
         }
 
-        if ((depth==0)&&(g->map[c.x][c.y]!=0)) {
-          c1.x=c.x ; c1.y = c.y; depth++;
+        if ((depth==0) && (g->map[c.x][c.y]==g->currentPlayer)) {
+          c1.x = c.x ; c1.y = c.y ; depth=1;
           //display available mouvement and catchs
           printf("first clic %d : %d \n",c1.x, c1.y);
         }
       }
       c.x=-1; c.y=-1;
     }
-    printf("final move %d : %d -> %d : %d \n", c1.x, c1.y, c2.x, c2.y);
+    printf("final move %d : %d | %d -> %d : %d | %d \n", c1.x, c1.y, g->map[c1.x][c1.y], c2.x, c2.y, g->map[c2.x][c2.y]);
     moveRight = updateBoard(g, c1, c2);
   }
   return checkVictory(g, c2);

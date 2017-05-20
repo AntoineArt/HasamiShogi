@@ -41,7 +41,7 @@ int updateBoard(game *g, coordinates c1, coordinates c2)
 		return 0;
 	} else if ((g->map[c1.x][c1.y]) != (g->currentPlayer))
 	{
-		printf("Invalid Movement (Not your token !) %d",g->currentPlayer);
+		printf("Invalid Movement (Not your token !");
 		return 0;
 	}
 	else if(checkMovement(g,c1,c2)==1){

@@ -14,9 +14,9 @@ void initGame(game *g, int gameMode, int var)
 	int j;
 	for (i=0; i<9; i++) { //init of the standart board
 		for (j=0; j<9; j++) {
-			if (i==0 || i==var) { //I think it does what we expect 1 row in var 0 and 2 in var 1
+			if (j==0 || j==var) { //I think it does what we expect 1 row in var 0 and 2 in var 1
 				g->map[i][j]=2; //player two ie red token
-			} else if (i==8 || i==(8-var)) {
+			} else if (j==8 || j==(8-var)) {
 				g->map[i][j]=1; //players one ie black token
 			} else {
 				g->map[i][j]=0; //empty cases

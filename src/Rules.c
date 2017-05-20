@@ -64,9 +64,15 @@ int checkVictory(game *g, coordinates c2)
 			//Up
 			i=1;
 			while(
-				  (((g->currentPlayer == 1)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=0))
+				  (((g->currentPlayer == 1)
+				  &&(c2.y-i>=0)
+				  &&(g->map[c2.x][c2.y-i]==1)
+				  )
 				  ||
-				  ((g->currentPlayer == 2)&&(g->map[c2.x][c2.y-i]==1)&&(c2.y-i>=2))
+				  ((g->currentPlayer == 2)
+				  &&(c2.y-i>=2)
+				  &&(g->map[c2.x][c2.y-i]==2)
+				  )
 				  )&&(number<5)
 				 )
 			{
@@ -76,9 +82,15 @@ int checkVictory(game *g, coordinates c2)
 			//Down
 			i=1;
 			while(
-				  (((g->currentPlayer == 1)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=6))
+				  (((g->currentPlayer == 1)
+				  &&(c2.y+i<=6)
+				  &&(g->map[c2.x][c2.y+i]==1)
+				  )
 				   ||
-				   ((g->currentPlayer == 2)&&(g->map[c2.x][c2.y+i]==1)&&(c2.y+i<=8))
+				   ((g->currentPlayer == 2)
+				   &&(c2.y+i<=8)
+				   &&(g->map[c2.x][c2.y+i]==2)
+				   )
 				  )&&(number<5)
 				 )
 			{
@@ -92,9 +104,17 @@ int checkVictory(game *g, coordinates c2)
 			//UpL
 			i=1;
 			while(
-				  (((g->currentPlayer == 1)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x-i>=0))
+				  (((g->currentPlayer == 1)
+				  &&(c2.y-i>=0)
+				  &&(c2.x-i>=0)
+				  &&(g->map[c2.x-i][c2.y-i]==1)
+				  )
 				  ||
-				  ((g->currentPlayer == 2)&&(g->map[c2.x-i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x-i>=0))
+				  ((g->currentPlayer == 2)
+				  &&(c2.y-i>=2)
+				  &&(c2.x-i>=0)
+				  &&(g->map[c2.x-i][c2.y-i]==2)
+				  )
 				  )&&(number<5)
 				 )
 			{
@@ -104,10 +124,21 @@ int checkVictory(game *g, coordinates c2)
 			//DownR
 			i=1;
 			while(
-				  (((g->currentPlayer == 1)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x+i<=8))
+				  (
+				  ((g->currentPlayer == 1) //player one
+				  &&(c2.y+i<=6) //next token still on the winning area
+				  &&(c2.x+i<=8) //next token still on the winning area
+				  &&(g->map[c2.x+i][c2.y+i]==1) //next token is friendly
+				  )
 				  ||
-				  ((g->currentPlayer == 2)&&(g->map[c2.x+i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x+i<=8))
-				  )&&(number<5)
+				  ((g->currentPlayer == 2) //player two
+				  &&(c2.y+i<=8) //next token still on the winning area
+				  &&(c2.x+i<=8) //next token still on the winning area
+				  &&(g->map[c2.x+i][c2.y+i]==2) //next token is friendly
+				  )
+				  )
+				  &&
+				  (number<5) //count the aligned token
 				 )
 			{
 				number++;
@@ -121,10 +152,20 @@ int checkVictory(game *g, coordinates c2)
 			//UpR
 			i=1;
 			while(
-				  (((g->currentPlayer == 1)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=0)&&(c2.x+i<=8))
+				  (
+				  ((g->currentPlayer == 1)
+				  &&(c2.y-i>=0)
+				  &&(c2.x+i<=8)
+				  &&(g->map[c2.x+i][c2.y-i]==1)
+				  )
 				  ||
-				  ((g->currentPlayer == 2)&&(g->map[c2.x+i][c2.y-i]==1)&&(c2.y-i>=2)&&(c2.x+i<=8))
-				  )&&(number<5)
+				  ((g->currentPlayer == 2)
+				  &&(c2.y-i>=2)
+				  &&(c2.x+i<=8)
+				  &&(g->map[c2.x+i][c2.y-i]==2)
+				  )
+				  )
+				  &&(number<5)
 				 )
 			{
 				number++;
@@ -133,10 +174,20 @@ int checkVictory(game *g, coordinates c2)
 			//DownL
 			i=1;
 			while(
-				  (((g->currentPlayer == 1)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=6)&&(c2.x-i>=0))
+				  (
+				  ((g->currentPlayer == 1)
+				  &&(c2.y+i<=6)
+				  &&(c2.x-i>=0)
+				  &&(g->map[c2.x-i][c2.y+i]==1)
+				  )
 				  ||
-				  ((g->currentPlayer == 2)&&(g->map[c2.x-i][c2.y+i]==1)&&(c2.y+i<=8)&&(c2.x-i>=0))
-				  )&&(number<5)
+				  ((g->currentPlayer == 2)
+				  &&(c2.y+i<=8)
+				  &&(c2.x-i>=0)
+				  &&(g->map[c2.x-i][c2.y+i]==2)
+				  )
+				  )
+				  &&(number<5)
 				 )
 			{
 				number++;
@@ -171,7 +222,7 @@ coordinates* checkCatch(game *g, coordinates c2)
 		up++;
 		i++;
 	}
-	//If the opposing token isn't a current player's one, no token can be catch
+	//If the opposing token isn't a current player's one, no token can be caught
 	if ((c2.y-i == -1) || (g->map[c2.x][c2.y-i] != g->currentPlayer)){up = 0;}
 
 	//Right
@@ -199,7 +250,11 @@ coordinates* checkCatch(game *g, coordinates c2)
 		left++;
 		i++;
 	}
-	if ((c2.x+i == -1) || (g->map[c2.x-i][c2.y] != g->currentPlayer)){left = 0;}
+	if ((c2.x-i == -1) //reached the end of the board
+	|| (g->map[c2.x-i][c2.y] != g->currentPlayer) //last token not friendly
+	){
+	left = 0; //reinit left caught token
+	}
 
 	//We create the table who will contain the coordonates of the near-to-be caught tokens
 	return createTable(g, c2, up, right, down, left, 1);
@@ -279,16 +334,32 @@ coordinates* createTable(game *g, coordinates c, int up, int right, int down, in
 int checkMovement(game *g, coordinates c1, coordinates c2) {
 
 	//Check if the start isn't empty
-	if(g->map[c1.x][c1.y]==0){return 0;}
+	if((g->map[c1.x][c1.y]) == 0)
+	{
+	printf("Invalid Movement (Empty start)");
+	return 0;
+	}
 
 	//Check if the destination is friendly
-	if(g->map[c2.x][c2.y]==g->currentPlayer){return 2;}
+	if((g->map[c2.x][c2.y]) == (g->currentPlayer))
+	{
+	printf("Invalid Movement (Destination is a friendly token)");
+	return 2;
+	}
 	
 	//Check if destination is not empty (means ennemy with previous check)
-	if(g->map[c2.x][c2.y]!=0){return 0;}
+	if(g->map[c2.x][c2.y]!=0)
+	{
+	printf("Invalid Movement (Destination is a ennemy token)");
+	return 0;
+	}
 
 	//Check deplacement lign or colonn 
-	if((c1.x!=c2.x)&&(c1.y!=c2.y)){return 0;}
+	if((c1.x!=c2.x)&&(c1.y!=c2.y))
+	{
+	printf("Invalid Movement (not in lign or colonn)");
+	return 0;
+	}
 	else
 	{
 		//1:Up, 2:Right, 3:Down, 4:Left
@@ -303,50 +374,83 @@ int checkMovement(game *g, coordinates c1, coordinates c2) {
 		switch (typeMovement)
 		{
 			case 1:
-				if((g->var==1)&&(c1.y-c2.y==2)&&(g->map[c1.x][c1.y-1]!=0)){return 1;}
+				if((g->var==1)&&(c1.y-c2.y==2)&&((g->map[c1.x][c1.y-1])!=0))
+				{
+					printf("Valid Move (jump)");
+					return 1;
+				}
 				else
 				{
 					int i;
-					for(i=0 ; i<(c1.y-c2.y) ; i++)
+					for(i=1 ; i<(c1.y-c2.y) ; i++)
 					{
-						if(g->map[c1.x][c1.y-i]!=0){return 0;}
+						if((g->map[c1.x][c1.y-i])!=0)
+						{
+							printf("Invalid Movement (token on the way)");
+							return 0;
+						}
 					}
 				}
 			case 2:
-				if((g->var==1)&&(c1.x-c2.x==-2)&&(g->map[c1.x+1][c1.y]!=0)){return 1;}
+				if((g->var==1)&&(c1.x-c2.x==-2)&&(g->map[c1.x+1][c1.y]!=0))
+				{
+					printf("Valid Move (jump)");
+					return 1;
+				}
 				else
 				{
 					int i;
-					for(i=0 ; i<(c2.x-c1.x) ; i++)
+					for(i=1 ; i<(c2.x-c1.x) ; i++)
 					{
-						if(g->map[c1.x+i][c1.y]!=0){return 0;}
+						if(g->map[c1.x+i][c1.y]!=0)
+						{
+							printf("Invalid Movement (token on the way)");
+							return 0;
+						}
 					}
 				}
 			case 3:
-				if((g->var==1)&&(c1.y-c2.y==-2)&&(g->map[c1.x][c1.y+1]!=0)){return 1;}
+				if((g->var==1)&&(c1.y-c2.y==-2)&&(g->map[c1.x][c1.y+1]!=0))
+				{
+					printf("Valid Move (jump)");
+					return 1;
+				}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c2.y-c1.y) ; i++)
 					{
-						if(g->map[c1.x][c1.y+i]!=0){return 0;}
+						if(g->map[c1.x][c1.y+i]!=0)
+						{
+							printf("Invalid Movement (token on the way)");
+							return 0;
+						}
 					}
 				}
 			case 4:
-				if((g->var==1)&&(c1.x-c2.x==2)&&(g->map[c1.x-1][c1.y]!=0)){return 1;}
+				if((g->var==1)&&(c1.x-c2.x==2)&&(g->map[c1.x-1][c1.y]!=0))
+				{
+					printf("Valid Move (jump)");
+					return 1;
+				}
 				else
 				{
 					int i;
 					for(i=0 ; i<(c1.x-c2.x) ; i++)
 					{
-						if(g->map[c1.x-i][c1.y]!=0){return 0;}
+						if(g->map[c1.x-i][c1.y]!=0){
+							printf("Invalid Movement (token on the way)");
+							return 0;
+						}
 					}
 				}
 		}
 		//Default case
+		printf("Valid Move");
 		return 1;
 	}
 	//Never used
+	printf("Invalid Movement");
 	return 0;
 }
 
