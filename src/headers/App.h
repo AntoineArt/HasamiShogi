@@ -11,7 +11,7 @@ const int DEFAULT_HEIGTH = 1080;
 const int GAME_MODE_DEFAULT = 0; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int LANG_DEFAULT = 0; // 0 means english , 1 means french
-const int DECAY_PIECES = 150;
+const int DECAY_PIECES = 0;
 
 Parameters initParameters(int lang, int resX, int resY);
 

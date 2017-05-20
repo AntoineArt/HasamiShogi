@@ -136,8 +136,8 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 void newGame(Game *g, Parameters param){
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
+                                              1200,
                                               1353,
-                                              1300,
                                               0.);
   SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
   // Menu display
@@ -163,9 +163,9 @@ void newGame(Game *g, Parameters param){
     for(i=1; i<updatedCases[0].x; i++) {
     	if (i==2)
     	{
-    		updateWindow(DECAY_PIECES + 67 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*131, pWinGame, pToken);
+    		updateWindow(DECAY_PIECES + 68 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*(131+4), pWinGame, pToken);
     	} else {
-		updateWindow(DECAY_PIECES + 67 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*131, pWinGame, pYellow);
+		updateWindow(DECAY_PIECES + 68 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*(131+4), pWinGame, pYellow);
     	}
     }
 
@@ -229,8 +229,8 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 
   for(int i = 0; i<9; i++){
     for(int j=0; j<(g->var)+1; j++){
-      updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + j*131, pWindow, p1st);  //Positioning 1st player
-      updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + 8 * 131 - j*131, pWindow, p2nd);  //Positioning 2nd player
+      updateWindow(DECAY_PIECES + 68 + i*(115+5), 68+8 + j*131, pWindow, p1st);  //Positioning 1st player
+      updateWindow(DECAY_PIECES + 68 + i*(115+5), 68+8 + 8 * (131+4) - j*(131+4), pWindow, p2nd);  //Positioning 2nd player
     }
   }
 }
