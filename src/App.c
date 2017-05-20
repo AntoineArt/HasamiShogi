@@ -136,8 +136,8 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 void newGame(Game *g, Parameters param){
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
-                                              1500,
                                               1353,
+                                              1300,
                                               0.);
   SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
   // Menu display
