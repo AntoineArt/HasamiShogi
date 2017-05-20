@@ -2,7 +2,7 @@
 
 //GLOBAL VAR
 
-game *g; //global variable (initialized in App.c)
+Game *g; //global variable (initialized in App.c)
 
 
 int main(int argc, char* argv[]){
@@ -20,15 +20,15 @@ int main(int argc, char* argv[]){
   pWindow = SDL_CreateWindow("Hasami Shogi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DEFAULT_WIDTH, DEFAULT_HEIGTH, 0.);
 
   //Language choice
-  textsStruct texts[2] = {enText, frText};
+  Texts texts[2] = {enText, frText};
   // Launching the menu window
   int mode;
-  game *g = (game*) malloc(sizeof(game));
+  Game *g = (Game*) malloc(sizeof(Game));
   initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
 
   mode = menu(pWindow, police, texts);
 
-  parameters param = initParameters(LANG_DEFAULT, DEFAULT_WIDTH, DEFAULT_HEIGTH);
+  Parameters param = initParameters(LANG_DEFAULT, DEFAULT_WIDTH, DEFAULT_HEIGTH);
 
   switch(mode){
     case 0: newGame(g, param);break;
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]){
   return 0;
 }
 
-int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts){
+int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts){
   SDL_Surface* pBackgroundMenu = SDL_LoadBMP("./ressources/images/BackgroundMenu.bmp");
   /*pWindow = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
@@ -137,7 +137,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
   SDL_UpdateWindowSurface(pWindow);
 }
 
-void newGame(game *g, parameters param){
+void newGame(Game *g, Parameters param){
   SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
@@ -171,7 +171,7 @@ void rules(){
 
 }
 
-void parametersMenu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts, parameters p){
+void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Parameters p){
   SDL_Surface* pBackgroundParameters = SDL_LoadBMP("./ressources/images/BackgroundMenu.bmp");
   SDL_Window *pWinParam = SDL_CreateWindow("Parameters",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
@@ -200,7 +200,7 @@ char isIn(int xM, int yM, int x, int y, int w, int h){
   return ((xM > x && xM < x+w) && (yM > y && yM < y+h));
 }
 
-void setupBoard(game *g, SDL_Window* pWindow){
+void setupBoard(Game *g, SDL_Window* pWindow){
   SDL_Surface* pBlackPiece = SDL_LoadBMP("./ressources/images/BlackPiece.bmp");
   SDL_Surface* pRedPiece = SDL_LoadBMP("./ressources/images/RedPiece.bmp");
 
@@ -224,11 +224,11 @@ void victoryDisplay(int winner){
 
 int inGameEvents(int currentPlayer){
   int depth = 0;
-  coordinates c;
+  Coordinates c;
   c.x=-1; c.y=-1;
-  coordinates c1;
+  Coordinates c1;
   c1.x=-1; c1.y=-1;
-  coordinates c2;
+  Coordinates c2;
   c2.x=-1; c2.y=-1;
   int moveRight = 0;
   while (!moveRight) {// no valid move has been done
@@ -293,8 +293,8 @@ int inGameEvents(int currentPlayer){
 
 
 
-parameters initParameters(int lang, int resX, int resY){
-  parameters p;
+Parameters initParameters(int lang, int resX, int resY){
+  Parameters p;
   p.fullscreen = 0;
   p.soundLevel = 255;
   p.texturePack = 0;

@@ -1,19 +1,19 @@
 #include "./headers/Board.h"
 
-void write(int status, coordinates c)
+void write(int status, Coordinates c)
 {
 	g->map[c.x][c.y] = status;
 }
 
-void movePiece(coordinates c1, coordinates c2)
+void movePiece(Coordinates c1, Coordinates c2)
 {
 	write(g->map[c1.x][c1.y],c2);
 	write(0,c1);
 }
 
-void catchPiece(int currentPlayer, coordinates c2)
+void catchPiece(int currentPlayer, Coordinates c2)
 {
-	coordinates *tab;
+	Coordinates *tab;
 	tab = checkCatch(currentPlayer, c2);
 	int i;
 	for (i = 1; i<tab[0].x; i++) {
@@ -29,7 +29,7 @@ void catchPiece(int currentPlayer, coordinates c2)
 	free(tab);
 }
 
-int updateBoard(int currentPlayer, coordinates c1, coordinates c2)
+int updateBoard(int currentPlayer, Coordinates c1, Coordinates c2)
 {
 	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8))
 	{

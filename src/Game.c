@@ -1,6 +1,6 @@
 #include "./headers/Game.h"
 
-void initGame(game *g, int gameMode, int var)
+void initGame(Game *g, int gameMode, int var)
 {
 	g->gameMode = gameMode;
 	g->var = var;
@@ -39,7 +39,7 @@ void initGame(game *g, int gameMode, int var)
 	}
 }
 
-void freeGame(game *g)
+void freeGame(Game *g)
 {
 	int i;
 	for (i=0; i<9; i++) {

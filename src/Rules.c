@@ -33,7 +33,7 @@ void resetBoard() {
 	}
 }
 
-int checkVictory(int currentPlayer, coordinates c2)
+int checkVictory(int currentPlayer, Coordinates c2)
 {
 	//We check if the opponent has loose every tokens but one
 	if ((g->var)==0)
@@ -157,7 +157,7 @@ int checkVictory(int currentPlayer, coordinates c2)
 	return -1; //Never used
 }
 
-coordinates* checkCatch(int currentPlayer, coordinates c2)
+Coordinates* checkCatch(int currentPlayer, Coordinates c2)
 {
 	//We identifie the number of tokens we will catch in the named direction
 	int up=0; int right=0; int down=0; int left=0;
@@ -205,12 +205,12 @@ coordinates* checkCatch(int currentPlayer, coordinates c2)
 	return createTable(c2, up, right, down, left, 1);
 }
 
-coordinates* createTable(coordinates c, int up, int right, int down, int left, int catching){
+Coordinates* createTable(Coordinates c, int up, int right, int down, int left, int catching){
 
 	int i = up + right + down + left;
-	coordinates *tab;
-	tab = (coordinates*) malloc(sizeof(coordinates)*(i+1));
-	coordinates ct;
+	Coordinates *tab;
+	tab = (Coordinates*) malloc(sizeof(Coordinates)*(i+1));
+	Coordinates ct;
 	ct.x = i+1;
 	tab[0] = ct;
 
@@ -276,7 +276,7 @@ coordinates* createTable(coordinates c, int up, int right, int down, int left, i
 	return tab;
 }
 
-int checkMovement(coordinates c1, coordinates c2) {
+int checkMovement(Coordinates c1, Coordinates c2) {
 
 	//Check if the start isn't empty
 	if(g->map[c1.x][c1.y]==0){return 0;}
@@ -347,11 +347,11 @@ int checkMovement(coordinates c1, coordinates c2) {
 	return 0;
 }
 
-coordinates* showPossible(coordinates c1)
+Coordinates* showPossible(Coordinates c1)
 {
 	//We identifie the number of cases
 	int i=0; int up=0; int right=0; int down=0; int left=0;
-	coordinates c2;
+	Coordinates c2;
 
 	//Up
 	c2.x = c1.x;

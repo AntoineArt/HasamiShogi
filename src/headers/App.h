@@ -13,7 +13,7 @@ const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int LANG_DEFAULT = 0; // 0 means english , 1 means french
 const int DECAY_PIECES = 150;
 
-parameters initParameters(int lang, int resX, int resY);
+Parameters initParameters(int lang, int resX, int resY);
 
 /*
   Initializes SDL2
@@ -23,7 +23,7 @@ int main(int argc, char * argv[]);
 /*
   Displays the BackgroundMenu and calls menu(...) for user's input
 */
-int menu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts);
+int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts);
 
 /*
   Waits for user's input
@@ -45,7 +45,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage);
 /*
   Launches a new game
 */
-void newGame(game *g, parameters param);
+void newGame(Game *g, Parameters param);
 
 /*
   Loads an ancient game and launches it
@@ -55,12 +55,12 @@ void continueGame();
 /*
   Displays the parameters menu
 */
-void parametersMenu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts, parameters p);
+void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Parameters p);
 
 /*
   Sets up the display for a new game
 */
-void setupBoard(game *g, SDL_Window *pWindow);
+void setupBoard(Game *g, SDL_Window *pWindow);
 
 /*
   Displays the defeat screen

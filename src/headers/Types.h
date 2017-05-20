@@ -3,18 +3,18 @@
 */
 typedef struct{
 	int x,y;
-} coordinates;
+} Coordinates;
 
 /*
 	a structure that contains the whole game
 */
 typedef struct {
 	int gameMode; //the gameMode ie player vs player 1, player vs computer 2, computer vs player 3,  computer vs computer (watch mode) 4
-	int var; // variante of ashami shogi beeing played
+	int var; // variante of Hasami shogi beeing played
 	int **map;  //the game board with the pieces
 	int countPlayer1; //the number of pieces owned by the first player
 	int countPlayer2; //the number of pieces owned by the second player
-} game;
+} Game;
 
 
 /*
@@ -25,7 +25,7 @@ typedef struct{
 	char* rules[20];
 	char* options[10];
 	char* inGame[10];
-	} textsStruct;
+} Texts;
 
 /*
 	a structure used to store parameters for the graphical interface
@@ -37,7 +37,7 @@ typedef struct {
 	int lang; //the language that should be used by the app
 	int screenResX;
 	int screenResY;
-} parameters;
+} Parameters;
 
 typedef struct{
 	int xbegin;

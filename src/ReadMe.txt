@@ -7,12 +7,12 @@ else :
 
 
 Compiling sources :
-Dependancees :
+Dependencies :
 Under debian-like system :
-	Install SDL2 library : 
+	Install SDL2 library :
 		sudo apt-get install libsdl2-dev
 Install SDL-TTF library TTF : 
-	sudo apt-get install libsdl2-ttf-2.0-0 
+	sudo apt-get install libsdl2-ttf-2.0-0
 	sudo apt-get install libsdl2-ttf-dev
 
 Go to the right directory :
@@ -20,10 +20,10 @@ Go to the right directory :
 
 To compile sources use :
 	make
-	
+
 To clean all including Application use :
 	make mrproper
-	
+
 
 Bug report :
 	send email at :

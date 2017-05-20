@@ -1,7 +1,7 @@
 #include "../IA.c"
 
 //GLOBAL VAR
-extern game *g; //global variable (initialized in App.c)
+extern Game *g; //global variable (initialized in App.c)
 
 /*
 	function used to initialize a new game
@@ -11,9 +11,9 @@ extern game *g; //global variable (initialized in App.c)
 
 	warning allocate memory !
 */
-void initGame(game *g, int gameMode, int var);
+void initGame(Game *g, int gameMode, int var);
 
 /*
 	Free the memory used by the game
 */
-void freeGame(game *g);
+void freeGame(Game *g);
