@@ -40,13 +40,13 @@ int checkVictory(game *g, coordinates c2)
 	{
 		if ((g->currentPlayer == 1)&&(g->countPlayer2==1))
 		{
-			return 1;
+			return 1; //player 1 wins
 		}
 		else if ((g->currentPlayer == 2)&&(g->countPlayer1==1))
 		{
-			return 2;
+			return 2; //player 2 wins
 		}
-		else if ((g->countPlayer1<1)||(g->countPlayer2<1))
+		else if (((g->countPlayer1)<1) || ((g->countPlayer2)<1))
 		{
 			return 3; //Both players loose ; TO BE CHECKED
 		}
@@ -203,9 +203,9 @@ int checkVictory(game *g, coordinates c2)
 	}
 	else
 	{
-		return -1; //Error case
+		return 0; //Error case
 	}
-	return -1; //Never used
+	return 0; //Never used
 }
 
 coordinates* checkCatch(game *g, coordinates c2)
@@ -339,15 +339,8 @@ int checkMovement(game *g, coordinates c1, coordinates c2) {
 	printf("Invalid Movement (Empty start)");
 	return 0;
 	}
-
-	//Check if the destination is friendly
-	if((g->map[c2.x][c2.y]) == (g->currentPlayer))
-	{
-	printf("Invalid Movement (Destination is a friendly token)");
-	return 2;
-	}
 	
-	//Check if destination is not empty (means ennemy with previous check)
+	//Check if destination is not empty
 	if(g->map[c2.x][c2.y]!=0)
 	{
 	printf("Invalid Movement (Destination is a ennemy token)");
@@ -418,7 +411,7 @@ int checkMovement(game *g, coordinates c1, coordinates c2) {
 				else
 				{
 					int i;
-					for(i=0 ; i<(c2.y-c1.y) ; i++)
+					for(i=1 ; i<(c2.y-c1.y) ; i++)
 					{
 						if(g->map[c1.x][c1.y+i]!=0)
 						{
@@ -436,7 +429,7 @@ int checkMovement(game *g, coordinates c1, coordinates c2) {
 				else
 				{
 					int i;
-					for(i=0 ; i<(c1.x-c2.x) ; i++)
+					for(i=1 ; i<(c1.x-c2.x) ; i++)
 					{
 						if(g->map[c1.x-i][c1.y]!=0){
 							printf("Invalid Movement (token on the way)");

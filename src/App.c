@@ -134,28 +134,53 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 }
 
 void newGame(game *g, parameters param){
-  SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               1500,
                                               1353,
                                               0.);
-
+  SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
   // Menu display
   updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
   setupBoard(g, pWinGame);
 
+
+  SDL_Surface* pBlackPiece = SDL_LoadBMP("./ressources/images/BlackPiece.bmp");
+  SDL_Surface* pRedPiece = SDL_LoadBMP("./ressources/images/RedPiece.bmp");
+  SDL_Surface* pYellow = SDL_LoadBMP("./ressources/images/Yellow.bmp");
   //victory contains the player who won this turn (0 if none of them, 3 if both loosed)
   int victory = 0;
-  while (!victory){
+  coordinates* updatedCases;
+  int i;
+  while (victory==0){
     //ajouter IAplay
-    victory = inGameEvents(g);
-    (g->currentPlayer) = 3-(g->currentPlayer); //switch the player 3-1=2 3-2=1
+    
+    SDL_Surface* pToken = (g->currentPlayer == 1) ? pBlackPiece : pRedPiece;
+    
+    updatedCases = inGameEvents(g);
+    if (updatedCases[0].y==4) {break;} //redcross pressed == rageQuit
+    else {
+    for(i=1; i<updatedCases[0].x; i++) {
+    	if (i==2) 
+    	{
+    		updateWindow(DECAY_PIECES + 67 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*131, pWinGame, pToken);
+    	} else {
+		updateWindow(DECAY_PIECES + 67 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*131, pWinGame, pYellow);
+    	}
+    }
+    
+    victory = checkVictory(g, updatedCases[2]); 
+    (g->currentPlayer) = 3-(g->currentPlayer); //switch the current player 3-1=2 3-2=1
+    }
+    free(updatedCases); //malloc in inGameEvents
   }
-
+  (g->currentPlayer) = 3-(g->currentPlayer); //switch the current player , I think it is needed because of the last switch of the while 
   if(victory == 1){victoryDisplay(1);}
   else if (victory == 2){victoryDisplay(2);}
-  else{defeatDisplay();} //both loosed
+  else if (victory == 3){defeatDisplay();} //both loosed
+  else {
+  //rage quit case
+  } 
 }
 
 void continueGame(){
@@ -174,8 +199,8 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, textsStruct* texts, p
                                               DEFAULT_HEIGTH,
                                               0.);
 
-  // Menu display
-  updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
+    // Menu display
+    updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
     SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
     SDL_Color textColor ;
     textColor.r = 255;
@@ -205,19 +230,43 @@ void setupBoard(game *g, SDL_Window* pWindow){
   for(int i = 0; i<9; i++){
     for(int j=0; j<(g->var)+1; j++){
       updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + j*131, pWindow, p1st);  //Positioning 1st player
-      updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + 8 * (131+4) - j*131, pWindow, p2nd);  //Positioning 2nd player
+      updateWindow(DECAY_PIECES + 67 + i*(115+5), 68+8 + 8 * 131 - j*131, pWindow, p2nd);  //Positioning 2nd player
     }
   }
 }
 
-void defeatDisplay(){
+void defeatDisplay(){//when both loosed
+	SDL_Surface* pBackground = SDL_LoadBMP("./ressources/images/Defeat.bmp");
+  	SDL_Window* pWinGame = SDL_CreateWindow("Defeat !",  SDL_WINDOWPOS_CENTERED,
+                                              SDL_WINDOWPOS_CENTERED,
+                                              600,
+                                              600,
+                                              0.);
 
+  	// Menu display
+  	updateWindow(DECAY_PIECES, 0, pWinGame, pBackground);
+  	SDL_Delay(3000); //waiting for a click ? add button ?
 }
+
 void victoryDisplay(int winner){
-
+	SDL_Window* pWinGame = SDL_CreateWindow("Victory !",  SDL_WINDOWPOS_CENTERED,
+                                              SDL_WINDOWPOS_CENTERED,
+                                              600,
+                                              600,
+                                              0.);
+  	SDL_Surface* pBackground = SDL_LoadBMP("./ressources/images/victory.bmp");
+  	updateWindow(0, 0, pWinGame, pBackground);
+  	SDL_Surface* pName;
+  	if (winner==1) {
+  		pName = SDL_LoadBMP("./ressources/images/J1.bmp");
+  	} else {
+  		pName = SDL_LoadBMP("./ressources/images/J2.bmp");
+  	}
+  	updateWindow(0, 0, pWinGame, pName); //todo should be aligned
+  	SDL_Delay(3000);//waiting for a click ? add button ?
 }
 
-int inGameEvents(game *g){
+coordinates* inGameEvents(game *g){
   int depth;
   coordinates c;
   coordinates c1;
@@ -243,7 +292,10 @@ int inGameEvents(game *g){
         switch(event.type){ // Which type of event is it ?
           case SDL_WINDOWEVENT: // Window event
             if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
-              return 4;
+              coordinates *tab;
+  	      tab = (coordinates*) malloc(sizeof(coordinates)*(1));
+  	      tab[0].y=4;
+              return tab;
             }
             break;
 
@@ -285,9 +337,27 @@ int inGameEvents(game *g){
       c.x=-1; c.y=-1;
     }
     printf("final move %d : %d | %d -> %d : %d | %d \n", c1.x, c1.y, g->map[c1.x][c1.y], c2.x, c2.y, g->map[c2.x][c2.y]);
-    moveRight = updateBoard(g, c1, c2);
+    moveRight = checkMove(g, c1, c2);
   }
-  return checkVictory(g, c2);
+  movePiece(g,c1, c2); //the move has been checked so it is safe
+  
+  coordinates *tabCatch;
+  tabCatch = checkCatch(g, c2); //the tab of to be caught token
+  catchPiece(g,tabCatch);
+  
+  //creating the returned tab for graphical
+  coordinates *tab;
+  tab = (coordinates*) malloc(sizeof(coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
+  tab[0].x = tabCatch[0].x+2;
+  tab[0].y = 0;
+  tab[1] = c1;
+  tab[2] = c2;
+  int i;
+  for (i=1; i<(tabCatch[0].x); i++) {
+  	tab[i+2]=tabCatch[i];
+  }
+  free(tabCatch); //malloc in checkCatch
+  return tab;
 }
 
 

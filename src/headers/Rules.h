@@ -30,6 +30,7 @@ coordinates* createTable(game *g, coordinates c, int up, int right, int down, in
 	1 if valid, 
 	2 if on another friendly token
 	0 else
+	warning, function assume c1 and c2 are in the board, please use checkMove from Board.c to check
 */
 int checkMovement(game *g, coordinates c1, coordinates c2);
 

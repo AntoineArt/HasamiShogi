@@ -11,10 +11,8 @@ void movePiece(game *g, coordinates c1, coordinates c2)
 	write(g,0,c1);
 }
 
-void catchPiece(game *g, coordinates c2)
+void catchPiece(game *g, coordinates *tab)
 {
-	coordinates *tab;
-	tab = checkCatch(g, c2);
 	int i;
 	for (i = 1; i<tab[0].x; i++) {
 			write(g,0,tab[i]);
@@ -24,12 +22,10 @@ void catchPiece(game *g, coordinates c2)
 			if (g->currentPlayer==2) {
 				g->countPlayer1--; //the opponant lose pieces
 				}
-
 		}
-	free(tab);
 }
 
-int updateBoard(game *g, coordinates c1, coordinates c2)
+int checkMove(game *g, coordinates c1, coordinates c2)
 {
 	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8))
 	{
@@ -44,18 +40,14 @@ int updateBoard(game *g, coordinates c1, coordinates c2)
 		printf("Invalid Movement (Not your token !");
 		return 0;
 	}
-	else if(checkMovement(g,c1,c2)==1){
-		movePiece(g,c1, c2);
-		catchPiece(g,c2);
-		return 1;
-	}
-	else if(checkMovement(g,c1,c2)==2){
-		printf("New move from a friendly token");
-		return 2;
-	}
-	else
+	//Check if the destination is friendly
+	else if((g->map[c2.x][c2.y]) == (g->currentPlayer))
 	{
-		printf("Invalid Movement (Not in the rules !");
-		return 0;
+	printf("Invalid Movement (Destination is a friendly token)");
+	return 2;
 	}
+	else {
+	return checkMovement(g,c1,c2);
+	}
+	
 }

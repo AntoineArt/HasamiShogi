@@ -14,12 +14,13 @@ void write(game *g, int status, coordinates c);
 void movePiece(game *g, coordinates c1, coordinates c2);
 
 /*
-	Catch eventualy the pieces around c2, using checkCatch from Rules.c
+	Catch eventualy the pieces from tab given by checkCatch from Rules.c
 */
-void catchPiece(game *g, coordinates c2);
+void catchPiece(game *g, coordinates *tab);
 
 /*
-	Update the board with the player's move from c1 to c2
+	Update the board with the player's move from c1 to c2 including catching pieces.
+	return a coordinates* tab that contains is own length, c1, c2 and the eventual list of caught piece.
 */
 
-int updateBoard(game *g, coordinates c1, coordinates c2);
+int checkMove(game *g, coordinates c1, coordinates c2);

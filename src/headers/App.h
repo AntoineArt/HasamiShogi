@@ -75,10 +75,14 @@ void defeatDisplay();
 void victoryDisplay(int winner);
 
 /*
-  Fonction that handle the turn of currentPlayer from the beggining thil the end returning victory check
+  Fonction that handle the turn of currentPlayer from the beggining thil the end returning a tab who contains the move c1->c2 and the eventualy caught token. length of the tab in first coordinate x.
 */
-int inGameEvents(game *g);
+coordinates* inGameEvents(game *g);
 
+
+/*
+  Fonction who display the rules in a separate window
+*/
 void rules();
 
 /*
