@@ -10,20 +10,21 @@ extern Game *g; //global variable (initialized in App.c)
 /*
 	Change the status of the case of coordonates c1
 */
-void write(int status, Coordinates c);
+void write(Game* g, int status, Coordinates c);
 
 /*
 	Move a piece from c1 to c2
 */
-void movePiece(Coordinates c1, Coordinates c2);
+void movePiece(Game *g, Coordinates c1, Coordinates c2);
 
 /*
-	Catch eventualy the pieces around c2, using checkCatch from Rules.c
+	Catch eventualy the pieces from tab given by checkCatch from Rules.c
 */
-void catchPiece(int currentPlayer, Coordinates c2);
+void catchPiece(Game *g, Coordinates *tab);
 
 /*
-	Update the board with the current player's move from c1 to c2
+	Update the board with the player's move from c1 to c2 including catching pieces.
+	return a coordinates* tab that contains is own length, c1, c2 and the eventual list of caught piece.
 */
 
-int updateBoard(int currentPlayer, Coordinates c1, Coordinates c2);
+int checkMove(Game *g, Coordinates c1, Coordinates c2);

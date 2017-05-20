@@ -17,8 +17,9 @@ Parameters initParameters(int lang, int resX, int resY);
 
 /*
   Initializes SDL2
+  has yet no need of int argc, char * argv[]
 */
-int main(int argc, char * argv[]);
+int main(void);
 
 /*
   Displays the BackgroundMenu and calls menu(...) for user's input
@@ -74,10 +75,14 @@ void defeatDisplay();
 void victoryDisplay(int winner);
 
 /*
-  Fonction that handle the turn of currentPlayer from the beggining thil the end returning victory check
+  Fonction that handle the turn of currentPlayer from the beggining thil the end returning a tab who contains the move c1->c2 and the eventualy caught token. length of the tab in first coordinate x.
 */
-int inGameEvents(int currentPlayer);
+Coordinates* inGameEvents(Game *g);
 
+
+/*
+  Fonction who display the rules in a separate window
+*/
 void rules();
 
 /*

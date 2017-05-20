@@ -14,6 +14,7 @@ typedef struct {
 	int **map;  //the game board with the pieces
 	int countPlayer1; //the number of pieces owned by the first player
 	int countPlayer2; //the number of pieces owned by the second player
+	int currentPlayer; //the current player
 } Game;
 
 

@@ -3,40 +3,39 @@
 #include <string.h>
 #include "Types.h"
 
-
-//GLOBAL VAR
-extern Game *g; //global variable (initialized in App.c)
-
-
 /*
 	Reset the board b to it's basic state
 */
-void resetBoard();
+void resetBoard(Game *g);
 
 /*
 	Return the player who won this turn (0 if none of them, 3 if both loosed)
 */
-int checkVictory(int currentPlayer, Coordinates c2);
+int checkVictory(Game *g, Coordinates c2);
 
 /*
 	Return a table of the coordinates with the size of the table in first position
 	There isn't any interaction with the piece's previous position
 	WARNING : Allocate memory
 */
-Coordinates* checkCatch(int currentPlayer, Coordinates c2);
+Coordinates* checkCatch(Game *g, Coordinates c2);
 
 /*
 	Return a table of the coordinates surrounding c, according to the "catch" condition
 */
-Coordinates* createTable(Coordinates c, int up, int right, int down, int left, int catching);
+Coordinates* createTable(Game *g, Coordinates c, int up, int right, int down, int left, int catching);
 
 /*
 	Check if a move is valid
+	1 if valid,
+	2 if on another friendly token
+	0 else
+	warning, function assume c1 and c2 are in the board, please use checkMove from Board.c to check
 */
-int checkMovement(Coordinates c1, Coordinates c2);
+int checkMovement(Game *g, Coordinates c1, Coordinates c2);
 
 /*
 	function that show off the possible play after selection of a token
 */
 
-Coordinates* showPossible(Coordinates c1);
+Coordinates* showPossible(Game *g, Coordinates c1);
