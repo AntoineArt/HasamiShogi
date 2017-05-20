@@ -3,10 +3,6 @@
 #include <string.h>
 #include "../Rules.c"
 
-//GLOBAL VAR
-extern Game *g; //global variable (initialized in App.c)
-
-
 /*
 	Change the status of the case of coordonates c1
 */
