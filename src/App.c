@@ -163,9 +163,9 @@ void newGame(Game *g, Parameters param){
     for(i=1; i<updatedCases[0].x; i++) {
     	if (i==2)
     	{
-    		updateWindow(DECAY_PIECES + 68 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*(131+4), pWinGame, pToken);
+    		updateWindow(DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4), 68+8 + updatedCases[i].y*(131+4), pWinGame, pToken);
     	} else {
-		updateWindow(DECAY_PIECES + 68 + updatedCases[i].x*(115+5), 68+8 + updatedCases[i].y*(131+4), pWinGame, pYellow);
+		updateWindow(DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4), 68+8 + updatedCases[i].y*(131+4), pWinGame, pYellow);
     	}
     }
 
@@ -229,8 +229,8 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 
   for(int i = 0; i<9; i++){
     for(int j=0; j<(g->var)+1; j++){
-      updateWindow(DECAY_PIECES + 68 + i*(115+5), 68+8 + j*131, pWindow, p1st);  //Positioning 1st player
-      updateWindow(DECAY_PIECES + 68 + i*(115+5), 68+8 + 8 * (131+4) - j*(131+4), pWindow, p2nd);  //Positioning 2nd player
+      updateWindow(DECAY_PIECES + 68 + 8 + i*(115+4), 68+8 + j*(131+4), pWindow, p1st);  //Positioning red token
+      updateWindow(DECAY_PIECES + 68 + 8 + i*(115+4), 68+8 + 8 * (131+4) - j*(131+4), pWindow, p2nd);  //Positioning black token
     }
   }
 }
