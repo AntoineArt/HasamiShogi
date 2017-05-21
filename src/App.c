@@ -153,11 +153,21 @@ void newGame(Game *g, Parameters param){
   Coordinates* updatedCases;
   int i;
   while (victory==0){
-    //ajouter IAplay
-
+  
+    printf("%d",g->gameMode);
+    if ( (g->gameMode==0) 
+    || ((g->gameMode==1)&&(g->currentPlayer==1)) 
+    || ((g->gameMode==2)&&(g->currentPlayer==2)) )
+    { //human plays
+    	updatedCases = inGameEvents(g);
+    } else { //IA plays
+    	updatedCases = aiPlay(g);
+    }
+    
+    
+    //graphical stuff
     SDL_Surface* pToken = (g->currentPlayer == 1) ? pBlackPiece : pRedPiece;
 
-    updatedCases = inGameEvents(g);
     if (updatedCases[0].y==4) {break;} //redcross pressed == rageQuit
     else {
     for(i=1; i<updatedCases[0].x; i++) {
@@ -168,7 +178,6 @@ void newGame(Game *g, Parameters param){
 		updateWindow(DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4), 68+8 + updatedCases[i].y*(131+4), pWinGame, pYellow);
     	}
     }
-
     victory = checkVictory(g, updatedCases[2]);
     (g->currentPlayer) = 3-(g->currentPlayer); //switch the current player 3-1=2 3-2=1
     }
@@ -207,9 +216,11 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Paramet
     textColor.g = 255;
     textColor.b = 255;
 
-    for(int i = 0; i<6; i++){
+    for(int i = 0; i<5; i++){
       textsParameters[i] = TTF_RenderText_Blended(police, texts[p.lang].options[i + 5], textColor);
-      updateWindow(960 - textsParameters[i]->w/2, 540 - textsParameters[i]->h/2 - (300-100*i), pWinParam, textsParameters[i]);
+      //updateWindow(960 - (textsParameters[i]->w)/2, 540 - (textsParameters[i]->h)/2 - (300-100*i), pWinParam, textsParameters[i]); 
+      //is source of a segfault
+      updateWindow(0,0,pWinParam,textsParameters[i]);
     }
     SDL_Delay(2000);
     SDL_FreeSurface(pBackgroundParameters);

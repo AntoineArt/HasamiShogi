@@ -2,6 +2,11 @@
 #include <math.h> //needed for infinite value
 
 /*
+	handle the whole play of AI
+*/
+Coordinates* aiPlay(Game *g);
+
+/*
 	function for searching the Tree P of possible moves returning the best according to values of P nodes
 */
 double alphabeta(Tree *P, int depth, double a, double b); 
@@ -28,4 +33,9 @@ Coordinates* friendlyToken(Game* g);
 /*
 	function that give a value to a move
 */
-double evaluate(Coordinates c1, Coordinates c2);
+double evaluate(Game *g, Coordinates c1, Coordinates c2);
+
+/*
+	initialize all fields of a Node
+*/
+void initNode(Tree* t);
