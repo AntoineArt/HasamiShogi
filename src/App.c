@@ -157,8 +157,10 @@ void newGame(Game *g, Parameters param){
     || ((g->gameMode==1)&&(g->currentPlayer==1)) 
     || ((g->gameMode==2)&&(g->currentPlayer==2)) )
     { //human plays
+    	printf("human play");
     	updatedCases = inGameEvents(g);
     } else { //IA plays
+    	printf("AI play");
     	updatedCases = aiPlay(g);
     }
     //graphical stuff

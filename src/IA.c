@@ -2,30 +2,33 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 3;
+	int depth = 1;
 	Tree *root = malloc(sizeof(Tree));
 	initNode(root);
-	buildTree(g, depth, root);
-	
 	double ninf=-INFINITY;
         double pinf=INFINITY;
-	double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
 	Coordinates c1;
 	Coordinates c2;
 	c1.x=-1;
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
-	int i;
-	for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
-		if (((root->sons[i])->value)==bestmove) {
-			c1 = ((root->sons[i])->c1);
-			c2 = ((root->sons[i])->c2);
+	while (checkMove(g, c1, c2) != 1) { //useless by construction but still safer
+		buildTree(g, depth, root);
+		double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
+		c1.x=-1;
+		c1.y=-1;
+		c2.x=-1;
+		c2.y=-1;
+		int i;
+		for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
+			if (((root->sons[i])->value)==bestmove) {
+				c1 = ((root->sons[i])->c1);
+				c2 = ((root->sons[i])->c2);
+			}
 		}
+		printf("%d : %d \n",c1.x,c1.y);
 	}
-	printf("%d : %d \n",c1.x,c1.y);
-	freeTree(root);
-	
 	movePiece(g, c1, c2); //the move is safe by construction
 	
   	Coordinates *tabCatch;
@@ -38,11 +41,12 @@ Coordinates* aiPlay(Game *g) {
   	tab[0].y = 0;
   	tab[1] = c1;
   	tab[2] = c2;
-  	//re use of i 
+  	int i;
   	for (i=1; i<(tabCatch[0].x); i++) {
   		tab[i+2]=tabCatch[i];
   	}
   	free(tabCatch); //malloc in checkCatch
+  	freeTree(root);
   	return tab;
 }
 
@@ -105,7 +109,7 @@ void buildTree(Game* g, int depth, Tree *dad) {
 			}
 		}
 	} else { //depth is 0 -> dad is forced as a leave
-		dad->value = evaluate(g, dad->c1, dad->c2); //needs to be accurate
+		dad->value = evaluate(g, (dad->c1), (dad->c2)); //needs to be accurate
 		dad->nbofSons = 0;
 		dad->sons = NULL; //be carefull
 	}
@@ -146,11 +150,13 @@ Coordinates* friendlyToken(Game* g) {
 }
 
 double evaluate(Game *g, Coordinates c1, Coordinates c2) {
+	double res;
+	res = 0;
+	if (checkMove(g, c1, c2)!=1) {return res;}
+	//else
 	//do the play
 	movePiece(g, c1, c2);
 	//attribuate value
-	double res;
-	res = 0;
 	//victory cases
 	if (checkVictory(g, c2)==(g->currentPlayer)) //currentPlayer is AI player
 	{ res = res + 1000; }
