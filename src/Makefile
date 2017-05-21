@@ -1,4 +1,4 @@
-CFLAGS = -std=c99 -g -Wall -Wextra  -I $(INCLUDES)
+CFLAGS = -std=c99 -g -Wall -Wextra -Wno-unused-parameter  -I $(INCLUDES)
 LIB = -lSDL2 -lSDL2_ttf
 
 INCLUDES = headers

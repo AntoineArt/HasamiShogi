@@ -228,7 +228,7 @@ void setupBoard(Game *g, SDL_Window* pWindow){
   SDL_Surface* p2nd = (g->gameMode == 2) ? pRedPiece : pBlackPiece;
 
   for(int i = 0; i<9; i++){
-    for(int j=0; j<(g->var)+1; j++){
+    for(int j = 0; j<(g->var)+1; j++){
       updateWindow(DECAY_PIECES + 68 + 8 + i*(115+4), 68+8 + j*(131+4), pWindow, p1st);  //Positioning red token
       updateWindow(DECAY_PIECES + 68 + 8 + i*(115+4), 68+8 + 8 * (131+4) - j*(131+4), pWindow, p2nd);  //Positioning black token
     }
