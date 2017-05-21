@@ -334,18 +334,18 @@ Coordinates* inGameEvents(Game *g){
         }
         if ((depth==1) && (g->map[c.x][c.y]==0) ){//means destination is empty
           c2.x = c.x ; c2.y = c.y ; depth=2;
-          printf("second clic %d : %d \n",c2.x, c2.y);
+          //printf("second clic %d : %d \n",c2.x, c2.y);
         }
 
         if ((depth==0) && (g->map[c.x][c.y]==g->currentPlayer)) {
           c1.x = c.x ; c1.y = c.y ; depth=1;
-          //display available mouvement and catchs
-          printf("first clic %d : %d \n",c1.x, c1.y);
+          //todo display available mouvement and catchs
+          //printf("first clic %d : %d \n",c1.x, c1.y);
         }
       }
       c.x=-1; c.y=-1;
     }
-    printf("final move %d : %d | %d -> %d : %d | %d \n", c1.x, c1.y, g->map[c1.x][c1.y], c2.x, c2.y, g->map[c2.x][c2.y]);
+    //printf("final move %d : %d | %d -> %d : %d | %d \n", c1.x, c1.y, g->map[c1.x][c1.y], c2.x, c2.y, g->map[c2.x][c2.y]);
     moveRight = checkMove(g, c1, c2);
   }
   movePiece(g,c1, c2); //the move has been checked so it is safe
