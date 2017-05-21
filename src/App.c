@@ -153,8 +153,6 @@ void newGame(Game *g, Parameters param){
   Coordinates* updatedCases;
   int i;
   while (victory==0){
-  
-    printf("%d",g->gameMode);
     if ( (g->gameMode==0) 
     || ((g->gameMode==1)&&(g->currentPlayer==1)) 
     || ((g->gameMode==2)&&(g->currentPlayer==2)) )
@@ -163,8 +161,6 @@ void newGame(Game *g, Parameters param){
     } else { //IA plays
     	updatedCases = aiPlay(g);
     }
-    
-    
     //graphical stuff
     SDL_Surface* pToken = (g->currentPlayer == 1) ? pBlackPiece : pRedPiece;
 

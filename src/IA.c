@@ -9,21 +9,25 @@ Coordinates* aiPlay(Game *g) {
 	
 	double ninf=-INFINITY;
         double pinf=INFINITY;
-	double bestmove = alphabeta(root, depth, ninf, pinf); //find the path through victory
+	double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
 	Coordinates c1;
 	Coordinates c2;
+	c1.x=-1;
+	c1.y=-1;
+	c2.x=-1;
+	c2.y=-1;
 	int i;
 	for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
-		if ((root->sons[i])->value==bestmove) {
+		if (((root->sons[i])->value)==bestmove) {
 			c1 = ((root->sons[i])->c1);
 			c2 = ((root->sons[i])->c2);
 		}
 	}
+	printf("%d : %d \n",c1.x,c1.y);
 	freeTree(root);
 	
-	
 	movePiece(g, c1, c2); //the move is safe by construction
-
+	
   	Coordinates *tabCatch;
   	tabCatch = checkCatch(g, c2); //the tab of to be caught token
   	catchPiece(g,tabCatch);
@@ -43,26 +47,34 @@ Coordinates* aiPlay(Game *g) {
 }
 
 
-double alphabeta(Tree *P, int depth, double a, double b) { //a<b
+double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 	if (P->nbofSons==0 || depth==0) //means P is a leave
 	{ 
 	return P->value; //returning value of leave
-	} else {
-	double best;
-	best = -INFINITY;
+	} else if (g->currentPlayer==2) {//is ia
+	double best = -INFINITY;
 	int i;
 	for (i=0; i<(P->nbofSons); i++) {
 		double val;
-		val = - alphabeta(P->sons[i], depth-1,-b,-a);
-		if (val > best) {
-			best = val;
-			if (best < a) {
-				a = best;
-				if (a >= b) {
-					P->value=best; //saving the value
-					return best; //end of the research
-				}
-			}
+		val = alphabeta(g, P->sons[i], depth-1,-b,-a);
+		best = (best < val) ? val : best;
+		a = (a < val) ? val : a ; //α := max(α, v)
+		if (b <= a) {
+			break; // β cut-off 
+		}
+	}
+	P->value=best; //saving the value
+	return best; //continuing the recursive search
+	} else {
+	double best = +INFINITY;
+	int i;
+	for (i=0; i<(P->nbofSons); i++) {
+		double val;
+		val = alphabeta(g, P->sons[i], depth-1,-b,-a);
+		best = (best > val) ? val : best;
+		a = (a > val) ? val : a ; //α := max(α, v)
+		if (b <= a) {
+			break; // α cut-off 
 		}
 	}
 	P->value=best; //saving the value
@@ -148,11 +160,12 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	{
 	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
 	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
-	res = res - 100* (friendTokenNb - ennemyTokenNb); //ones wants draw if ones has less token
+	res = res - (100 * (friendTokenNb - ennemyTokenNb)); //ones wants draw if ones has less token
 	}
 	//caugth cases
 	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play token
-	res = res + tab[0].x * 100;
+	
+	res = res + (tab[0].x-1) * 100; //because of the false first coordonates
 	
 	//if protect friends then good
 	//I don't fucking know how to implement this

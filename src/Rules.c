@@ -336,21 +336,21 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 	//Check if the start isn't empty
 	if((g->map[c1.x][c1.y]) == 0)
 	{
-	printf("Invalid Movement (Empty start)");
+	//printf("Invalid Movement (Empty start)");
 	return 0;
 	}
 
 	//Check if destination is not empty
 	if(g->map[c2.x][c2.y]!=0)
 	{
-	printf("Invalid Movement (Destination is a ennemy token)");
+	//printf("Invalid Movement (Destination is a ennemy token)");
 	return 0;
 	}
 
 	//Check deplacement lign or colonn
 	if((c1.x!=c2.x)&&(c1.y!=c2.y))
 	{
-	printf("Invalid Movement (not in lign or colonn)");
+	//printf("Invalid Movement (not in lign or colonn)");
 	return 0;
 	}
 	else
@@ -369,7 +369,7 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 			case 1:
 				if((g->var==1)&&(c1.y-c2.y==2)&&((g->map[c1.x][c1.y-1])!=0))
 				{
-					printf("Valid Move (jump)");
+					//printf("Valid Move (jump)");
 					return 1;
 				}
 				else
@@ -379,7 +379,7 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 					{
 						if((g->map[c1.x][c1.y-i])!=0)
 						{
-							printf("Invalid Movement (token on the way)");
+							//printf("Invalid Movement (token on the way)");
 							return 0;
 						}
 					}
@@ -387,7 +387,7 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 			case 2:
 				if((g->var==1)&&(c1.x-c2.x==-2)&&(g->map[c1.x+1][c1.y]!=0))
 				{
-					printf("Valid Move (jump)");
+					//printf("Valid Move (jump)");
 					return 1;
 				}
 				else
@@ -397,7 +397,7 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 					{
 						if(g->map[c1.x+i][c1.y]!=0)
 						{
-							printf("Invalid Movement (token on the way)");
+							//printf("Invalid Movement (token on the way)");
 							return 0;
 						}
 					}
@@ -405,7 +405,7 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 			case 3:
 				if((g->var==1)&&(c1.y-c2.y==-2)&&(g->map[c1.x][c1.y+1]!=0))
 				{
-					printf("Valid Move (jump)");
+					//printf("Valid Move (jump)");
 					return 1;
 				}
 				else
@@ -415,7 +415,7 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 					{
 						if(g->map[c1.x][c1.y+i]!=0)
 						{
-							printf("Invalid Movement (token on the way)");
+							//printf("Invalid Movement (token on the way)");
 							return 0;
 						}
 					}
@@ -423,7 +423,7 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 			case 4:
 				if((g->var==1)&&(c1.x-c2.x==2)&&(g->map[c1.x-1][c1.y]!=0))
 				{
-					printf("Valid Move (jump)");
+					//printf("Valid Move (jump)");
 					return 1;
 				}
 				else
@@ -432,18 +432,18 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 					for(i=1 ; i<(c1.x-c2.x) ; i++)
 					{
 						if(g->map[c1.x-i][c1.y]!=0){
-							printf("Invalid Movement (token on the way)");
+							//printf("Invalid Movement (token on the way)");
 							return 0;
 						}
 					}
 				}
 		}
 		//Default case
-		printf("Valid Move");
+		//printf("Valid Move");
 		return 1;
 	}
 	//Never used
-	printf("Invalid Movement");
+	//printf("Invalid Movement");
 	return 0;
 }
 

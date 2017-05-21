@@ -29,21 +29,21 @@ int checkMove(Game *g, Coordinates c1, Coordinates c2)
 {
 	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8))
 	{
-		printf("Invalid Movement (Source not in the board !)");
+		//printf("Invalid Movement (Source not in the board !)");
 		return 0;
 	} else if (!(c2.x>=0 && c2.x<=8 && c2.y>=0 && c2.y<=8))
 	{
-		printf("Invalid Movement (Destination not in the board !)");
+		//printf("Invalid Movement (Destination not in the board !)");
 		return 0;
 	} else if ((g->map[c1.x][c1.y]) != (g->currentPlayer))
 	{
-		printf("Invalid Movement (Not your token !");
+		//printf("Invalid Movement (Not your token !");
 		return 0;
 	}
 	//Check if the destination is friendly
 	else if((g->map[c2.x][c2.y]) == (g->currentPlayer))
 	{
-	printf("Invalid Movement (Destination is a friendly token)");
+	//printf("Invalid Movement (Destination is a friendly token)");
 	return 2;
 	}
 	else {
