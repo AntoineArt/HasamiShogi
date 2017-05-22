@@ -21,9 +21,9 @@ typedef struct GAME {
 	a structure used to store parameters for the graphical interface
 */
 typedef struct PARAMETERS {
-  	int fullscreen;
-  	char soundLevel;
-  	int texturePack;
+  int fullscreen;
+  char soundLevel;
+  int texturePack;
 	int lang; //the language that should be used by the app
 	int screenResX;
 	int screenResY;

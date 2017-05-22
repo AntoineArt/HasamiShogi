@@ -15,7 +15,9 @@ int main(void){
   pWindow = SDL_CreateWindow("Hasami Shogi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DEFAULT_WIDTH, DEFAULT_HEIGTH, 0.);
 
   //Language choice
-  Texts texts[2] = {enText, frText};
+	Texts* texts;
+	texts = (Texts*)malloc(sizeof(Texts));
+	*texts = frText;
   // Launching the menu window
   int mode;
   Game *g = (Game*) malloc(sizeof(Game));
@@ -65,8 +67,7 @@ int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts){
     textColor.g = 255;
     textColor.b = 255;
 
-    int i;
-    for(i = 0; i<5; i++){
+    for(int i = 0; i<5; i++){
       textsMenu[i] = TTF_RenderText_Blended(police, texts[0].mainMenu[i], textColor);
       updateWindow(960 - textsMenu[i]->w/2, 540 - textsMenu[i]->h/2 - (300-100*i), pWindow, textsMenu[i]);
     }
@@ -74,7 +75,7 @@ int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts){
   int mode;
   if (pWindow){
     mode = eventDetectionMenu(pWindow, textsMenu);
-    for(int i=0; i<4; i++){
+    for(int i=0; i<5; i++){
       SDL_FreeSurface(textsMenu[i]);
     }
     return mode;
@@ -206,23 +207,78 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Paramet
                                               DEFAULT_HEIGTH,
                                               0.);
 
-    // Menu display
-    updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
-    SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
-    SDL_Color textColor ;
-    textColor.r = 255;
-    textColor.g = 255;
-    textColor.b = 255;
+  // Menu display
+  updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
+  SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
+  SDL_Color textColor ;
+  textColor.r = 255;
+  textColor.g = 255;
+  textColor.b = 255;
 
-    for(int i = 0; i<5; i++){
-      textsParameters[i] = TTF_RenderText_Blended(police, texts[p.lang].options[i + 5], textColor);
-      //updateWindow(960 - (textsParameters[i]->w)/2, 540 - (textsParameters[i]->h)/2 - (300-100*i), pWinParam, textsParameters[i]);
-      //is source of a segfault
-      updateWindow(0,0,pWinParam,textsParameters[i]);
+  for(int i = 0; i<6; i++){
+    textsParameters[i] = TTF_RenderText_Blended(police, texts[p.lang].options[i], textColor);
+    updateWindow(960 - (textsParameters[i]->w)/2, 540 - (textsParameters[i]->h)/2 - (300-100*i), pWinParam, textsParameters[i]);
+  }
+
+	int mode = -1;
+	if(pWindow){
+		while(mode!=5){
+			mode = eventDetectionParameters(pWindow, textsParameters);
+			switch(mode){
+				case 0: p.lang = 0; printf("0\n"); break;
+				case 1: p.lang = 1; printf("1\n"); break;
+				case 2: p.fullscreen = !p.fullscreen; printf("2\n"); break;
+				default: break;
+			}
+		}
+
+		for(int i = 0; i<6; i++){
+			SDL_FreeSurface(textsParameters[i]);
+		}
+	}
+
+	else{
+		fprintf(stderr, "Erreur de création de la fenêtre : %s\n", SDL_GetError());
+	}
+  SDL_FreeSurface(pBackgroundParameters);
+  SDL_DestroyWindow(pWinParam);
+}
+
+int eventDetectionParameters(SDL_Window* pWindow, SDL_Surface** texts){
+	int n = 5;
+  int x[n], y[n], w[n], h[n];
+  for(int i = 0; i<n; i++){
+    w[i] = texts[i]->w;
+    h[i] = texts[i]->h;
+    x[i] = 960 - w[i]/2;
+    y[i] = 540 - h[i]/2-(300-100*i);
+  }
+
+  while(1){
+    SDL_Event event;
+    while(SDL_PollEvent(&event)){
+
+      // Event treatment
+      switch(event.type){ // Which type of event is it ?
+        case SDL_WINDOWEVENT: // Window event
+          if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
+            return 5;
+          }
+          break;
+
+        case SDL_MOUSEBUTTONUP: // Mouse event
+          if (event.button.button == SDL_BUTTON_LEFT){
+            int xM = event.button.x;
+            int yM = event.button.y;
+            for(int i = 0; i<6; i++){
+            	if(isIn(xM, yM, x[i], y[i], w[0], h[0])){return i;}
+		}
+          }
+        default: break; //nothing happens
+      }
     }
-    SDL_Delay(2000);
-    SDL_FreeSurface(pBackgroundParameters);
-    SDL_DestroyWindow(pWinParam);
+  }
+  return -1; //error case
 }
 
 char isIn(int xM, int yM, int x, int y, int w, int h){
@@ -368,8 +424,6 @@ Coordinates* inGameEvents(Game *g){
   free(tabCatch); //malloc in checkCatch
   return tab;
 }
-
-
 
 
 

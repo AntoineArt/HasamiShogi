@@ -59,6 +59,12 @@ void continueGame();
 void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Parameters p);
 
 /*
+	Wait for user's input
+	return : int
+*/
+int eventDetectionParameters(SDL_Window* pWindow, SDL_Surface** texts);
+
+/*
   Sets up the display for a new game
 */
 void setupBoard(Game *g, SDL_Window *pWindow);
