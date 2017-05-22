@@ -153,8 +153,8 @@ void newGame(Game *g, Parameters param){
   Coordinates* updatedCases;
   int i;
   while (victory==0){
-    if ( (g->gameMode==0) 
-    || ((g->gameMode==1)&&(g->currentPlayer==1)) 
+    if ( (g->gameMode==0)
+    || ((g->gameMode==1)&&(g->currentPlayer==1))
     || ((g->gameMode==2)&&(g->currentPlayer==2)) )
     { //human plays
     	printf("human play");
@@ -216,7 +216,7 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Paramet
 
     for(int i = 0; i<5; i++){
       textsParameters[i] = TTF_RenderText_Blended(police, texts[p.lang].options[i + 5], textColor);
-      //updateWindow(960 - (textsParameters[i]->w)/2, 540 - (textsParameters[i]->h)/2 - (300-100*i), pWinParam, textsParameters[i]); 
+      //updateWindow(960 - (textsParameters[i]->w)/2, 540 - (textsParameters[i]->h)/2 - (300-100*i), pWinParam, textsParameters[i]);
       //is source of a segfault
       updateWindow(0,0,pWinParam,textsParameters[i]);
     }
