@@ -177,25 +177,22 @@ int checkVictory(Game *g, Coordinates c2)
 			if(number>=5){return g->currentPlayer;} //The current player win
 		}
 	}
+	//We check if the opponent has loose every tokens but one
+	if ((g->currentPlayer == 1)&&(g->countPlayer2==1))
+	{
+		return 1; //player 1 wins
+	}
+	else if ((g->currentPlayer == 2)&&(g->countPlayer1==1))
+	{
+		return 2; //player 2 wins
+	}
+	else if (((g->countPlayer1)<1) || ((g->countPlayer2)<1))
+	{
+		return 3; //Both players loose ; TO BE CHECKED
+	}
 	else
 	{
-		//We check if the opponent has loose every tokens but one
-		if ((g->currentPlayer == 1)&&(g->countPlayer2==1))
-		{
-			return 1; //player 1 wins
-		}
-		else if ((g->currentPlayer == 2)&&(g->countPlayer1==1))
-		{
-			return 2; //player 2 wins
-		}
-		else if (((g->countPlayer1)<1) || ((g->countPlayer2)<1))
-		{
-			return 3; //Both players loose ; TO BE CHECKED
-		}
-		else
-		{
-			return 0; //Game continue
-		}
+		return 0; //Game continue
 	}
 	return 0; //Never used
 }
