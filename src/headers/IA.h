@@ -9,7 +9,7 @@ Coordinates* aiPlay(Game *g);
 /*
 	function for searching the Tree P of possible moves returning the best according to values of P nodes
 */
-double alphabeta(Game *g, Tree *P, int depth, double a, double b); 
+double alphabeta(Game *g, Tree *P, int depth, double a, double b);
 
 /*
 	function that assumes the charge of building the tree of possible moves until depth to save ressources

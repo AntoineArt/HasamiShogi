@@ -17,17 +17,6 @@ typedef struct GAME {
 	int currentPlayer; //the current player
 } Game;
 
-
-/*
-	handle the different languages for texts
-*/
-typedef struct TEXTS {
-	char* mainMenu[10];
-	char* rules[20];
-	char* options[10];
-	char* inGame[10];
-} Texts;
-
 /*
 	a structure used to store parameters for the graphical interface
 */

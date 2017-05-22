@@ -3,7 +3,7 @@
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
 	int depth = 1; //warning depth 0 create infinite loop
-	Tree *root = malloc(sizeof(Tree));
+	Tree *root = (Tree*)malloc(sizeof(Tree));
 	initNode(root);
 	double ninf=-INFINITY;
         double pinf=INFINITY;
@@ -31,7 +31,7 @@ Coordinates* aiPlay(Game *g) {
 		printf("  %d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y, bestmove);
 	}
 	movePiece(g, c1, c2); //the move is safe by construction
-	
+
   	Coordinates *tabCatch;
   	tabCatch = checkCatch(g, c2); //the tab of to be caught token
   	catchPiece(g,tabCatch);
@@ -54,7 +54,7 @@ Coordinates* aiPlay(Game *g) {
 
 double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 	if (P->nbofSons==0 || depth==0) //means P is a leave
-	{ 
+	{
 	return P->value; //returning value of leave
 	} else if (g->currentPlayer==2) {//is ia
 	double best = -INFINITY;
@@ -65,7 +65,7 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 		best = (best < val) ? val : best;
 		a = (a < val) ? val : a ; //α := max(α, v)
 		if (b <= a) {
-			break; // β cut-off 
+			break; // β cut-off
 		}
 	}
 	P->value=best; //saving the value
@@ -79,7 +79,7 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 		best = (best > val) ? val : best;
 		a = (a > val) ? val : a ; //α := max(α, v)
 		if (b <= a) {
-			break; // α cut-off 
+			break; // α cut-off
 		}
 	}
 	P->value=best; //saving the value
@@ -90,14 +90,14 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 void buildTree(Game* g, int depth, Tree *dad) {
 	if (depth > 0) {
 		int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2;
-		Coordinates* friendlyTokenTab = friendlyToken(g);	
+		Coordinates* friendlyTokenTab = friendlyToken(g);
 		int i;
 		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat ? TO be checked?
 			Coordinates c1 = friendlyTokenTab[i];
 			Coordinates* moves = showPossible(g, c1); //available moves
 			int j;
 			for (j = 1 ; j<(moves[0].x) ; j++) {
-				Tree *newSon = malloc(sizeof(Tree));
+				Tree *newSon = (Tree*)malloc(sizeof(Tree));
 				initNode(newSon);
 				newSon->value = 0 ; //is overwritten by alpha beta
 				newSon->c1 = c1;
@@ -106,7 +106,7 @@ void buildTree(Game* g, int depth, Tree *dad) {
 				(dad->sons[dad->nbofSons])=newSon; //add the new son as last son of dad
 				dad->nbofSons++; //incremente the son number accordingly
 				buildTree(g, depth-1, newSon); //create the subtree of the new son
-				
+
 			}
 		}
 	} else { //depth is 0 -> dad is forced as a leave
@@ -115,7 +115,7 @@ void buildTree(Game* g, int depth, Tree *dad) {
 		dad->sons = NULL; //be carefull
 	}
 }
-	
+
 void freeTree(Tree *t) {
 	if (t->nbofSons==0) {
 		free(t);
@@ -126,16 +126,16 @@ void freeTree(Tree *t) {
 		}
 		free(t);
 	}
-}	
-		
-		
-		
+}
+
+
+
 Coordinates* friendlyToken(Game* g) {
 	int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2; //nb of tokens of the currentPlayer
 	int i;
 	int j;
 	Coordinates c;
-	Coordinates* tab = malloc(sizeof(Coordinates)*tokenNb);
+	Coordinates* tab = (Coordinates*)malloc(sizeof(Coordinates)*tokenNb);
 	int k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
@@ -179,14 +179,14 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	//but also close to friends
 	res = res + 2 * nbofFriends(g, c2);
 	
+
 	//if protect friends then good
 	//I don't fucking know how to implement this
-	
-	
+
 	//reverse the play
 	movePiece(g, c2, c1); //a ashami shogi play can always be reversed
 	//return value
-	
+
 	return res;
 
 }
@@ -201,7 +201,7 @@ void initNode(Tree* t) {
 	t->nbofSons=0;
 	t->sons= (Tree**) malloc(sizeof(Tree*)*8*8);//should handle every possible move
 	}
-	
+
 int nbofFriends(Game *g, Coordinates c) {
 	int n = 0;
 	int i;
