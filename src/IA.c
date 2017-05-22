@@ -153,7 +153,7 @@ Coordinates* friendlyToken(Game* g) {
 double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	double res;
 	res = 0;
-	if (checkMove(g, c1, c2)!=1) {return res;} //means incorrect move
+	if (checkMove(g, c1, c2)!=1) {return -INFINITY;} //means incorrect move
 	//else
 	//do the play
 	movePiece(g, c1, c2);
@@ -170,18 +170,18 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	res = res - (100 * (friendTokenNb - ennemyTokenNb)); //ones wants draw if ones has less token
 	}
 	//caugth cases
-	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play token
-
-	res = res + (tab[0].x-1) * 100; //-1 because of the false first coordonates
-
+	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play tokens
+	
+	res = res + (tab[0].x-1) * 100; //-1 because of the false first coordinates
+	
 	//be close to ennemy
 	res = res + (3 * nbofEnnemy(g, c2));
 	//but also close to friends
-	//res = res + 2 * nbofFriends(g, c2);
+	res = res + 2 * nbofFriends(g, c2);
+	
 
 	//if protect friends then good
 	//I don't fucking know how to implement this
-
 
 	//reverse the play
 	movePiece(g, c2, c1); //a ashami shogi play can always be reversed
