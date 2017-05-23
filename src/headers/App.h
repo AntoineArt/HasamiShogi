@@ -4,10 +4,15 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include "../Game.c"
-#include "../ressources/lang.c"
+#include "../resources/lang.c"
 
 const int DEFAULT_WIDTH = 1920;
 const int DEFAULT_HEIGTH = 1080;
+const int BOARD_WIDTH = 1200;
+const int BOARD_HEIGTH = 1353;
+const int PIECE_WIDTH = 98;
+const int PIECE_HEIGTH = 120;
+const double SCALE_FACTOR = 1;
 const int GAME_MODE_DEFAULT = 1; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int LANG_DEFAULT = 0; // 0 means english , 1 means french

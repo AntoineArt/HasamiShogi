@@ -8,12 +8,11 @@ int main(void){
   }
 
   TTF_Init(); // Initializes the TTF library
-  TTF_Font* police = TTF_OpenFont("./ressources/asman.ttf", 50);
+  TTF_Font* police = TTF_OpenFont("./resources/asman.ttf", 50*SCALE_FACTOR);
 
   // Window creation
   SDL_Window* pWindow = NULL;
-  pWindow = SDL_CreateWindow("Hasami Shogi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DEFAULT_WIDTH, DEFAULT_HEIGTH, 0.);
-
+  pWindow = SDL_CreateWindow("Hasami Shogi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DEFAULT_WIDTH*SCALE_FACTOR, DEFAULT_HEIGTH*SCALE_FACTOR, 0.);
   //Language choice
 	Texts* texts;
 	texts = (Texts*)malloc(sizeof(Texts));
@@ -22,6 +21,7 @@ int main(void){
   int mode;
   Game *g = (Game*) malloc(sizeof(Game));
   initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
+
 
   mode = menu(pWindow, police, texts);
 
@@ -50,14 +50,11 @@ int main(void){
 }
 
 int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts){
-  SDL_Surface* pBackgroundMenu = SDL_LoadBMP("./ressources/images/BackgroundMenu.bmp");
-  /*pWindow = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
-                                              SDL_WINDOWPOS_CENTERED,
-                                              DEFAULT_WIDTH,
-                                              DEFAULT_HEIGTH,
-                                              0.);
-                                              */
-
+  SDL_Surface* src = SDL_LoadBMP("./resources/images/BackgroundMenu.bmp");
+	SDL_Surface* pBackgroundMenu = SDL_CreateRGBSurface(0, DEFAULT_WIDTH*SCALE_FACTOR, DEFAULT_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pBackgroundMenu, NULL, SDL_MapRGB(pBackgroundMenu->format, 255, 0, 0));
+  SDL_BlitScaled(src, NULL, pBackgroundMenu, NULL);
+	SDL_FreeSurface(src);
   updateWindow(0, 0, pWindow, pBackgroundMenu); // BackgroundMenu display
 
   // Menu display
@@ -69,7 +66,7 @@ int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts){
 
     for(int i = 0; i<5; i++){
       textsMenu[i] = TTF_RenderText_Blended(police, texts[0].mainMenu[i], textColor);
-      updateWindow(960 - textsMenu[i]->w/2, 540 - textsMenu[i]->h/2 - (300-100*i), pWindow, textsMenu[i]);
+      updateWindow(DEFAULT_WIDTH*SCALE_FACTOR/2 - textsMenu[i]->w/2, DEFAULT_HEIGTH*SCALE_FACTOR/2 - textsMenu[i]->h/2 - (300-100*i)*SCALE_FACTOR, pWindow, textsMenu[i]);
     }
 
   int mode;
@@ -93,8 +90,8 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
   for(int i = 0; i<n; i++){
     w[i] = texts[i]->w;
     h[i] = texts[i]->h;
-    x[i] = 960 - w[i]/2;
-    y[i] = 540 - h[i]/2-(300-100*i);
+    x[i] = DEFAULT_WIDTH*SCALE_FACTOR/2 - w[i]/2;
+    y[i] = DEFAULT_HEIGTH*SCALE_FACTOR/2 - h[i]/2-(300-100*i)*SCALE_FACTOR;
   }
 
   while(1){
@@ -137,18 +134,34 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 void newGame(Game *g, Parameters param){
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
-                                              1200,
-                                              1353,
+                                              BOARD_WIDTH*SCALE_FACTOR,
+                                              BOARD_HEIGTH*SCALE_FACTOR,
                                               0.);
-  SDL_Surface* pBackgroundGame = SDL_LoadBMP("./ressources/images/ShogiBoard.bmp");
+  SDL_Surface* src = SDL_LoadBMP("./resources/images/ShogiBoard.bmp");
+	SDL_Surface* pBackgroundGame = SDL_CreateRGBSurface(0, BOARD_WIDTH*SCALE_FACTOR, BOARD_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pBackgroundGame, NULL, SDL_MapRGB(pBackgroundGame->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pBackgroundGame, NULL);
+
   // Menu display
   updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
   setupBoard(g, pWinGame);
 
+  src = SDL_LoadBMP("./resources/images/BlackPiece.bmp");
+	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pBlackPiece, NULL);
 
-  SDL_Surface* pBlackPiece = SDL_LoadBMP("./ressources/images/BlackPiece.bmp");
-  SDL_Surface* pRedPiece = SDL_LoadBMP("./ressources/images/RedPiece.bmp");
-  SDL_Surface* pYellow = SDL_LoadBMP("./ressources/images/Yellow.bmp");
+  src = SDL_LoadBMP("./resources/images/RedPiece.bmp");
+	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pRedPiece, NULL);
+
+  src = SDL_LoadBMP("./resources/images/Yellow.bmp");
+	SDL_Surface* pYellow = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pYellow, NULL, SDL_MapRGB(pYellow->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pYellow, NULL);
+
+	SDL_FreeSurface(src);
   //victory contains the player who won this turn (0 if none of them, 3 if both loosed)
   int victory = 0;
   Coordinates* updatedCases;
@@ -172,9 +185,9 @@ void newGame(Game *g, Parameters param){
     for(i=1; i<updatedCases[0].x; i++) {
     	if (i==2)
     	{
-    		updateWindow(DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4), 68+8 + updatedCases[i].y*(131+4), pWinGame, pToken);
+    		updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR, (68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR, pWinGame, pToken);
     	} else {
-		updateWindow(DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4), 68+8 + updatedCases[i].y*(131+4), pWinGame, pYellow);
+		updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR, (68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR, pWinGame, pYellow);
     	}
     }
     victory = checkVictory(g, updatedCases[2]);
@@ -200,14 +213,18 @@ void rules(){
 }
 
 void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Parameters p){
-  SDL_Surface* pBackgroundParameters = SDL_LoadBMP("./ressources/images/BackgroundMenu.bmp");
+  SDL_Surface* src = SDL_LoadBMP("./resources/images/BackgroundMenu.bmp");
   SDL_Window *pWinParam = SDL_CreateWindow("Parameters",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
-                                              DEFAULT_WIDTH,
-                                              DEFAULT_HEIGTH,
+                                              DEFAULT_WIDTH*SCALE_FACTOR,
+                                              DEFAULT_HEIGTH*SCALE_FACTOR,
                                               0.);
+  SDL_Surface* pBackgroundParameters = SDL_CreateRGBSurface(0, DEFAULT_WIDTH*SCALE_FACTOR, DEFAULT_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+  SDL_FillRect(pBackgroundParameters, NULL, SDL_MapRGB(pBackgroundParameters->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pBackgroundParameters, NULL);
+	SDL_FreeSurface(src);
 
-  // Menu display
+	// Menu display
   updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
   SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
   SDL_Color textColor ;
@@ -217,7 +234,7 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Paramet
 
   for(int i = 0; i<6; i++){
     textsParameters[i] = TTF_RenderText_Blended(police, texts[p.lang].options[i], textColor);
-    updateWindow(960 - (textsParameters[i]->w)/2, 540 - (textsParameters[i]->h)/2 - (300-100*i), pWinParam, textsParameters[i]);
+    updateWindow(DEFAULT_WIDTH*SCALE_FACTOR/2 - (textsParameters[i]->w)/2, DEFAULT_HEIGTH*SCALE_FACTOR/2 - (textsParameters[i]->h)/2 - (300-100*i)*SCALE_FACTOR, pWinParam, textsParameters[i]);
   }
 
 	int mode = -1;
@@ -250,8 +267,8 @@ int eventDetectionParameters(SDL_Window* pWindow, SDL_Surface** texts){
   for(int i = 0; i<n; i++){
     w[i] = texts[i]->w;
     h[i] = texts[i]->h;
-    x[i] = 960 - w[i]/2;
-    y[i] = 540 - h[i]/2-(300-100*i);
+    x[i] = DEFAULT_WIDTH*SCALE_FACTOR/2 - w[i]/2;
+    y[i] = DEFAULT_HEIGTH*SCALE_FACTOR/2 - h[i]/2-(300-100*i)*SCALE_FACTOR;
   }
 
   while(1){
@@ -286,31 +303,38 @@ char isIn(int xM, int yM, int x, int y, int w, int h){
 }
 
 void setupBoard(Game *g, SDL_Window* pWindow){
-  SDL_Surface* pBlackPiece = SDL_LoadBMP("./ressources/images/BlackPiece.bmp");
-  SDL_Surface* pRedPiece = SDL_LoadBMP("./ressources/images/RedPiece.bmp");
+  SDL_Surface* src = SDL_LoadBMP("./resources/images/BlackPiece.bmp");
+	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pBlackPiece, NULL);
+  src = SDL_LoadBMP("./resources/images/RedPiece.bmp");
+	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pRedPiece, NULL);
+
 
   SDL_Surface* p1st = (g->gameMode == 2) ? pBlackPiece : pRedPiece;
   SDL_Surface* p2nd = (g->gameMode == 2) ? pRedPiece : pBlackPiece;
 
   for(int i = 0; i<9; i++){
     for(int j = 0; j<(g->var)+1; j++){
-      updateWindow(DECAY_PIECES + 68 + 8 + i*(115+4), 68+8 + j*(131+4), pWindow, p1st);  //Positioning red token
-      updateWindow(DECAY_PIECES + 68 + 8 + i*(115+4), 68+8 + 8 * (131+4) - j*(131+4), pWindow, p2nd);  //Positioning black token
+      updateWindow((DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR, (68+8 + j*(131+4))*SCALE_FACTOR, pWindow, p1st);  //Positioning red token
+      updateWindow((DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR, (68+8 + 8 * (131+4) - j*(131+4))*SCALE_FACTOR, pWindow, p2nd);  //Positioning black token
     }
   }
 }
 
 void defeatDisplay(){//when both loosed
-	SDL_Surface* pBackground = SDL_LoadBMP("./ressources/images/Defeat.bmp");
-  	SDL_Window* pWinGame = SDL_CreateWindow("Defeat !",  SDL_WINDOWPOS_CENTERED,
+	SDL_Surface* pBackground = SDL_LoadBMP("./resources/images/Defeat.bmp");
+  SDL_Window* pWinGame = SDL_CreateWindow("Defeat !",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
                                               600,
                                               600,
                                               0.);
 
-  	// Menu display
-  	updateWindow(DECAY_PIECES, 0, pWinGame, pBackground);
-  	SDL_Delay(3000); //waiting for a click ? add button ?
+  // Menu display
+  updateWindow(DECAY_PIECES, 0, pWinGame, pBackground);
+  SDL_Delay(3000); //waiting for a click ? add button ?
 }
 
 void victoryDisplay(int winner){
@@ -319,13 +343,13 @@ void victoryDisplay(int winner){
                                               600,
                                               600,
                                               0.);
-  	SDL_Surface* pBackground = SDL_LoadBMP("./ressources/images/victory.bmp");
+  	SDL_Surface* pBackground = SDL_LoadBMP("./resources/images/victory.bmp");
   	updateWindow(0, 0, pWinGame, pBackground);
   	SDL_Surface* pName;
   	if (winner==1) {
-  		pName = SDL_LoadBMP("./ressources/images/J1.bmp");
+  		pName = SDL_LoadBMP("./resources/images/J1.bmp");
   	} else {
-  		pName = SDL_LoadBMP("./ressources/images/J2.bmp");
+  		pName = SDL_LoadBMP("./resources/images/J2.bmp");
   	}
   	updateWindow(0, 0, pWinGame, pName); //todo should be aligned
   	SDL_Delay(3000);//waiting for a click ? add button ?
@@ -375,7 +399,7 @@ Coordinates* inGameEvents(Game *g){
               */
               for(int i=0; i<9; i++){
                 for(int j=0; j<9; j++){
-                  if(isIn(xM, yM, DECAY_PIECES + 67 + i*(115+5), 68+8 + j*131, 98, 120)){
+                  if(isIn(xM, yM, (DECAY_PIECES + 67 + i*(115+5))*SCALE_FACTOR, (68+8 + j*131)*SCALE_FACTOR, 98, 120)){
                     c.x = i ; c.y = j;
                   }
                 }
