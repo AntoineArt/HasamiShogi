@@ -15,7 +15,7 @@ int main(void){
   pWindow = SDL_CreateWindow("Hasami Shogi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, DEFAULT_WIDTH*SCALE_FACTOR, DEFAULT_HEIGTH*SCALE_FACTOR, 0.);
   //Language choice
 	Texts* texts;
-	texts = (Texts*)malloc(sizeof(Texts));
+	texts = (Texts*) malloc(sizeof(Texts));
 	*texts = frText;
   // Launching the menu window
   int mode;
@@ -37,6 +37,7 @@ int main(void){
   }
 
   //freeing memory
+  free(texts);
   freeGame(g);
   free(g);
   // Closing everything
@@ -75,6 +76,7 @@ int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts){
     for(int i=0; i<5; i++){
       SDL_FreeSurface(textsMenu[i]);
     }
+    SDL_FreeSurface(pBackgroundMenu);
     return mode;
   }
 
@@ -197,6 +199,10 @@ void newGame(Game *g, Parameters param){
     free(updatedCases); //malloc in inGameEvents
   }
   (g->currentPlayer) = 3-(g->currentPlayer); //switch the current player , I think it is needed because of the last switch of the while
+  SDL_FreeSurface(pBlackPiece);
+  SDL_FreeSurface(pRedPiece);
+  SDL_FreeSurface(pYellow);
+  SDL_FreeSurface(pBackgroundGame);
   if(victory == 1){victoryDisplay(1);}
   else if (victory == 2){victoryDisplay(2);}
   else if (victory == 3){defeatDisplay();} //both loosed
@@ -323,6 +329,8 @@ void setupBoard(Game *g, SDL_Window* pWindow){
       updateWindow((DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR, (68+8 + 8 * (131+4) - j*(131+4))*SCALE_FACTOR, pWindow, p2nd);  //Positioning black token
     }
   }
+  SDL_FreeSurface(pBlackPiece);
+  SDL_FreeSurface(pRedPiece);
 }
 
 void defeatDisplay(){//when both loosed
@@ -336,9 +344,10 @@ void defeatDisplay(){//when both loosed
                                               DEFEAT_HEIGTH*SCALE_FACTOR,
                                               0.);
 
-  // Menu display
-  updateWindow(DECAY_PIECES, 0, pWinGame, pDefeat);
-  SDL_Delay(3000); //waiting for a click ? add button ?
+  	// Menu display
+  	updateWindow(DECAY_PIECES, 0, pWinGame, pDefeat);
+  	SDL_Delay(3000); //waiting for a click ? add button ?
+  	SDL_FreeSurface(pDefeat);
 }
 
 void victoryDisplay(int winner){
@@ -352,14 +361,16 @@ void victoryDisplay(int winner){
                                               VICTORY_HEIGHT*SCALE_FACTOR,
                                               0.);
   updateWindow(0, 0, pWinGame, pVictory);
-  SDL_Surface* pName;
-  if (winner==1) {
-  	pName = SDL_LoadBMP("./resources/images/J1.bmp");
-  } else {
-  	pName = SDL_LoadBMP("./resources/images/J2.bmp");
-  }
-  updateWindow(0, 0, pWinGame, pName); //todo should be aligned
-  SDL_Delay(3000);//waiting for a click ? add button ?
+
+	SDL_Surface* pName;
+	if (winner==1) {
+		pName = SDL_LoadBMP("./resources/images/J1.bmp");
+	} else {
+		pName = SDL_LoadBMP("./resources/images/J2.bmp");
+	}
+	updateWindow(0, 0, pWinGame, pName); //todo should be aligned
+	SDL_Delay(3000);//waiting for a click ? add button ?
+	SDL_FreeSurface(pVictory);
 }
 
 Coordinates* inGameEvents(Game *g){

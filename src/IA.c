@@ -2,7 +2,7 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 1; //warning depth 0 create infinite loop
+	int depth = 3; //warning depth 0 create infinite loop
 	Tree *root = (Tree*)malloc(sizeof(Tree));
 	initNode(root);
 	double ninf=-INFINITY;
@@ -47,7 +47,8 @@ Coordinates* aiPlay(Game *g) {
   		tab[i+2]=tabCatch[i];
   	}
   	free(tabCatch); //malloc in checkCatch
-  	freeTree(root);
+  	freeTree(root); //free the rest of the tree
+  	free(root);
   	return tab;
 }
 
@@ -70,19 +71,23 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 	}
 	P->value=best; //saving the value
 	return best; //continuing the recursive search
-	} else {
+	} else { //opponant play
 	double best = +INFINITY;
 	int i;
 	for (i=0; i<(P->nbofSons); i++) {
 		double val;
 		val = alphabeta(g, P->sons[i], depth-1,-b,-a);
-		best = (best > val) ? val : best;
+		best = (best > val) ? val : best ;
 		a = (a > val) ? val : a ; //α := max(α, v)
 		if (b <= a) {
 			break; // α cut-off
 		}
 	}
 	P->value=best; //saving the value
+	for (i=0; i<(P->nbofSons); i++) {
+		freeTree(P->sons[i]);
+	}
+	P->nbofSons=0;
 	return best; //continuing the recursive search
 	}
 }
@@ -108,7 +113,9 @@ void buildTree(Game* g, int depth, Tree *dad) {
 				buildTree(g, depth-1, newSon); //create the subtree of the new son
 
 			}
+			free(moves);
 		}
+	free(friendlyTokenTab);
 	} else { //depth is 0 -> dad is forced as a leave
 		dad->value = evaluate(g, (dad->c1), (dad->c2)); //needs to be accurate
 		dad->nbofSons = 0;
@@ -124,18 +131,19 @@ void freeTree(Tree *t) {
 		for (i=0; i<(t->nbofSons); i++) {
 			freeTree(t->sons[i]);
 		}
-		free(t);
+		t->nbofSons=0;
+		//free(t);
 	}
 }
 
 
 
 Coordinates* friendlyToken(Game* g) {
-	int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2; //nb of tokens of the currentPlayer
+	//int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2; //nb of tokens of the currentPlayer
 	int i;
 	int j;
 	Coordinates c;
-	Coordinates* tab = (Coordinates*)malloc(sizeof(Coordinates)*tokenNb);
+	Coordinates* tab = (Coordinates*)malloc(sizeof(Coordinates)*18);
 	int k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
@@ -173,13 +181,36 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play tokens
 	
 	res = res + (tab[0].x-1) * 100; //-1 because of the false first coordinates
+	free(tab);
+	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
+	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
 	
+	//having more tokens
+	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
+	
+	
+	/*
 	//be close to ennemy
-	res = res + (3 * nbofEnnemy(g, c2));
+	res = res + (5 * nbofEnnemy(g, c2));
 	//but also close to friends
-	res = res + 2 * nbofFriends(g, c2);
+	res = res - 2 * nbofFriends(g, c2);
 	
-
+	// X shape is strong
+	res = res + 10 * nbXShape(g, c2);
+				
+	// / or \ or | shapes are strong
+	res = res + 15 * nbLignShape(g, c2);
+			
+	// _ shape is weak
+	res = res - 30 * nb_Shape(g, c2);
+				
+	// xox or (xox)t shapes are strong
+	res = res + 5 * nbSShape(g, c2);
+				
+	// contact
+	res = res + 3 * nbofEnnemy(g, c2);
+	
+	*/
 	//if protect friends then good
 	//I don't fucking know how to implement this
 
@@ -199,7 +230,7 @@ void initNode(Tree* t) {
 	t->c1=c;
 	t->c2=c;
 	t->nbofSons=0;
-	t->sons= (Tree**) malloc(sizeof(Tree*)*8*8);//should handle every possible move
+	t->sons= (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move
 	}
 
 int nbofFriends(Game *g, Coordinates c) {
@@ -233,5 +264,84 @@ int nbofEnnemy(Game *g, Coordinates c) {
 		}
 	}
 	//printf(" %d :%d Ennemy  %d \n",c.x,c.y, n);
+	return n;
+}
+
+
+int nbXShape(Game *g, Coordinates c) {
+	int n = 0;
+	int i;
+	int j;
+	for (i=-1; i<=1; i=i+2){
+		for (j=-1; j<=1 ;j=j+2) {
+			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+j && c.y+j<=8) { //in the board
+				if (g->map[c.x+i][c.y+j]==g->map[c.x][c.y]) {
+				n++;
+				}
+			}
+		}
+	}
+	return n;
+}
+
+int nb_Shape(Game *g, Coordinates c) {
+	int n = 0;
+	int i;
+	for (i=-1; i<=1; i=i+2){
+			if (0<=c.x+i && c.x+i<=8) { //in the board
+				if (g->map[c.x+i][c.y]==(g->map[c.x][c.y])) {
+				n++;
+				}
+			}
+		
+	}
+	return n;
+}
+
+int nbSShape(Game *g, Coordinates c) {
+	int n = 0;
+	int i;
+	for (i=-1; i<=1; i=i+2){
+			if (0<=c.x+i && c.x+i<=8) { //in the board
+				if (g->map[c.x+i][c.y]==(3-(g->map[c.x][c.y]))) {
+				n++;
+				}
+			if (0<=c.y+i && c.y+i<=8) {
+				if (g->map[c.x][c.y+i]==(3-(g->map[c.x][c.y]))) {
+				n++;
+				}
+			}
+			 if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) { //in the board
+				if (g->map[c.x+i][c.y+i]==(3-(g->map[c.x][c.y]))) {
+				n++;
+				}
+			}
+			
+		}
+	}
+	return n;
+}
+
+int nbLignShape(Game *g, Coordinates c) {
+	int n = 0;
+	int i;
+	for (i=-1; i<=1; i=i+2){
+			if (0<=c.y+i && c.y+i<=8) { 
+				if (g->map[c.x][c.y+i]==(g->map[c.x][c.y])) { // | shape
+				n++;
+				}
+			}
+			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) {
+				if (g->map[c.x+i][c.y+i]==(g->map[c.x][c.y])) { // \ shape
+				n++;
+				}
+			}
+			if (0<=c.x-i && c.x-i<=8 && 0<=c.y+i && c.y+i<=8) {
+				if (g->map[c.x-i][c.y+i]==(g->map[c.x][c.y])) { // / shape
+				n++;
+				}
+			}
+		
+	}
 	return n;
 }

@@ -48,3 +48,23 @@ int nbofFriends(Game *g, Coordinates c);
 	nb of close ennemy
 */
 int nbofEnnemy(Game *g, Coordinates c);
+
+/*
+	valuating X shapes
+*/
+int nbXShape(Game *g, Coordinates c);
+
+/*
+	valuating (negatively) __ lign of friendly token
+*/
+int nb_Shape(Game *g, Coordinates c);
+
+/*
+	valuating suicide like moves
+*/
+int nbSShape(Game *g, Coordinates c);
+
+/*
+	valuating / | \ shapes
+*/
+int nbLignShape(Game *g, Coordinates c);
