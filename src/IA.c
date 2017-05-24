@@ -1,94 +1,101 @@
 #include "./headers/IA.h"
 
+int GROSSE_VARIABLE = 0;
+
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
 	int depth = 3; //warning depth 0 create infinite loop
 	Tree *root = (Tree*)malloc(sizeof(Tree));
 	initNode(root);
 	double ninf=-INFINITY;
-        double pinf=INFINITY;
+	double pinf=INFINITY;
 	Coordinates c1;
 	Coordinates c2;
 	c1.x=-1;
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
-	while (checkMove(g, c1, c2) != 1) { //useless by construction but still safer
-		buildTree(g, depth, root);
-		double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
-		c1.x=-1;
-		c1.y=-1;
-		c2.x=-1;
-		c2.y=-1;
-		int i;
-		for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
-			if (((root->sons[i])->value)==bestmove) {
-				c1 = (((root->sons)[i])->c1);
-				c2 = (((root->sons)[i])->c2);
-				break; //not usefull to go further
-			}
-		}
-		printf("  %d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y, bestmove);
-	}
-	movePiece(g, c1, c2); //the move is safe by construction
+	//while (checkMove(g, c1, c2) != 1) { //useless by construction but still safer
+	buildTree(g, depth, root);
+	double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
 
-  	Coordinates *tabCatch;
-  	tabCatch = checkCatch(g, c2); //the tab of to be caught token
-  	catchPiece(g,tabCatch);
-  	//creating the returned tab for graphical update
-  	Coordinates *tab;
-  	tab = (Coordinates*) malloc(sizeof(Coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
-  	tab[0].x = tabCatch[0].x+2;
-  	tab[0].y = 0;
-  	tab[1] = c1;
-  	tab[2] = c2;
-  	int i;
-  	for (i=1; i<(tabCatch[0].x); i++) {
-  		tab[i+2]=tabCatch[i];
-  	}
-  	free(tabCatch); //malloc in checkCatch
-  	freeTree(root); //free the rest of the tree
-  	free(root);
-  	return tab;
+	//Ne recherche que dans le premier niveau de branche. On devrait plutôt chercher le max dans les valeurs
+	//des feuilles puis remonter au premier niveau source de la branche gagnante
+
+	int i;
+	for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
+		if (((root->sons[i])->value)==bestmove) {
+			c1 = (((root->sons)[i])->c1);
+			c2 = (((root->sons)[i])->c2);
+			break; //not usefull to go further
+		}
+	}
+	printf("  %d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y, bestmove);
+	//}
+
+	Coordinates *tab;
+	if(checkMove(g, c1, c2)){
+		movePiece(g, c1, c2); //the move is safe by construction
+		Coordinates *tabCatch;
+		tabCatch = checkCatch(g, c2); //the tab of to be caught token
+		catchPiece(g,tabCatch);
+
+		//creating the returned tab for graphical update
+		tab = (Coordinates*) malloc(sizeof(Coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
+		tab[0].x = tabCatch[0].x+2;
+		tab[0].y = 0;
+		tab[1] = c1;
+		tab[2] = c2;
+		int i;
+		for (i=1; i<(tabCatch[0].x); i++) {
+			tab[i+2]=tabCatch[i];
+		}
+		free(tabCatch); //malloc in checkCatch
+	}
+	freeTree(root); //free the rest of the tree
+	free(root);
+	return tab;
 }
 
 
 double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 	if (P->nbofSons==0 || depth==0) //means P is a leave
 	{
-	return P->value; //returning value of leave
+		return P->value; //returning value of leave
 	} else if (g->currentPlayer==2) {//is ia
-	double best = -INFINITY;
-	int i;
-	for (i=0; i<(P->nbofSons); i++) {
-		double val;
-		val = alphabeta(g, P->sons[i], depth-1,-b,-a);
-		best = (best < val) ? val : best;
-		a = (a < val) ? val : a ; //α := max(α, v)
-		if (b <= a) {
-			break; // β cut-off
+		double best = -INFINITY;
+		int i;
+		for (i=0; i<(P->nbofSons); i++) {
+			double val;
+			val = alphabeta(g, P->sons[i], depth-1,-b,-a);
+			best = (best < val) ? val : best;
+			a = (a < val) ? val : a ; //α := max(α, v)
+			if (b <= a) {
+				break; // β cut-off
+			}
 		}
-	}
-	P->value=best; //saving the value
-	return best; //continuing the recursive search
+		P->value=best; //saving the value
+		return best; //continuing the recursive search
 	} else { //opponant play
-	double best = +INFINITY;
-	int i;
-	for (i=0; i<(P->nbofSons); i++) {
-		double val;
-		val = alphabeta(g, P->sons[i], depth-1,-b,-a);
-		best = (best > val) ? val : best ;
-		a = (a > val) ? val : a ; //α := max(α, v)
-		if (b <= a) {
-			break; // α cut-off
+		double best = +INFINITY;
+		int i;
+		for (i=0; i<(P->nbofSons); i++) {
+			double val;
+			val = alphabeta(g, P->sons[i], depth-1,-b,-a);
+			best = (best > val) ? val : best ;
+			a = (a > val) ? val : a ; //α := max(α, v)
+			if (b <= a) {
+				break; // α cut-off
+			}
 		}
-	}
-	P->value=best; //saving the value
-	for (i=0; i<(P->nbofSons); i++) {
-		freeTree(P->sons[i]);
-	}
-	P->nbofSons=0;
-	return best; //continuing the recursive search
+		P->value=best; //saving the value
+		GROSSE_VARIABLE = 0;
+		for (i=0; i<(P->nbofSons); i++) {
+			printf("%ld\n", sizeof(P->sons[i]));
+			freeTree(P->sons[i]);
+		}
+		P->nbofSons=0;
+		return best; //continuing the recursive search
 	}
 }
 
@@ -111,11 +118,10 @@ void buildTree(Game* g, int depth, Tree *dad) {
 				(dad->sons[dad->nbofSons])=newSon; //add the new son as last son of dad
 				dad->nbofSons++; //incremente the son number accordingly
 				buildTree(g, depth-1, newSon); //create the subtree of the new son
-
 			}
 			free(moves);
 		}
-	free(friendlyTokenTab);
+		free(friendlyTokenTab);
 	} else { //depth is 0 -> dad is forced as a leave
 		dad->value = evaluate(g, (dad->c1), (dad->c2)); //needs to be accurate
 		dad->nbofSons = 0;
@@ -124,11 +130,13 @@ void buildTree(Game* g, int depth, Tree *dad) {
 }
 
 void freeTree(Tree *t) {
+	GROSSE_VARIABLE += 1;
 	if (t->nbofSons==0) {
 		free(t);
 	} else {
 		int i;
 		for (i=0; i<(t->nbofSons); i++) {
+			printf("%d + yolooo + %d\n", i, GROSSE_VARIABLE);
 			freeTree(t->sons[i]);
 		}
 		t->nbofSons=0;
@@ -173,43 +181,43 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	{ res = res - 1000; }
 	else if (checkVictory(g, c2)==3) //means both loosed
 	{
-	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
-	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
-	res = res - (100 * (friendTokenNb - ennemyTokenNb)); //ones wants draw if ones has less token
+		int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
+		int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
+		res = res - (100 * (friendTokenNb - ennemyTokenNb)); //ones wants draw if ones has less token
 	}
 	//caugth cases
 	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play tokens
-	
+
 	res = res + (tab[0].x-1) * 100; //-1 because of the false first coordinates
 	free(tab);
 	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
 	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
-	
+
 	//having more tokens
 	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
-	
-	
+
+
 	/*
 	//be close to ennemy
 	res = res + (5 * nbofEnnemy(g, c2));
 	//but also close to friends
 	res = res - 2 * nbofFriends(g, c2);
-	
+
 	// X shape is strong
 	res = res + 10 * nbXShape(g, c2);
-				
+
 	// / or \ or | shapes are strong
 	res = res + 15 * nbLignShape(g, c2);
-			
+
 	// _ shape is weak
 	res = res - 30 * nb_Shape(g, c2);
-				
+
 	// xox or (xox)t shapes are strong
 	res = res + 5 * nbSShape(g, c2);
-				
+
 	// contact
 	res = res + 3 * nbofEnnemy(g, c2);
-	
+
 	*/
 	//if protect friends then good
 	//I don't fucking know how to implement this
@@ -230,8 +238,8 @@ void initNode(Tree* t) {
 	t->c1=c;
 	t->c2=c;
 	t->nbofSons=0;
-	t->sons= (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move
-	}
+	t->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move
+}
 
 int nbofFriends(Game *g, Coordinates c) {
 	int n = 0;
@@ -241,7 +249,7 @@ int nbofFriends(Game *g, Coordinates c) {
 		for (j=-1; j<=1 ;j++) {
 			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+j && c.y+j<=8) { //in the board
 				if (g->map[c.x+i][c.y+j]==g->map[c.x][c.y]) {
-				n++;
+					n++;
 				}
 			}
 		}
@@ -276,7 +284,7 @@ int nbXShape(Game *g, Coordinates c) {
 		for (j=-1; j<=1 ;j=j+2) {
 			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+j && c.y+j<=8) { //in the board
 				if (g->map[c.x+i][c.y+j]==g->map[c.x][c.y]) {
-				n++;
+					n++;
 				}
 			}
 		}
@@ -288,12 +296,12 @@ int nb_Shape(Game *g, Coordinates c) {
 	int n = 0;
 	int i;
 	for (i=-1; i<=1; i=i+2){
-			if (0<=c.x+i && c.x+i<=8) { //in the board
-				if (g->map[c.x+i][c.y]==(g->map[c.x][c.y])) {
+		if (0<=c.x+i && c.x+i<=8) { //in the board
+			if (g->map[c.x+i][c.y]==(g->map[c.x][c.y])) {
 				n++;
-				}
 			}
-		
+		}
+
 	}
 	return n;
 }
@@ -302,21 +310,21 @@ int nbSShape(Game *g, Coordinates c) {
 	int n = 0;
 	int i;
 	for (i=-1; i<=1; i=i+2){
-			if (0<=c.x+i && c.x+i<=8) { //in the board
-				if (g->map[c.x+i][c.y]==(3-(g->map[c.x][c.y]))) {
+		if (0<=c.x+i && c.x+i<=8) { //in the board
+			if (g->map[c.x+i][c.y]==(3-(g->map[c.x][c.y]))) {
 				n++;
-				}
+			}
 			if (0<=c.y+i && c.y+i<=8) {
 				if (g->map[c.x][c.y+i]==(3-(g->map[c.x][c.y]))) {
-				n++;
+					n++;
 				}
 			}
-			 if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) { //in the board
+			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) { //in the board
 				if (g->map[c.x+i][c.y+i]==(3-(g->map[c.x][c.y]))) {
-				n++;
+					n++;
 				}
 			}
-			
+
 		}
 	}
 	return n;
@@ -326,22 +334,22 @@ int nbLignShape(Game *g, Coordinates c) {
 	int n = 0;
 	int i;
 	for (i=-1; i<=1; i=i+2){
-			if (0<=c.y+i && c.y+i<=8) { 
-				if (g->map[c.x][c.y+i]==(g->map[c.x][c.y])) { // | shape
+		if (0<=c.y+i && c.y+i<=8) {
+			if (g->map[c.x][c.y+i]==(g->map[c.x][c.y])) { // | shape
 				n++;
-				}
 			}
-			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) {
-				if (g->map[c.x+i][c.y+i]==(g->map[c.x][c.y])) { // \ shape
+		}
+		if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) {
+			if (g->map[c.x+i][c.y+i]==(g->map[c.x][c.y])) { // \ shape
 				n++;
-				}
 			}
-			if (0<=c.x-i && c.x-i<=8 && 0<=c.y+i && c.y+i<=8) {
-				if (g->map[c.x-i][c.y+i]==(g->map[c.x][c.y])) { // / shape
+		}
+		if (0<=c.x-i && c.x-i<=8 && 0<=c.y+i && c.y+i<=8) {
+			if (g->map[c.x-i][c.y+i]==(g->map[c.x][c.y])) { // / shape
 				n++;
-				}
 			}
-		
+		}
+
 	}
 	return n;
 }
