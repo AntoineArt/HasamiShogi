@@ -134,9 +134,10 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 void newGame(Game *g, Parameters param){
   SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
-                                              BOARD_WIDTH*SCALE_FACTOR,
+                                              (BOARD_WIDTH + PREVIOUS_BUTTON_WIDTH)*SCALE_FACTOR,
                                               BOARD_HEIGTH*SCALE_FACTOR,
                                               0.);
+
   SDL_Surface* src = SDL_LoadBMP("./resources/images/ShogiBoard.bmp");
 	SDL_Surface* pBackgroundGame = SDL_CreateRGBSurface(0, BOARD_WIDTH*SCALE_FACTOR, BOARD_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pBackgroundGame, NULL, SDL_MapRGB(pBackgroundGame->format, 255, 0, 0));
@@ -325,34 +326,40 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 }
 
 void defeatDisplay(){//when both loosed
-	SDL_Surface* pBackground = SDL_LoadBMP("./resources/images/Defeat.bmp");
+	SDL_Surface* src = SDL_LoadBMP("./resources/images/Defeat.bmp");
+	SDL_Surface* pDefeat = SDL_CreateRGBSurface(0, DEFEAT_WIDTH*SCALE_FACTOR, DEFEAT_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pDefeat, NULL, SDL_MapRGB(pDefeat->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pDefeat, NULL);
   SDL_Window* pWinGame = SDL_CreateWindow("Defeat !",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
-                                              600,
-                                              600,
+                                              DEFEAT_WIDTH*SCALE_FACTOR,
+                                              DEFEAT_HEIGTH*SCALE_FACTOR,
                                               0.);
 
   // Menu display
-  updateWindow(DECAY_PIECES, 0, pWinGame, pBackground);
+  updateWindow(DECAY_PIECES, 0, pWinGame, pDefeat);
   SDL_Delay(3000); //waiting for a click ? add button ?
 }
 
 void victoryDisplay(int winner){
+	SDL_Surface* src = SDL_LoadBMP("./resources/images/victory.bmp");
+	SDL_Surface* pVictory = SDL_CreateRGBSurface(0, VICTORY_WIDTH*SCALE_FACTOR, VICTORY_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pVictory, NULL, SDL_MapRGB(pVictory->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pVictory, NULL);
 	SDL_Window* pWinGame = SDL_CreateWindow("Victory !",  SDL_WINDOWPOS_CENTERED,
                                               SDL_WINDOWPOS_CENTERED,
-                                              600,
-                                              600,
+                                              VICTORY_WIDTH*SCALE_FACTOR,
+                                              VICTORY_HEIGHT*SCALE_FACTOR,
                                               0.);
-  	SDL_Surface* pBackground = SDL_LoadBMP("./resources/images/victory.bmp");
-  	updateWindow(0, 0, pWinGame, pBackground);
-  	SDL_Surface* pName;
-  	if (winner==1) {
-  		pName = SDL_LoadBMP("./resources/images/J1.bmp");
-  	} else {
-  		pName = SDL_LoadBMP("./resources/images/J2.bmp");
-  	}
-  	updateWindow(0, 0, pWinGame, pName); //todo should be aligned
-  	SDL_Delay(3000);//waiting for a click ? add button ?
+  updateWindow(0, 0, pWinGame, pVictory);
+  SDL_Surface* pName;
+  if (winner==1) {
+  	pName = SDL_LoadBMP("./resources/images/J1.bmp");
+  } else {
+  	pName = SDL_LoadBMP("./resources/images/J2.bmp");
+  }
+  updateWindow(0, 0, pWinGame, pName); //todo should be aligned
+  SDL_Delay(3000);//waiting for a click ? add button ?
 }
 
 Coordinates* inGameEvents(Game *g){
