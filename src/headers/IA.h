@@ -12,7 +12,7 @@ Coordinates* aiPlay(Game *g);
 double alphabeta(Game *g, Tree *P, int depth, double a, double b);
 
 /*
-	function that assumes the charge of building the tree of possible moves until depth to save ressources
+	function that assumes the charge of building the tree of possible moves until depth to save resources
 	depth could be used to strengthenth the AI
 	allocate memory
 */
