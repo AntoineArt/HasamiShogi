@@ -21,7 +21,7 @@ void buildTree(Game* g, int depth, Tree *dad);
 /*
 	function used to free an entire Tree
 */
-void freeTree(Tree *t);
+void freeTree(Tree *t, int depth);
 
 /*
 	function that gives back at tab of coordinates of the friendly token for currentPlayer, note that there are exactly g->countPlayer* of this token
@@ -38,7 +38,7 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2);
 /*
 	initialize all fields of a Node
 */
-void initNode(Tree* t);
+void initNode(Tree* t, int depth);
 
 /*
 	nb of close friends

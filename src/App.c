@@ -36,8 +36,8 @@ int main(void){
 		case 1: SDL_DestroyWindow(pWindow); continueGame();break;
 		case 2: parametersMenu(pWindow, police, texts, param);break;
 		case 3: rules();break;
-		case 4: break; //quit
-		default : break;
+		case 4: SDL_DestroyWindow(pWindow); break; //quit
+		default : SDL_DestroyWindow(pWindow); break;
 	}
 
 	//freeing memory
@@ -133,6 +133,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 	SDL_Rect dest = {x, y, 0, 0};
 	SDL_BlitSurface(pImage, NULL, pWinSurf, &dest);
 	SDL_UpdateWindowSurface(pWindow);
+	SDL_FreeSurface(pWinSurf);
 }
 
 void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Color textColor){
@@ -146,7 +147,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_Surface* pBackgroundGame = SDL_CreateRGBSurface(0, BOARD_WIDTH*SCALE_FACTOR, BOARD_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pBackgroundGame, NULL, SDL_MapRGB(pBackgroundGame->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pBackgroundGame, NULL);
-
+	SDL_FreeSurface(src);
 	// Menu display
 	updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
 	setupBoard(g, pWinGame);
@@ -160,23 +161,27 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	int buttonX = BOARD_WIDTH+(pButton->w-buttonText->w)/2;
 	int buttonY = ((BOARD_HEIGTH)*SCALE_FACTOR - buttonText->h)/2;
 	updateWindow(buttonX,	buttonY, pWinGame, buttonText); //Centering the text in the middle of the button
-
+	SDL_FreeSurface(src);
 	src = SDL_LoadBMP("./resources/images/BlackPiece.bmp");
 	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pBlackPiece, NULL);
-
+	
+	SDL_FreeSurface(src);
+	
 	src = SDL_LoadBMP("./resources/images/RedPiece.bmp");
 	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pRedPiece, NULL);
-
+	
+	SDL_FreeSurface(src);
+		
 	src = SDL_LoadBMP("./resources/images/Yellow.bmp");
 	SDL_Surface* pYellow = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pYellow, NULL, SDL_MapRGB(pYellow->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pYellow, NULL);
-
 	SDL_FreeSurface(src);
+	
 	//victory contains the player who won this turn (0 if none of them, 3 if both loosed)
 	int victory = 0;
 	Coordinates* updatedCases;
@@ -200,31 +205,34 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 			for(i=1; i<updatedCases[0].x; i++) {
 				if (i==2)
 				{
-					updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR,
-											(68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR,
-											pWinGame, pToken);
+					updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR, (68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR, pWinGame, pToken);
 				} else {
-					updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR,
-					 						(68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR,
-											pWinGame, pYellow);
+					updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR, (68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR, pWinGame, pYellow);
 				}
 			}
 			victory = checkVictory(g, updatedCases[2]);
 			(g->currentPlayer) = 3-(g->currentPlayer); //switch the current player 3-1=2 3-2=1
 		}
 		free(updatedCases); //malloc in inGameEvents
+		//SDL_FreeSurface(pToken);
 	}
 	(g->currentPlayer) = 3-(g->currentPlayer); //switch the current player , I think it is needed because of the last switch of the while
-	SDL_FreeSurface(pBlackPiece);
-	SDL_FreeSurface(pRedPiece);
-	SDL_FreeSurface(pYellow);
+	
+	//SDL_FreeSurface(pBlackPiece);
+	//SDL_FreeSurface(pRedPiece);
+	//SDL_FreeSurface(pYellow);
 	SDL_FreeSurface(pBackgroundGame);
+	SDL_FreeSurface(pButton);
+	SDL_FreeSurface(buttonText);
+	
+	
 	if(victory == 1){victoryDisplay(1);}
 	else if (victory == 2){victoryDisplay(2);}
 	else if (victory == 3){defeatDisplay();} //both loosed
 	else {
 		//rage quit case
 	}
+	SDL_DestroyWindow(pWinGame);
 }
 
 void continueGame(){}
@@ -332,11 +340,12 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pRedPiece, NULL);
-
+	
+	SDL_FreeSurface(src);
 
 	SDL_Surface* p1st = (g->gameMode == 2) ? pBlackPiece : pRedPiece;
 	SDL_Surface* p2nd = (g->gameMode == 2) ? pRedPiece : pBlackPiece;
-
+	
 	for(int i = 0; i<9; i++){
 		for(int j = 0; j<(g->var)+1; j++){
 			updateWindow((DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR,
@@ -347,8 +356,10 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 									pWindow, p2nd);  //Positioning black token
 		}
 	}
-	SDL_FreeSurface(pBlackPiece);
-	SDL_FreeSurface(pRedPiece);
+	SDL_FreeSurface(p1st);
+	SDL_FreeSurface(p2nd);
+	//SDL_FreeSurface(pBlackPiece);
+	//SDL_FreeSurface(pRedPiece);
 }
 
 void defeatDisplay(){//when both loosed
@@ -392,6 +403,7 @@ void victoryDisplay(int winner){
 	updateWindow(0, 0, pWinGame, pName); //todo should be aligned
 	SDL_Delay(3000);//waiting for a click ? add button ?
 	SDL_FreeSurface(pVictory);
+	SDL_DestroyWindow(pWinGame);
 }
 
 Coordinates* inGameEvents(Game *g, int buttonX, int buttonY, int buttonW, int buttonH){

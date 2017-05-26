@@ -1,12 +1,10 @@
 #include "./headers/IA.h"
 
-int GROSSE_VARIABLE = 0;
-
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
 	int depth = 3; //warning depth 0 create infinite loop
 	Tree *root = (Tree*)malloc(sizeof(Tree));
-	initNode(root);
+	initNode(root, depth);
 	double ninf=-INFINITY;
 	double pinf=INFINITY;
 	Coordinates c1;
@@ -19,9 +17,6 @@ Coordinates* aiPlay(Game *g) {
 	buildTree(g, depth, root);
 	double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
 
-	//Ne recherche que dans le premier niveau de branche. On devrait plutôt chercher le max dans les valeurs
-	//des feuilles puis remonter au premier niveau source de la branche gagnante
-
 	int i;
 	for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
 		if (((root->sons[i])->value)==bestmove) {
@@ -31,7 +26,6 @@ Coordinates* aiPlay(Game *g) {
 		}
 	}
 	printf("  %d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y, bestmove);
-	//}
 
 	Coordinates *tab;
 	if(checkMove(g, c1, c2)){
@@ -52,7 +46,7 @@ Coordinates* aiPlay(Game *g) {
 		}
 		free(tabCatch); //malloc in checkCatch
 	}
-	freeTree(root); //free the rest of the tree
+	freeTree(root, depth); //free the rest of the tree
 	free(root);
 	return tab;
 }
@@ -89,10 +83,9 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 			}
 		}
 		P->value=best; //saving the value
-		GROSSE_VARIABLE = 0;
 		for (i=0; i<(P->nbofSons); i++) {
-			printf("%ld\n", sizeof(P->sons[i]));
-			freeTree(P->sons[i]);
+			printf("%d \n", sizeof(P->sons[i]));
+			freeTree(P->sons[i], depth);
 		}
 		P->nbofSons=0;
 		return best; //continuing the recursive search
@@ -109,8 +102,8 @@ void buildTree(Game* g, int depth, Tree *dad) {
 			Coordinates* moves = showPossible(g, c1); //available moves
 			int j;
 			for (j = 1 ; j<(moves[0].x) ; j++) {
-				Tree *newSon = (Tree*)malloc(sizeof(Tree));
-				initNode(newSon);
+				Tree *newSon = (Tree*) malloc(sizeof(Tree));
+				initNode(newSon, depth);
 				newSon->value = 0 ; //is overwritten by alpha beta
 				newSon->c1 = c1;
 				newSon->c2 = moves[j];
@@ -129,18 +122,23 @@ void buildTree(Game* g, int depth, Tree *dad) {
 	}
 }
 
-void freeTree(Tree *t) {
-	GROSSE_VARIABLE += 1;
-	if (t->nbofSons==0) {
+void freeTree(Tree *t, int depth) {
+	if (t) {
+	if (t->nbofSons==0) { 
+		free(t->sons);
 		free(t);
 	} else {
 		int i;
-		for (i=0; i<(t->nbofSons); i++) {
-			printf("%d + yolooo + %d\n", i, GROSSE_VARIABLE);
-			freeTree(t->sons[i]);
+		//for (i=0; i<(t->nbofSons); i++) {
+		for (i=0; i<16*18;i++) {
+			if (t->sons[i]) {
+				freeTree(t->sons[i], depth-1);
+			}
 		}
+		free(t->sons);
 		t->nbofSons=0;
 		//free(t);
+	}
 	}
 }
 
@@ -187,9 +185,9 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	}
 	//caugth cases
 	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play tokens
-
 	res = res + (tab[0].x-1) * 100; //-1 because of the false first coordinates
 	free(tab);
+	
 	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
 	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
 
@@ -225,13 +223,13 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 
 	//reverse the play
 	movePiece(g, c2, c1); //a ashami shogi play can always be reversed
-	//return value
+
 
 	return res;
 
 }
 
-void initNode(Tree* t) {
+void initNode(Tree* t, int depth) {
 	Coordinates c;
 	c.x = -1;
 	c.y = -1;
@@ -239,7 +237,11 @@ void initNode(Tree* t) {
 	t->c1=c;
 	t->c2=c;
 	t->nbofSons=0;
-	t->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move
+	if (depth>0) {
+		t->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
+	} else {
+		t->sons = NULL; //leaf case
+	}
 }
 
 int nbofFriends(Game *g, Coordinates c) {
