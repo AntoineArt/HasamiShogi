@@ -32,24 +32,20 @@ int main(void){
 	Parameters param = initParameters(LANG_DEFAULT, DEFAULT_WIDTH, DEFAULT_HEIGTH);
 
 	switch(mode){
-		case 0: SDL_DestroyWindow(pWindow); newGame(g, param, police, texts, textColor);break;
-		case 1: SDL_DestroyWindow(pWindow); continueGame();break;
-		case 2: parametersMenu(pWindow, police, texts, param);break;
-		case 3: rules();break;
+		case 0: SDL_DestroyWindow(pWindow); newGame(g, param, police, texts, textColor); break;
+		case 1: SDL_DestroyWindow(pWindow); continueGame(); break;
+		case 2: parametersMenu(pWindow, police, texts, param); break;
+		case 3: SDL_DestroyWindow(pWindow); rules(); break;
 		case 4: SDL_DestroyWindow(pWindow); break; //quit
 		default : SDL_DestroyWindow(pWindow); break;
 	}
-
 	//freeing memory
 	free(texts);
 	freeGame(g);
 	free(g);
 	// Closing everything
-
 	TTF_CloseFont(police);
 	TTF_Quit();
-
-	SDL_DestroyWindow(pWindow);
 	SDL_Quit();
 	return 0;
 }
@@ -128,7 +124,6 @@ int eventDetectionMenu(SDL_Window* pWindow, SDL_Surface** texts){
 void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 	int *w = NULL, *h = NULL;
 	SDL_GetWindowSize(pWindow, w, h); // Gets the width and the heigth of the current window
-
 	SDL_Surface* pWinSurf = SDL_GetWindowSurface(pWindow);
 	SDL_Rect dest = {x, y, 0, 0};
 	SDL_BlitSurface(pImage, NULL, pWinSurf, &dest);
@@ -217,10 +212,11 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 		//SDL_FreeSurface(pToken);
 	}
 	(g->currentPlayer) = 3-(g->currentPlayer); //switch the current player , I think it is needed because of the last switch of the while
-	
-	//SDL_FreeSurface(pBlackPiece);
-	//SDL_FreeSurface(pRedPiece);
-	//SDL_FreeSurface(pYellow);
+	/*
+	SDL_FreeSurface(pBlackPiece);
+	SDL_FreeSurface(pRedPiece);
+	SDL_FreeSurface(pYellow);
+	*/
 	SDL_FreeSurface(pBackgroundGame);
 	SDL_FreeSurface(pButton);
 	SDL_FreeSurface(buttonText);
@@ -336,11 +332,12 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pBlackPiece, NULL);
+	SDL_FreeSurface(src);
+	
 	src = SDL_LoadBMP("./resources/images/RedPiece.bmp");
 	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pRedPiece, NULL);
-	
 	SDL_FreeSurface(src);
 
 	SDL_Surface* p1st = (g->gameMode == 2) ? pBlackPiece : pRedPiece;
@@ -385,7 +382,7 @@ void victoryDisplay(int winner){
 	SDL_Surface* pVictory = SDL_CreateRGBSurface(0, VICTORY_WIDTH*SCALE_FACTOR, VICTORY_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pVictory, NULL, SDL_MapRGB(pVictory->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pVictory, NULL);
-	free(src);
+	SDL_FreeSurface(src);
 
 	SDL_Window* pWinGame = SDL_CreateWindow("Victory !",  SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED,

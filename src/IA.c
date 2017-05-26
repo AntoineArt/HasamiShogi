@@ -2,9 +2,18 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 3; //warning depth 0 create infinite loop
-	Tree *root = (Tree*)malloc(sizeof(Tree));
+	int depth = 1; //warning depth 0 create infinite loop
+	Tree* root = (Tree*) malloc(sizeof(Tree));
 	initNode(root, depth);
+	
+	root->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
+	
+	int k;
+	for (k = 0; k < (16*18); k++) {
+		root->sons[k] = (Tree *) malloc(sizeof(Tree));
+		initNode(root->sons[k], depth-1);
+	}
+	
 	double ninf=-INFINITY;
 	double pinf=INFINITY;
 	Coordinates c1;
@@ -46,8 +55,8 @@ Coordinates* aiPlay(Game *g) {
 		}
 		free(tabCatch); //malloc in checkCatch
 	}
-	freeTree(root, depth); //free the rest of the tree
-	free(root);
+	freeTree(root); //free the rest of the tree
+	//free(root);
 	return tab;
 }
 
@@ -83,9 +92,9 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 			}
 		}
 		P->value=best; //saving the value
-		for (i=0; i<(P->nbofSons); i++) {
-			printf("%d \n", sizeof(P->sons[i]));
-			freeTree(P->sons[i], depth);
+		//for (i=0; i<(P->nbofSons); i++) {
+		for (i=0; i<(16*18); i++) {
+			freeTree((P->sons)[i]);
 		}
 		P->nbofSons=0;
 		return best; //continuing the recursive search
@@ -94,6 +103,7 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 
 void buildTree(Game* g, int depth, Tree *dad) {
 	if (depth > 0) {
+		dad->depth = depth;
 		int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2;
 		Coordinates* friendlyTokenTab = friendlyToken(g);
 		int i;
@@ -110,6 +120,13 @@ void buildTree(Game* g, int depth, Tree *dad) {
 				newSon->nbofSons = 0; //initialize the value
 				(dad->sons[dad->nbofSons])=newSon; //add the new son as last son of dad
 				dad->nbofSons++; //incremente the son number accordingly
+				newSon->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
+				/*
+				int k;
+				for (k=0; k<=(16*18-1); k++) {
+					(newSon->sons)[k] = (Tree*) malloc(sizeof(Tree));
+					initNode((newSon->sons)[k], depth-1);
+				} */
 				buildTree(g, depth-1, newSon); //create the subtree of the new son
 			}
 			free(moves);
@@ -118,27 +135,22 @@ void buildTree(Game* g, int depth, Tree *dad) {
 	} else { //depth is 0 -> dad is forced as a leave
 		dad->value = evaluate(g, (dad->c1), (dad->c2)); //needs to be accurate
 		dad->nbofSons = 0;
+		dad->depth=0;
 		dad->sons = NULL; //be carefull
 	}
 }
 
-void freeTree(Tree *t, int depth) {
-	if (t) {
-	if (t->nbofSons==0) { 
-		free(t->sons);
-		free(t);
+void freeTree(Tree *t) {
+	if (t->depth==0) { 
+		//free(t->sons);
+		//free(t);
 	} else {
 		int i;
-		//for (i=0; i<(t->nbofSons); i++) {
-		for (i=0; i<16*18;i++) {
-			if (t->sons[i]) {
-				freeTree(t->sons[i], depth-1);
-			}
+		for (i=0; i<=(16*18-1); i++) {
+			freeTree((t->sons)[i]);
 		}
 		free(t->sons);
-		t->nbofSons=0;
 		//free(t);
-	}
 	}
 }
 
@@ -149,7 +161,7 @@ Coordinates* friendlyToken(Game* g) {
 	int i;
 	int j;
 	Coordinates c;
-	Coordinates* tab = (Coordinates*)malloc(sizeof(Coordinates)*18);
+	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*18);
 	int k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
@@ -233,15 +245,11 @@ void initNode(Tree* t, int depth) {
 	Coordinates c;
 	c.x = -1;
 	c.y = -1;
-	t->value=0;
-	t->c1=c;
-	t->c2=c;
-	t->nbofSons=0;
-	if (depth>0) {
-		t->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
-	} else {
-		t->sons = NULL; //leaf case
-	}
+	t->value = (double) 0;
+	t->c1 = c;
+	t->c2 = c;
+	t->nbofSons = 0;
+	t->depth = depth;
 }
 
 int nbofFriends(Game *g, Coordinates c) {
