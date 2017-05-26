@@ -189,28 +189,24 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
 	
 	
-	/*
+	
 	//be close to ennemy
-	res = res + (5 * nbofEnnemy(g, c2));
+	res = res + (15 * nbofEnnemy(g, c2));
 	//but also close to friends
-	res = res - 2 * nbofFriends(g, c2);
+	res = res - 20 * nbofFriends(g, c2);
 	
 	// X shape is strong
-	res = res + 10 * nbXShape(g, c2);
+	res = res + 12 * nbXShape(g, c2);
 				
 	// / or \ or | shapes are strong
-	res = res + 15 * nbLignShape(g, c2);
+	res = res + 45 * nbLignShape(g, c2);
 			
 	// _ shape is weak
 	res = res - 30 * nb_Shape(g, c2);
 				
 	// xox or (xox)t shapes are strong
-	res = res + 5 * nbSShape(g, c2);
-				
-	// contact
-	res = res + 3 * nbofEnnemy(g, c2);
-	
-	*/
+	//res = res + 5 * nbSShape(g, c2);
+					
 	//if protect friends then good
 	//I don't fucking know how to implement this
 
