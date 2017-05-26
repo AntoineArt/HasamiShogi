@@ -16,8 +16,10 @@ const int VICTORY_WIDTH = 600;
 const int VICTORY_HEIGHT = 600;
 const int DEFEAT_WIDTH = 894;
 const int DEFEAT_HEIGTH = 762;
-const int PREVIOUS_BUTTON_WIDTH = 0;
+const int PREVIOUS_BUTTON_WIDTH = 2400/8;
+const int PREVIOUS_BUTTON_HEIGTH = 821/8;
 const double SCALE_FACTOR = 0.65;
+
 const int GAME_MODE_DEFAULT = 1; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int LANG_DEFAULT = 0; // 0 means english , 1 means french
@@ -34,7 +36,7 @@ int main(void);
 /*
   Displays the BackgroundMenu and calls menu(...) for user's input
 */
-int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts);
+int menu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, SDL_Color textColor);
 
 /*
   Waits for user's input
@@ -56,7 +58,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage);
 /*
   Launches a new game
 */
-void newGame(Game *g, Parameters param);
+void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Color textColor);
 
 /*
   Loads an ancient game and launches it
@@ -93,7 +95,7 @@ void victoryDisplay(int winner);
 /*
   Fonction that handle the turn of currentPlayer from the beggining thil the end returning a tab who contains the move c1->c2 and the eventualy caught token. length of the tab in first coordinate x.
 */
-Coordinates* inGameEvents(Game *g);
+Coordinates* inGameEvents(Game *g, int buttonX, int buttonY, int buttonW, int buttonH);
 
 
 /*
