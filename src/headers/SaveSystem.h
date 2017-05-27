@@ -20,9 +20,20 @@ void createSave(char* name, Game* g);
 void addToSave(char* name, Game* g, Coordinates x, Coordinates y, Coordinates* tab);
 
 /*
-	It return an int who store the save
+	It return an char* who store the line number n of the file
 */
-int readSave(char* name);
+int readSave(char* name, int n);
+
+/*
+	return the play number n
+	WARNING : allocate memory
+*/
+int playPlayed(char* name, int n);
+
+/*
+	Return the play of the input (only works if the string is a play)
+*/
+coordinates* analysePlay(char* input);
 
 /*
 	Return a Game* ; We will create a new game using it
