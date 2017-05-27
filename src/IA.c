@@ -2,18 +2,18 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 1; //warning depth 0 create infinite loop
+	int depth = 4; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
-	initNode(root, depth);
-	
+	initNode(root);
+	/*
 	root->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
 	
 	int k;
 	for (k = 0; k < (16*18); k++) {
 		root->sons[k] = (Tree *) malloc(sizeof(Tree));
-		initNode(root->sons[k], depth-1);
+		initNode(root->sons[k]);
 	}
-	
+	*/
 	double ninf=-INFINITY;
 	double pinf=INFINITY;
 	Coordinates c1;
@@ -34,7 +34,7 @@ Coordinates* aiPlay(Game *g) {
 			break; //not usefull to go further
 		}
 	}
-	printf("  %d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y, bestmove);
+	//printf("  %d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y, bestmove);
 
 	Coordinates *tab;
 	if(checkMove(g, c1, c2)){
@@ -78,6 +78,12 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 			}
 		}
 		P->value=best; //saving the value
+		/*
+		for (i=0; i<(16*18); i++) {
+			freeTree((P->sons)[i]);
+		}
+		P->nbofSons=0;
+		*/
 		return best; //continuing the recursive search
 	} else { //opponant play
 		double best = +INFINITY;
@@ -92,66 +98,56 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 			}
 		}
 		P->value=best; //saving the value
-		//for (i=0; i<(P->nbofSons); i++) {
+		/*
 		for (i=0; i<(16*18); i++) {
 			freeTree((P->sons)[i]);
 		}
 		P->nbofSons=0;
+		*/
 		return best; //continuing the recursive search
 	}
 }
 
 void buildTree(Game* g, int depth, Tree *dad) {
 	if (depth > 0) {
-		dad->depth = depth;
 		int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2;
 		Coordinates* friendlyTokenTab = friendlyToken(g);
+		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
 		int i;
 		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat ? TO be checked?
 			Coordinates c1 = friendlyTokenTab[i];
 			Coordinates* moves = showPossible(g, c1); //available moves
 			int j;
 			for (j = 1 ; j<(moves[0].x) ; j++) {
-				Tree *newSon = (Tree*) malloc(sizeof(Tree));
-				initNode(newSon, depth);
-				newSon->value = 0 ; //is overwritten by alpha beta
-				newSon->c1 = c1;
-				newSon->c2 = moves[j];
-				newSon->nbofSons = 0; //initialize the value
-				(dad->sons[dad->nbofSons])=newSon; //add the new son as last son of dad
+				dad->sons[dad->nbofSons] = (Tree*) malloc(sizeof(Tree));
+				initNode(dad->sons[dad->nbofSons]);
+				(dad->sons[dad->nbofSons])->value = 0 ; //is overwritten by alpha beta
+				(dad->sons[dad->nbofSons])->c1 = c1;
+				(dad->sons[dad->nbofSons])->c2 = moves[j];
+				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
+				
+				buildTree(g, depth-1, (dad->sons[dad->nbofSons])); //create the subtree of the new son
 				dad->nbofSons++; //incremente the son number accordingly
-				newSon->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
-				/*
-				int k;
-				for (k=0; k<=(16*18-1); k++) {
-					(newSon->sons)[k] = (Tree*) malloc(sizeof(Tree));
-					initNode((newSon->sons)[k], depth-1);
-				} */
-				buildTree(g, depth-1, newSon); //create the subtree of the new son
 			}
 			free(moves);
 		}
 		free(friendlyTokenTab);
 	} else { //depth is 0 -> dad is forced as a leave
 		dad->value = evaluate(g, (dad->c1), (dad->c2)); //needs to be accurate
-		dad->nbofSons = 0;
-		dad->depth=0;
+		dad->nbofSons = 0; //means is a leave
 		dad->sons = NULL; //be carefull
 	}
 }
 
 void freeTree(Tree *t) {
-	if (t->depth==0) { 
-		//free(t->sons);
-		//free(t);
-	} else {
+	if (t->nbofSons>=0) {
 		int i;
-		for (i=0; i<=(16*18-1); i++) {
+		for (i=0; i<(t->nbofSons); i++) {
 			freeTree((t->sons)[i]);
 		}
 		free(t->sons);
-		//free(t);
 	}
+	free(t);
 }
 
 
@@ -241,7 +237,7 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 
 }
 
-void initNode(Tree* t, int depth) {
+void initNode(Tree* t) {
 	Coordinates c;
 	c.x = -1;
 	c.y = -1;
@@ -249,7 +245,6 @@ void initNode(Tree* t, int depth) {
 	t->c1 = c;
 	t->c2 = c;
 	t->nbofSons = 0;
-	t->depth = depth;
 }
 
 int nbofFriends(Game *g, Coordinates c) {

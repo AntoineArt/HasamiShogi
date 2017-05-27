@@ -38,7 +38,7 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2);
 /*
 	initialize all fields of a Node
 */
-void initNode(Tree* t, int depth);
+void initNode(Tree* t);
 
 /*
 	nb of close friends

@@ -186,10 +186,10 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 		|| ((g->gameMode==1)&&(g->currentPlayer==1))
 		|| ((g->gameMode==2)&&(g->currentPlayer==2)) )
 		{ //human plays
-			printf("human play");
+			printf("human play \n");
 			updatedCases = inGameEvents(g, buttonX, buttonY, buttonText->w, buttonText->h);
 		} else { //IA plays
-			printf("AI play");
+			printf("AI play \n");
 			updatedCases = aiPlay(g);
 		}
 		//graphical stuff
@@ -212,15 +212,6 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 		//SDL_FreeSurface(pToken);
 	}
 	(g->currentPlayer) = 3-(g->currentPlayer); //switch the current player , I think it is needed because of the last switch of the while
-	/*
-	SDL_FreeSurface(pBlackPiece);
-	SDL_FreeSurface(pRedPiece);
-	SDL_FreeSurface(pYellow);
-	*/
-	SDL_FreeSurface(pBackgroundGame);
-	SDL_FreeSurface(pButton);
-	SDL_FreeSurface(buttonText);
-	
 	
 	if(victory == 1){victoryDisplay(1);}
 	else if (victory == 2){victoryDisplay(2);}
@@ -228,6 +219,14 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	else {
 		//rage quit case
 	}
+	SDL_FreeSurface(pBlackPiece);
+	SDL_FreeSurface(pRedPiece);
+	SDL_FreeSurface(pYellow);
+	
+	SDL_FreeSurface(pBackgroundGame);
+	SDL_FreeSurface(pButton);
+	SDL_FreeSurface(buttonText);
+	
 	SDL_DestroyWindow(pWinGame);
 }
 

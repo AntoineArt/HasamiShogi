@@ -49,6 +49,5 @@ typedef struct TREE {
 	Coordinates c1;
 	Coordinates c2;
 	int nbofSons;
-	int depth; //0 for leafs max for root
 	struct TREE** sons; //a tab of pointers
 } Tree;
