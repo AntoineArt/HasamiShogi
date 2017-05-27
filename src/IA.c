@@ -2,18 +2,9 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 4; //warning depth 0 create infinite loop
+	int depth = 3; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
 	initNode(root);
-	/*
-	root->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
-	
-	int k;
-	for (k = 0; k < (16*18); k++) {
-		root->sons[k] = (Tree *) malloc(sizeof(Tree));
-		initNode(root->sons[k]);
-	}
-	*/
 	double ninf=-INFINITY;
 	double pinf=INFINITY;
 	Coordinates c1;
@@ -22,41 +13,36 @@ Coordinates* aiPlay(Game *g) {
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
-	//while (checkMove(g, c1, c2) != 1) { //useless by construction but still safer
-	buildTree(g, depth, root);
-	double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
+	while (checkMove(g, c1, c2) != 1) { //useless by construction but still safer
+		buildTree(g, depth, root, g->currentPlayer);
+		double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
 
-	int i;
-	for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
-		if (((root->sons[i])->value)==bestmove) {
-			c1 = (((root->sons)[i])->c1);
-			c2 = (((root->sons)[i])->c2);
-			break; //not usefull to go further
-		}
-	}
-	//printf("  %d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y, bestmove);
-
-	Coordinates *tab;
-	if(checkMove(g, c1, c2)){
-		movePiece(g, c1, c2); //the move is safe by construction
-		Coordinates *tabCatch;
-		tabCatch = checkCatch(g, c2); //the tab of to be caught token
-		catchPiece(g,tabCatch);
-
-		//creating the returned tab for graphical update
-		tab = (Coordinates*) malloc(sizeof(Coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
-		tab[0].x = tabCatch[0].x+2;
-		tab[0].y = 0;
-		tab[1] = c1;
-		tab[2] = c2;
 		int i;
-		for (i=1; i<(tabCatch[0].x); i++) {
-			tab[i+2]=tabCatch[i];
+		for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
+			if (((root->sons[i])->value)==bestmove) {
+				c1 = (((root->sons)[i])->c1);
+				c2 = (((root->sons)[i])->c2);
+				break; //not usefull to go further
+			}
 		}
-		free(tabCatch); //malloc in checkCatch
 	}
+	Coordinates *tab;
+	movePiece(g, c1, c2); //the move is safe by construction
+	Coordinates *tabCatch;
+	tabCatch = checkCatch(g, c2); //the tab of to be caught token
+	catchPiece(g,tabCatch);
+	//creating the returned tab for graphical update
+	tab = (Coordinates*) malloc(sizeof(Coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
+	tab[0].x = tabCatch[0].x+2;
+	tab[0].y = 0;
+	tab[1] = c1;
+	tab[2] = c2;
+	int i;
+	for (i=1; i<(tabCatch[0].x); i++) {
+		tab[i+2]=tabCatch[i];
+	}
+	free(tabCatch); //malloc in checkCatch
 	freeTree(root); //free the rest of the tree
-	//free(root);
 	return tab;
 }
 
@@ -108,10 +94,10 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 	}
 }
 
-void buildTree(Game* g, int depth, Tree *dad) {
+void buildTree(Game* g, int depth, Tree *dad, int player) {
 	if (depth > 0) {
-		int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2;
-		Coordinates* friendlyTokenTab = friendlyToken(g);
+		int tokenNb = player==1 ? g->countPlayer1 : g->countPlayer2;
+		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
 		int i;
 		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat ? TO be checked?
@@ -124,36 +110,43 @@ void buildTree(Game* g, int depth, Tree *dad) {
 				(dad->sons[dad->nbofSons])->value = 0 ; //is overwritten by alpha beta
 				(dad->sons[dad->nbofSons])->c1 = c1;
 				(dad->sons[dad->nbofSons])->c2 = moves[j];
+				movePiece(g, c1, moves[j]);
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
 				
-				buildTree(g, depth-1, (dad->sons[dad->nbofSons])); //create the subtree of the new son
+				
+				//recursive call
+				buildTree(g, depth-1, (dad->sons[dad->nbofSons]), 3-player); //create the subtree of the new son
+				
+				
 				dad->nbofSons++; //incremente the son number accordingly
+				movePiece(g, moves[j], c1);
 			}
 			free(moves);
 		}
 		free(friendlyTokenTab);
 	} else { //depth is 0 -> dad is forced as a leave
-		dad->value = evaluate(g, (dad->c1), (dad->c2)); //needs to be accurate
+		//do the play
+		movePiece(g, dad->c1, dad->c2);
+		dad->value = evaluate(g, player); //needs to be accurate
 		dad->nbofSons = 0; //means is a leave
 		dad->sons = NULL; //be carefull
+		//reverse the play
+		movePiece(g, dad->c2, dad->c1); //a ashami shogi play can always be reversed
 	}
 }
 
 void freeTree(Tree *t) {
-	if (t->nbofSons>=0) {
-		int i;
-		for (i=0; i<(t->nbofSons); i++) {
-			freeTree((t->sons)[i]);
-		}
-		free(t->sons);
+	int i;
+	for (i=0; i<(t->nbofSons); i++) {
+		freeTree((t->sons)[i]);
 	}
+	free(t->sons);
 	free(t);
 }
 
 
 
-Coordinates* friendlyToken(Game* g) {
-	//int tokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2; //nb of tokens of the currentPlayer
+Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
 	Coordinates c;
@@ -161,7 +154,7 @@ Coordinates* friendlyToken(Game* g) {
 	int k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
-			if (g->map[i][j]==g->currentPlayer) {
+			if (g->map[i][j]==player) {
 				c.x = i ; c.y = j;
 				tab[k] = c;
 				k++;
@@ -172,11 +165,97 @@ Coordinates* friendlyToken(Game* g) {
 	return tab;
 }
 
+double evaluate(Game *g, int player) {
+	double res;
+	res = 0;
+	//attribuate value
+	
+	//having more tokens
+	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
+	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
+	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
+	
+	//having aligned tokens including victory condition
+	res = res + 10 * nbofLigns(g, player);
+	res = res - 10 * nbofLigns(g, 3-player); 
+	
+	//return the value
+	return res;
+}
+
+int nbofLigns(Game* g, int player) {
+	int begin = 0;
+	int end = 9;
+	if (player==1) { begin = 2; } else { end = 7; }
+	int mem = 0; //memory for returning
+	int nb;
+	int last;
+	int i;
+	int j;
+	for (i=begin ; i<end ; i++) { //for each lign
+		nb=0; //checking colomn
+		last=1; //boolean last was a friendly token
+		for (j=0 ; j<9 ; j++) { //for each colomn
+			if (g->map[j][i]==player) {
+				if (last) {nb++;}
+				else { nb=1;}
+			} else { //means end of an alignment
+				if (nb==3) 
+				{ mem++; }
+				else if (nb==4) 
+				{ mem = mem + 10; }
+				else if (nb>=5) 
+				{ mem = mem + 100; }
+			}
+		}		
+	}
+	//checking Left diags
+	for (i=5; i<16 ;i++) { //diag sum
+		nb=0; //checking Left diag
+		last=1; //boolean last was a friendly token
+		int min = i>8 ? 8 : i;
+		for (j=min; j>=3 ;j--) { //case ordonate
+			if (g->map[j][i-j]==player) {
+				if (last) {nb++;}
+				else { nb=1;}
+			} else { //means end of an alignment
+				if (nb==3) 
+				{ mem++; }
+				else if (nb==4) 
+				{ mem = mem + 10; }
+				else if (nb>=5) 
+				{ mem = mem + 100; }
+			}
+		}
+	}
+	//checking Right diags
+	for (i=5; i<16 ;i++) { //diag sum
+		nb=0; //checking Left diag
+		last=1; //boolean last was a friendly token
+		int min = i>8 ? 8 : i;
+		for (j=min; j>=3 ;j--) { //case ordonate
+			if (g->map[j][8-(i-j)]==player) {
+				if (last) {nb++;}
+				else { nb=1;}
+			} else { //means end of an alignment
+				if (nb==3) 
+				{ mem++; }
+				else if (nb==4) 
+				{ mem = mem + 10; }
+				else if (nb>=5) 
+				{ mem = mem + 100; }
+			}
+		}
+	}
+	return mem;
+}
+
+
+/*
 double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	double res;
 	res = 0;
 	if (checkMove(g, c1, c2)!=1) {return -INFINITY;} //means incorrect move
-	//else
 	//do the play
 	movePiece(g, c1, c2);
 	//attribuate value
@@ -202,7 +281,7 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	//having more tokens
 	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
 
-
+	
 	//be close to ennemy
 	res = res + (15 * nbofEnnemy(g, c2));
 	//but also close to friends
@@ -214,7 +293,6 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	// / or \ or | shapes are strong
 	res = res + 45 * nbLignShape(g, c2);
 			
-
 	// _ shape is weak
 	res = res - 30 * nb_Shape(g, c2);
 
@@ -225,18 +303,15 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	// contact
 	res = res + 3 * nbofEnnemy(g, c2);
 
-
 	//if protect friends then good
 	//I don't fucking know how to implement this
-
+	
 	//reverse the play
 	movePiece(g, c2, c1); //a ashami shogi play can always be reversed
-
-
 	return res;
 
 }
-
+*/
 void initNode(Tree* t) {
 	Coordinates c;
 	c.x = -1;

@@ -51,3 +51,18 @@ int checkMove(Game *g, Coordinates c1, Coordinates c2)
 	}
 
 }
+
+void printBoard(Game *g) 
+{
+	int i;
+	for (i=0; i<9; i++) {
+		int j;
+		for (j=0; j<9 ; j++) {
+			printf("| %d |",g->map[i][j]);
+		}
+		printf(" \n");
+	}
+	printf(" \n");
+	printf(" \n");
+	printf(" \n");
+}

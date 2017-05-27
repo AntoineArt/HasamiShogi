@@ -24,3 +24,8 @@ void catchPiece(Game *g, Coordinates *tab);
 */
 
 int checkMove(Game *g, Coordinates c1, Coordinates c2);
+
+/*
+	print the board in console
+*/
+void printBoard(Game *g);

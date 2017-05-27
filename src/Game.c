@@ -48,3 +48,4 @@ void freeGame(Game *g)
 		}
 	free(g->map);
 }
+

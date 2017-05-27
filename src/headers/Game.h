@@ -13,3 +13,4 @@ void initGame(Game *g, int gameMode, int var);
 	Free the memory used by the game
 */
 void freeGame(Game *g);
+
