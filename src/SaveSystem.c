@@ -19,7 +19,7 @@ void createSave(char* name, Game* g){
 
 }
 
-void addToSave(char* name, Game* g, Coordinates x, Coordinates y, Coordinates* tab){
+void addToSave(char* name, Game* g, Coordinates c1, Coordinates c2, Coordinates* tab){
 
 	int i=0;
 
@@ -30,19 +30,19 @@ void addToSave(char* name, Game* g, Coordinates x, Coordinates y, Coordinates* t
 	fprintf(save,"%c",g->turn);
 	fprintf(save,"/");
 
-	fprintf(save,"%c",g->currentPlayer);
-	fprintf(save,"/");
+	fprintf(save,"%c /",g->currentPlayer);
 
-	fprintf(save,"%c",x.x);
-	fprintf(save,"%c",x.y);
-	fprintf(save,"%c",y.x);
-	fprintf(save,"%c",y.y);
+	fprintf(save,"%c",c1.x);
+	fprintf(save,"%c",c1.y);
+	fprintf(save,"%c",c2.x);
+	fprintf(save,"%c",c2.y);
 	fprintf(save,"/");
 
 	for(i=1 ; i<tab[0].x ; i++) //tab[0].x is the total size of the array
 	{
 		fprintf(save,"%c",tab[i].x);
 		fprintf(save,"%c",tab[i].y);
+		fprintf(save,",");
 	}
 
 	fclose(save);
@@ -50,7 +50,7 @@ void addToSave(char* name, Game* g, Coordinates x, Coordinates y, Coordinates* t
 
 int readSave(char* name, int n){
 
-	FILE* fichier = NULL;
+    FILE* fichier = NULL;
     char chaine[1000] = "";
  
     fichier = fopen("destination.txt", "r");
@@ -70,9 +70,7 @@ int readSave(char* name, int n){
 }
 
 int playPlayed(char* name, int n){
-
 	char* string = readSave(name, n);
-
 	return analysePlay(string);
 }
 
@@ -82,7 +80,8 @@ coordinates* analysePlay(char* input){
 	int count2=0; // used to fill the coordinates datas
 	Coordinates *tab;
 	tab = (Coordinates*) malloc(sizeof(Coordinates)*(???)); // DETERMINER TAILLE POUR LE PLAY PLUS LES PIECES PRISES
-
+	//why not use updatedCases from App.c:182 for writing
+	//and writing the size of the tab somewhere at the beginning of each line
 	for(i=0;i<strlen(input);i++){
 		if input[i]="/";{
 			count++;
@@ -114,11 +113,11 @@ Game* loadSave(char* name){
 	Game* game;
 
 	FILE* fichier = NULL;
-    char chaine[1000] = "";
-    fichier = fopen(name, "r");
+    	char chaine[1000] = "";
+    	fichier = fopen(name, "r");
  
 	fgets(chaine, TAILLE_MAX, fichier); // Is used for the first lign
-
+	
 	//S'EN SERVIR POUR LES OPTIONS :
 	//game->gameMode
 	//game->var
@@ -127,7 +126,9 @@ Game* loadSave(char* name){
 	//game->currentPlayer
 
 	resetBoard(game); // it initialise the board
-
+	int i = 0;
+	while (
+	
 	//FOR I IN RANGE LE RESTE DES PLAYS
 		//RECUPERER LE PLAY A L'AIDE DES FONCTIONS PRECEDENTES
 		//UTILISER LA FONCTION WRITE DE RULES POUR ECRIRE DIRECTEMENT SUR LE BOARD (PAS LA PEINE DE VERIFIER)

@@ -26,14 +26,6 @@ Coordinates* checkCatch(Game *g, Coordinates c2);
 */
 Coordinates* createTable(Game *g, Coordinates c, int up, int right, int down, int left, int catching);
 
-/*
-	Check if a move is valid
-	1 if valid,
-	2 if on another friendly token
-	0 else
-	warning, function assume c1 and c2 are in the board, please use checkMove from Board.c to check
-*/
-int checkMovement(Game *g, Coordinates c1, Coordinates c2);
 
 /*
 	function that show off the possible play after selection of a token

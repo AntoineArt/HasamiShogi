@@ -52,6 +52,59 @@ int checkMove(Game *g, Coordinates c1, Coordinates c2)
 
 }
 
+Coordinates* showPossible(Game *g, Coordinates c1)
+{
+	//We identifie the number of available case in each direction
+	int i=0; int up=0; int right=0; int down=0; int left=0;
+	Coordinates c2;
+
+	//Up
+	c2.x = c1.x;
+	c2.y = c1.y;
+	for(i=1 ; (c1.y)-i >= 0 ; i++)
+	{
+		c2.y = (c1.y)-i;
+		if (checkMove(g,c1,c2)==1) {
+			up++;
+		} else {break;}
+	}
+
+	//Right
+	c2.x = c1.x;
+	c2.y = c1.y;
+	for(i=1 ; (c1.x)+i <= 8 ; i++)
+	{
+		c2.x = (c1.x)+i;
+		if (checkMove(g,c1,c2)==1) {
+			right++;
+		} else {break;}
+	}
+
+	//Down
+	c2.x = c1.x;
+	c2.y = c1.y;
+	for(i=1 ; (c1.y)+i <= 8 ; i++)
+	{
+		c2.y = (c1.y)+i;
+		if (checkMove(g,c1,c2)==1) {
+			down++;
+		} else {break;}
+	}
+
+	//Left
+	c2.x = c1.x;
+	c2.y = c1.y;
+	for(i=1 ; (c1.x)-i >= 0 ; i++)
+	{
+		c2.x = (c1.x)-i;
+		if (checkMove(g,c1,c2)==1) {
+			left++;
+		} else {break;}
+	}
+
+	return createTable(g, c1, up, right, down, left, 0);
+}
+
 void printBoard(Game *g) 
 {
 	int i;

@@ -48,7 +48,7 @@ Coordinates* aiPlay(Game *g) {
 
 
 double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
-	if (P->nbofSons==0 || depth==0) //means P is a leave
+	if (depth==0) //means P is a leave
 	{
 		return P->value; //returning value of leave
 	} else if (g->currentPlayer==2) {//is ia
@@ -95,12 +95,12 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
 }
 
 void buildTree(Game* g, int depth, Tree *dad, int player) {
-	if (depth > 0) {
-		int tokenNb = player==1 ? g->countPlayer1 : g->countPlayer2;
+	int tokenNb = (player==1) ? g->countPlayer1 : g->countPlayer2;
+	if ((depth > 0) && (tokenNb>0)) {
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
 		int i;
-		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat ? TO be checked?
+		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat should have happenned
 			Coordinates c1 = friendlyTokenTab[i];
 			Coordinates* moves = showPossible(g, c1); //available moves
 			int j;
@@ -150,7 +150,7 @@ Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
 	Coordinates c;
-	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*18);
+	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*18);//there are at utter most 18 friendly tokens
 	int k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
@@ -210,11 +210,13 @@ int nbofLigns(Game* g, int player) {
 		}		
 	}
 	//checking Left diags
-	for (i=5; i<16 ;i++) { //diag sum
+	for (i=4; i<15 ;i++) { //diag sum
 		nb=0; //checking Left diag
 		last=1; //boolean last was a friendly token
-		int min = i>8 ? 8 : i;
-		for (j=min; j>=3 ;j--) { //case ordonate
+		int max = i>8 ? 8 : i;
+		int min = i<10 ? 2 : i-8;
+		for (j=max; j>=min ;j--) { //case ordonate
+			//printf("%d,%d -> %d,%d \n",i,j ,j,i-j);
 			if (g->map[j][i-j]==player) {
 				if (last) {nb++;}
 				else { nb=1;}
@@ -229,11 +231,13 @@ int nbofLigns(Game* g, int player) {
 		}
 	}
 	//checking Right diags
-	for (i=5; i<16 ;i++) { //diag sum
-		nb=0; //checking Left diag
+	for (i=4; i<15 ;i++) { //diag sum
+		nb=0; //checking Right diag
 		last=1; //boolean last was a friendly token
-		int min = i>8 ? 8 : i;
-		for (j=min; j>=3 ;j--) { //case ordonate
+		int max = i>8 ? 8 : i;
+		int min = i<10 ? 2 : i-8;
+		for (j=max; j>=min ;j--) { //case ordonate
+			printf("%d,%d -> %d,%d \n",i,j,j,8-(i-j));
 			if (g->map[j][8-(i-j)]==player) {
 				if (last) {nb++;}
 				else { nb=1;}
