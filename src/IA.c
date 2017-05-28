@@ -2,7 +2,7 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 3; //warning depth 0 create infinite loop
+	int depth = 5; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
 	initNode(root);
 	double ninf=-INFINITY;
@@ -15,8 +15,7 @@ Coordinates* aiPlay(Game *g) {
 	c2.y=-1;
 	while (checkMove(g, c1, c2) != 1) { //useless by construction but still safer
 		buildTree(g, depth, root, g->currentPlayer);
-		double bestmove = alphabeta(g, root, depth, ninf, pinf); //find the path through victory
-
+		double bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
 		int i;
 		for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
 			if (((root->sons[i])->value)==bestmove) {
@@ -25,6 +24,7 @@ Coordinates* aiPlay(Game *g) {
 				break; //not usefull to go further
 			}
 		}
+		printf("%d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y,bestmove);
 	}
 	Coordinates *tab;
 	movePiece(g, c1, c2); //the move is safe by construction
@@ -47,55 +47,63 @@ Coordinates* aiPlay(Game *g) {
 }
 
 
-double alphabeta(Game *g, Tree *P, int depth, double a, double b) { //a<b
-	if (depth==0) //means P is a leave
+double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { //a<b
+	//printf("param depth %d, a %lf, b %lf \n",depth,a,b);
+	if ((depth<=0) || (P->nbofSons==0)) //means P is a leave or is forced to be one by depth
 	{
+		//printf("leaf value %lf \n",P->value);
 		return P->value; //returning value of leave
-	} else if (g->currentPlayer==2) {//is ia
-		double best = -INFINITY;
+	} else if (g->currentPlayer==player) {//ai play (max)
+		double max = -INFINITY;
 		int i;
 		for (i=0; i<(P->nbofSons); i++) {
 			double val;
-			val = alphabeta(g, P->sons[i], depth-1,-b,-a);
-			best = (best < val) ? val : best;
-			a = (a < val) ? val : a ; //α := max(α, v)
+			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
+			max = (max < val) ? val : max; //max= max(val, max)
+			a = (a < val) ? val : a ; //α = max(α, v)
+			//printf("max %lf, val %lf, a %lf, b %lf \n",max,val,a,b);
+			/*
 			if (b <= a) {
 				break; // β cut-off
-			}
+			}*/
 		}
-		P->value=best; //saving the value
+		P->value=max; //saving the value
 		/*
 		for (i=0; i<(16*18); i++) {
 			freeTree((P->sons)[i]);
 		}
 		P->nbofSons=0;
 		*/
-		return best; //continuing the recursive search
-	} else { //opponant play
-		double best = +INFINITY;
+		return max; //continuing the recursive search
+	} else { //opponant play (min)
+		double min = +INFINITY;
 		int i;
 		for (i=0; i<(P->nbofSons); i++) {
 			double val;
-			val = alphabeta(g, P->sons[i], depth-1,-b,-a);
-			best = (best > val) ? val : best ;
-			a = (a > val) ? val : a ; //α := max(α, v)
+			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
+			min = (min > val) ? val : min; //min = min(min,val)
+			b = (b > val) ? val : b ; //β := min(β, v)
+			//printf("min %lf, val %lf, a %lf, b %lf \n",min,val,a,b);
+			/*
 			if (b <= a) {
 				break; // α cut-off
-			}
+			}*/
 		}
-		P->value=best; //saving the value
+		
+		P->value=min; //saving the value
 		/*
 		for (i=0; i<(16*18); i++) {
 			freeTree((P->sons)[i]);
 		}
 		P->nbofSons=0;
 		*/
-		return best; //continuing the recursive search
+		return min; //continuing the recursive search
 	}
 }
 
 void buildTree(Game* g, int depth, Tree *dad, int player) {
-	int tokenNb = (player==1) ? g->countPlayer1 : g->countPlayer2;
+	int tokenNb = (player==2) ? g->countPlayer1 : g->countPlayer2;
+	printf("depth %d ; tokennb %d \n",depth, tokenNb);
 	if ((depth > 0) && (tokenNb>0)) {
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
@@ -112,13 +120,10 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				(dad->sons[dad->nbofSons])->c2 = moves[j];
 				movePiece(g, c1, moves[j]);
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
-				
-				
 				//recursive call
-				buildTree(g, depth-1, (dad->sons[dad->nbofSons]), 3-player); //create the subtree of the new son
-				
-				
-				dad->nbofSons++; //incremente the son number accordingly
+				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
+				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH 
+				(dad->nbofSons)++; //incremente the son number accordingly
 				movePiece(g, moves[j], c1);
 			}
 			free(moves);
@@ -180,6 +185,7 @@ double evaluate(Game *g, int player) {
 	res = res - 10 * nbofLigns(g, 3-player); 
 	
 	//return the value
+	printf("res val : %lf \n",res);
 	return res;
 }
 
