@@ -1,0 +1,1057 @@
+desc: (none)
+cmd: ./App
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=312193786
+mem_heap_B=15406532
+mem_heap_extra_B=24004
+mem_stacks_B=0
+heap_tree=detailed
+n2: 15406532 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 15206400 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 8294400 0x403BEE: menu (App.c:59)
+   n0: 8294400 0x403A2F: main (App.c:30)
+  n1: 6912000 0x4EEE5FD: SDL_LoadBMP_RW_REAL (SDL_bmp.c:299)
+   n1: 6912000 0x403B8F: menu (App.c:58)
+    n0: 6912000 0x403A2F: main (App.c:30)
+ n0: 200132 in 182 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=2
+#-----------
+time=708772769
+mem_heap_B=18113176
+mem_heap_extra_B=27160
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=1032829994
+mem_heap_B=18113152
+mem_heap_extra_B=27144
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=1279944662
+mem_heap_B=87245316
+mem_heap_extra_B=735404
+mem_stacks_B=0
+heap_tree=detailed
+n4: 87245316 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 67951872 0x402FD6: initNode (IA.c:233)
+  n2: 67949568 0x402B3A: buildTree (IA.c:106)
+   n2: 67908096 0x402BC4: buildTree (IA.c:113)
+    n1: 66290688 0x402BC4: buildTree (IA.c:113)
+     n1: 66290688 0x4025F9: aiPlay (IA.c:17)
+      n1: 66290688 0x404984: newGame (App.c:189)
+       n0: 66290688 0x403A94: main (App.c:35)
+    n1: 1617408 0x4025F9: aiPlay (IA.c:17)
+     n1: 1617408 0x404984: newGame (App.c:189)
+      n0: 1617408 0x403A94: main (App.c:35)
+   n0: 41472 in 1 place, below massif's threshold (1.00%)
+  n0: 2304 in 1 place, below massif's threshold (1.00%)
+ n3: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n3: 10974480 0x4EEE5FD: SDL_LoadBMP_RW_REAL (SDL_bmp.c:299)
+   n1: 5961600 0x4044D0: newGame (App.c:152)
+    n0: 5961600 0x403A94: main (App.c:35)
+   n1: 4870800 0x4043D1: newGame (App.c:143)
+    n0: 4870800 0x403A94: main (App.c:35)
+   n0: 142080 in 6 places, all below massif's threshold (1.00%)
+  n1: 6494400 0x404430: newGame (App.c:144)
+   n0: 6494400 0x403A94: main (App.c:35)
+  n0: 397380 in 8 places, all below massif's threshold (1.00%)
+ n2: 1179680 0x402B2A: buildTree (IA.c:105)
+  n2: 1178960 0x402BC4: buildTree (IA.c:113)
+   n1: 1150880 0x402BC4: buildTree (IA.c:113)
+    n1: 1150880 0x4025F9: aiPlay (IA.c:17)
+     n1: 1150880 0x404984: newGame (App.c:189)
+      n0: 1150880 0x403A94: main (App.c:35)
+   n0: 28080 in 1 place, below massif's threshold (1.00%)
+  n0: 720 in 1 place, below massif's threshold (1.00%)
+ n0: 247504 in 196 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=5
+#-----------
+time=1691458854
+mem_heap_B=325430604
+mem_heap_extra_B=2099284
+mem_stacks_B=0
+heap_tree=detailed
+n3: 325430604 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 304782336 0x402FD6: initNode (IA.c:233)
+  n2: 304777728 0x402B3A: buildTree (IA.c:106)
+   n2: 304632576 0x402BC4: buildTree (IA.c:113)
+    n1: 298128384 0x402BC4: buildTree (IA.c:113)
+     n1: 298128384 0x4025F9: aiPlay (IA.c:17)
+      n1: 298128384 0x404984: newGame (App.c:189)
+       n0: 298128384 0x403A94: main (App.c:35)
+    n1: 6504192 0x4025F9: aiPlay (IA.c:17)
+     n1: 6504192 0x404984: newGame (App.c:189)
+      n0: 6504192 0x403A94: main (App.c:35)
+   n0: 145152 in 1 place, below massif's threshold (1.00%)
+  n0: 4608 in 1 place, below massif's threshold (1.00%)
+ n3: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n3: 10974480 0x4EEE5FD: SDL_LoadBMP_RW_REAL (SDL_bmp.c:299)
+   n1: 5961600 0x4044D0: newGame (App.c:152)
+    n0: 5961600 0x403A94: main (App.c:35)
+   n1: 4870800 0x4043D1: newGame (App.c:143)
+    n0: 4870800 0x403A94: main (App.c:35)
+   n0: 142080 in 6 places, all below massif's threshold (1.00%)
+  n1: 6494400 0x404430: newGame (App.c:144)
+   n0: 6494400 0x403A94: main (App.c:35)
+  n0: 397380 in 8 places, all below massif's threshold (1.00%)
+ n0: 2782008 in 198 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=6
+#-----------
+time=1945594920
+mem_heap_B=530690968
+mem_heap_extra_B=1880328
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=2317405008
+mem_heap_B=580991460
+mem_heap_extra_B=2395388
+mem_stacks_B=0
+heap_tree=detailed
+n3: 580991460 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 561814272 0x402FD6: initNode (IA.c:233)
+  n2: 561807360 0x402B3A: buildTree (IA.c:106)
+   n2: 561567744 0x402BC4: buildTree (IA.c:113)
+    n1: 550169856 0x402BC4: buildTree (IA.c:113)
+     n1: 550169856 0x4025F9: aiPlay (IA.c:17)
+      n1: 550169856 0x404984: newGame (App.c:189)
+       n0: 550169856 0x403A94: main (App.c:35)
+    n1: 11397888 0x4025F9: aiPlay (IA.c:17)
+     n1: 11397888 0x404984: newGame (App.c:189)
+      n0: 11397888 0x403A94: main (App.c:35)
+   n0: 239616 in 1 place, below massif's threshold (1.00%)
+  n0: 6912 in 1 place, below massif's threshold (1.00%)
+ n3: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n2: 10974480 0x4EEE5FD: SDL_LoadBMP_RW_REAL (SDL_bmp.c:299)
+   n1: 5961600 0x4044D0: newGame (App.c:152)
+    n0: 5961600 0x403A94: main (App.c:35)
+   n0: 5012880 in 7 places, all below massif's threshold (1.00%)
+  n1: 6494400 0x404430: newGame (App.c:144)
+   n0: 6494400 0x403A94: main (App.c:35)
+  n0: 397380 in 8 places, all below massif's threshold (1.00%)
+ n0: 1310928 in 198 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=8
+#-----------
+time=2604138995
+mem_heap_B=760023144
+mem_heap_extra_B=2710912
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=2823056980
+mem_heap_B=760023120
+mem_heap_extra_B=2710896
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=3192595428
+mem_heap_B=847914316
+mem_heap_extra_B=3610860
+mem_stacks_B=0
+heap_tree=detailed
+n3: 847914316 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 828009216 0x402FD6: initNode (IA.c:233)
+  n2: 828000000 0x402B3A: buildTree (IA.c:106)
+   n2: 827624448 0x402BC4: buildTree (IA.c:113)
+    n1: 810298368 0x402BC4: buildTree (IA.c:113)
+     n1: 810298368 0x4025F9: aiPlay (IA.c:17)
+      n1: 810298368 0x404984: newGame (App.c:189)
+       n0: 810298368 0x403A94: main (App.c:35)
+    n1: 17326080 0x4025F9: aiPlay (IA.c:17)
+     n1: 17326080 0x404984: newGame (App.c:189)
+      n0: 17326080 0x403A94: main (App.c:35)
+   n0: 375552 in 1 place, below massif's threshold (1.00%)
+  n0: 9216 in 1 place, below massif's threshold (1.00%)
+ n2: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 10974480 0x4EEE5FD: SDL_LoadBMP_RW_REAL (SDL_bmp.c:299)
+   n0: 10974480 in 8 places, all below massif's threshold (1.00%)
+  n0: 6891780 in 9 places, all below massif's threshold (1.00%)
+ n0: 2038840 in 198 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=11
+#-----------
+time=3407377086
+mem_heap_B=911325584
+mem_heap_extra_B=3262264
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=3835296362
+mem_heap_B=982291624
+mem_heap_extra_B=3524424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=4198337929
+mem_heap_B=982291624
+mem_heap_extra_B=3524424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=4522121124
+mem_heap_B=982291624
+mem_heap_extra_B=3524424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=4715739546
+mem_heap_B=982291624
+mem_heap_extra_B=3524424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=4995548145
+mem_heap_B=982291624
+mem_heap_extra_B=3524424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=5224792124
+mem_heap_B=982291624
+mem_heap_extra_B=3524424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=5637574628
+mem_heap_B=1040525464
+mem_heap_extra_B=3740424
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=5907252412
+mem_heap_B=1098636132
+mem_heap_extra_B=4335468
+mem_stacks_B=0
+heap_tree=detailed
+n3: 1098636132 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 1079099136 0x402FD6: initNode (IA.c:233)
+  n2: 1079083008 0x402B3A: buildTree (IA.c:106)
+   n2: 1078463232 0x402BC4: buildTree (IA.c:113)
+    n1: 1053501696 0x402BC4: buildTree (IA.c:113)
+     n1: 1053501696 0x4025F9: aiPlay (IA.c:17)
+      n1: 1053501696 0x404984: newGame (App.c:189)
+       n0: 1053501696 0x403A94: main (App.c:35)
+    n1: 24961536 0x4025F9: aiPlay (IA.c:17)
+     n1: 24961536 0x404984: newGame (App.c:189)
+      n0: 24961536 0x403A94: main (App.c:35)
+   n0: 619776 in 1 place, below massif's threshold (1.00%)
+  n0: 16128 in 1 place, below massif's threshold (1.00%)
+ n1: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n0: 17866260 in 10 places, all below massif's threshold (1.00%)
+ n0: 1670736 in 200 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=20
+#-----------
+time=6257910690
+mem_heap_B=1098759280
+mem_heap_extra_B=3956408
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=6701766411
+mem_heap_B=1177776108
+mem_heap_extra_B=4765524
+mem_stacks_B=0
+heap_tree=detailed
+n3: 1177776108 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 1157847552 0x402FD6: initNode (IA.c:233)
+  n2: 1157829120 0x402B3A: buildTree (IA.c:106)
+   n2: 1157137920 0x402BC4: buildTree (IA.c:113)
+    n1: 1129858560 0x402BC4: buildTree (IA.c:113)
+     n1: 1129858560 0x4025F9: aiPlay (IA.c:17)
+      n1: 1129858560 0x404984: newGame (App.c:189)
+       n0: 1129858560 0x403A94: main (App.c:35)
+    n1: 27279360 0x4025F9: aiPlay (IA.c:17)
+     n1: 27279360 0x404984: newGame (App.c:189)
+      n0: 27279360 0x403A94: main (App.c:35)
+   n0: 691200 in 1 place, below massif's threshold (1.00%)
+  n0: 18432 in 1 place, below massif's threshold (1.00%)
+ n1: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n0: 17866260 in 10 places, all below massif's threshold (1.00%)
+ n0: 2062296 in 200 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=22
+#-----------
+time=6977495093
+mem_heap_B=1184190424
+mem_heap_extra_B=4270856
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=7257128917
+mem_heap_B=1184190400
+mem_heap_extra_B=4270840
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=7643431745
+mem_heap_B=1262165440
+mem_heap_extra_B=4558336
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=8066330696
+mem_heap_B=1333131480
+mem_heap_extra_B=4820496
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=8380308547
+mem_heap_B=1465779036
+mem_heap_extra_B=6178700
+mem_stacks_B=0
+heap_tree=detailed
+n3: 1465779036 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 1444808448 0x402FD6: initNode (IA.c:233)
+  n2: 1444783104 0x402B3A: buildTree (IA.c:106)
+   n2: 1443856896 0x402BC4: buildTree (IA.c:113)
+    n1: 1408520448 0x402BC4: buildTree (IA.c:113)
+     n1: 1408520448 0x4025F9: aiPlay (IA.c:17)
+      n1: 1408520448 0x404984: newGame (App.c:189)
+       n0: 1408520448 0x403A94: main (App.c:35)
+    n1: 35336448 0x4025F9: aiPlay (IA.c:17)
+     n1: 35336448 0x404984: newGame (App.c:189)
+      n0: 35336448 0x403A94: main (App.c:35)
+   n0: 926208 in 1 place, below massif's threshold (1.00%)
+  n0: 25344 in 1 place, below massif's threshold (1.00%)
+ n1: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n0: 17866260 in 10 places, all below massif's threshold (1.00%)
+ n0: 3104328 in 200 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=27
+#-----------
+time=8709811927
+mem_heap_B=1473461376
+mem_heap_extra_B=5332480
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=9039677936
+mem_heap_B=1473461376
+mem_heap_extra_B=5332480
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=9337305414
+mem_heap_B=1473461376
+mem_heap_extra_B=5332480
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=9737855063
+mem_heap_B=1648395720
+mem_heap_extra_B=5968552
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=10082541100
+mem_heap_B=1648395696
+mem_heap_extra_B=5968536
+mem_stacks_B=0
+heap_tree=detailed
+n3: 1648395696 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 1629554688 0x402FD6: initNode (IA.c:233)
+  n2: 1629527040 0x402B3A: buildTree (IA.c:106)
+   n2: 1628499456 0x402BC4: buildTree (IA.c:113)
+    n1: 1588852224 0x402BC4: buildTree (IA.c:113)
+     n1: 1588852224 0x4025F9: aiPlay (IA.c:17)
+      n1: 1588852224 0x404984: newGame (App.c:189)
+       n0: 1588852224 0x403A94: main (App.c:35)
+    n1: 39647232 0x4025F9: aiPlay (IA.c:17)
+     n1: 39647232 0x404984: newGame (App.c:189)
+      n0: 39647232 0x403A94: main (App.c:35)
+   n0: 1027584 in 1 place, below massif's threshold (1.00%)
+  n0: 27648 in 1 place, below massif's threshold (1.00%)
+ n1: 17866260 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n0: 17866260 in 10 places, all below massif's threshold (1.00%)
+ n0: 974748 in 200 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=32
+#-----------
+time=10293395568
+mem_heap_B=1733826840
+mem_heap_extra_B=6282984
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=10625408682
+mem_heap_B=1861441796
+mem_heap_extra_B=7589660
+mem_stacks_B=0
+heap_tree=detailed
+n2: 1861441796 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 1840377600 0x402FD6: initNode (IA.c:233)
+  n2: 1840345344 0x402B3A: buildTree (IA.c:106)
+   n2: 1839161088 0x402BC4: buildTree (IA.c:113)
+    n1: 1793869056 0x402BC4: buildTree (IA.c:113)
+     n1: 1793869056 0x4025F9: aiPlay (IA.c:17)
+      n1: 1793869056 0x404984: newGame (App.c:189)
+       n0: 1793869056 0x403A94: main (App.c:35)
+    n1: 45292032 0x4025F9: aiPlay (IA.c:17)
+     n1: 45292032 0x404984: newGame (App.c:189)
+      n0: 45292032 0x403A94: main (App.c:35)
+   n0: 1184256 in 1 place, below massif's threshold (1.00%)
+  n0: 32256 in 1 place, below massif's threshold (1.00%)
+ n0: 21064196 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=34
+#-----------
+time=10906604943
+mem_heap_B=1874156760
+mem_heap_extra_B=6794984
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=11175657744
+mem_heap_B=1874156736
+mem_heap_extra_B=6794968
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=11371742837
+mem_heap_B=1976182252
+mem_heap_extra_B=7839668
+mem_stacks_B=0
+heap_tree=detailed
+n2: 1976182252 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 1955492352 0x402FD6: initNode (IA.c:233)
+  n2: 1955457792 0x402B3A: buildTree (IA.c:106)
+   n2: 1954183680 0x402BC4: buildTree (IA.c:113)
+    n1: 1905737472 0x402BC4: buildTree (IA.c:113)
+     n1: 1905737472 0x4025F9: aiPlay (IA.c:17)
+      n1: 1905737472 0x404984: newGame (App.c:189)
+       n0: 1905737472 0x403A94: main (App.c:35)
+    n1: 48446208 0x4025F9: aiPlay (IA.c:17)
+     n1: 48446208 0x404984: newGame (App.c:189)
+      n0: 48446208 0x403A94: main (App.c:35)
+   n0: 1274112 in 1 place, below massif's threshold (1.00%)
+  n0: 34560 in 1 place, below massif's threshold (1.00%)
+ n0: 20689900 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=37
+#-----------
+time=11647713886
+mem_heap_B=1975896480
+mem_heap_extra_B=7168216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=11951349762
+mem_heap_B=1975896480
+mem_heap_extra_B=7168216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=12147643197
+mem_heap_B=1975896480
+mem_heap_extra_B=7168216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=12413409452
+mem_heap_B=1975896480
+mem_heap_extra_B=7168216
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=12819947114
+mem_heap_B=2034130344
+mem_heap_extra_B=7384232
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=13095477666
+mem_heap_B=2086613384
+mem_heap_extra_B=7579344
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=13381868054
+mem_heap_B=2086613384
+mem_heap_extra_B=7579344
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=13560898413
+mem_heap_B=2119235380
+mem_heap_extra_B=7913396
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2119235380 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2099612160 0x402FD6: initNode (IA.c:233)
+  n2: 2099570688 0x402B3A: buildTree (IA.c:106)
+   n2: 2098123776 0x402BC4: buildTree (IA.c:113)
+    n1: 2044790784 0x402BC4: buildTree (IA.c:113)
+     n1: 2044790784 0x4025F9: aiPlay (IA.c:17)
+      n1: 2044790784 0x404984: newGame (App.c:189)
+       n0: 2044790784 0x403A94: main (App.c:35)
+    n1: 53332992 0x4025F9: aiPlay (IA.c:17)
+     n1: 53332992 0x404984: newGame (App.c:189)
+      n0: 53332992 0x403A94: main (App.c:35)
+   n0: 1446912 in 1 place, below massif's threshold (1.00%)
+  n0: 41472 in 1 place, below massif's threshold (1.00%)
+ n0: 19623220 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=45
+#-----------
+time=13841408433
+mem_heap_B=2139096400
+mem_heap_extra_B=7774440
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=14241493664
+mem_heap_B=2249580516
+mem_heap_extra_B=8441276
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2249580516 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2229767424 0x402FD6: initNode (IA.c:233)
+  n2: 2229721344 0x402B3A: buildTree (IA.c:106)
+   n2: 2228133888 0x402BC4: buildTree (IA.c:113)
+    n1: 2170591488 0x402BC4: buildTree (IA.c:113)
+     n1: 2170591488 0x4025F9: aiPlay (IA.c:17)
+      n1: 2170591488 0x404984: newGame (App.c:189)
+       n0: 2170591488 0x403A94: main (App.c:35)
+    n1: 57542400 0x4025F9: aiPlay (IA.c:17)
+     n1: 57542400 0x404984: newGame (App.c:189)
+      n0: 57542400 0x403A94: main (App.c:35)
+   n0: 1587456 in 1 place, below massif's threshold (1.00%)
+  n0: 46080 in 1 place, below massif's threshold (1.00%)
+ n0: 19813092 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=47
+#-----------
+time=14516297474
+mem_heap_B=2268296256
+mem_heap_extra_B=8252584
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=14912009125
+mem_heap_B=2387708092
+mem_heap_extra_B=9231668
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2387708092 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2367111168 0x402FD6: initNode (IA.c:233)
+  n2: 2367060480 0x402B3A: buildTree (IA.c:106)
+   n2: 2365320960 0x402BC4: buildTree (IA.c:113)
+    n1: 2303329536 0x402BC4: buildTree (IA.c:113)
+     n1: 2303329536 0x4025F9: aiPlay (IA.c:17)
+      n1: 2303329536 0x404984: newGame (App.c:189)
+       n0: 2303329536 0x403A94: main (App.c:35)
+    n1: 61991424 0x4025F9: aiPlay (IA.c:17)
+     n1: 61991424 0x404984: newGame (App.c:189)
+      n0: 61991424 0x403A94: main (App.c:35)
+   n0: 1739520 in 1 place, below massif's threshold (1.00%)
+  n0: 50688 in 1 place, below massif's threshold (1.00%)
+ n0: 20596924 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=49
+#-----------
+time=15168437838
+mem_heap_B=2411991300
+mem_heap_extra_B=8920028
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2411991300 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2392392960 0x402FD6: initNode (IA.c:233)
+  n2: 2392339968 0x402B3A: buildTree (IA.c:106)
+   n2: 2390577408 0x402BC4: buildTree (IA.c:113)
+    n1: 2327804928 0x402BC4: buildTree (IA.c:113)
+     n1: 2327804928 0x4025F9: aiPlay (IA.c:17)
+      n1: 2327804928 0x404984: newGame (App.c:189)
+       n0: 2327804928 0x403A94: main (App.c:35)
+    n1: 62772480 0x4025F9: aiPlay (IA.c:17)
+     n1: 62772480 0x404984: newGame (App.c:189)
+      n0: 62772480 0x403A94: main (App.c:35)
+   n0: 1762560 in 1 place, below massif's threshold (1.00%)
+  n0: 52992 in 1 place, below massif's threshold (1.00%)
+ n0: 19598340 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=50
+#-----------
+time=15187811062
+mem_heap_B=2435956356
+mem_heap_extra_B=9165404
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2435956356 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2415949056 0x402FD6: initNode (IA.c:233)
+  n2: 2415896064 0x402B3A: buildTree (IA.c:106)
+   n2: 2414108160 0x402BC4: buildTree (IA.c:113)
+    n1: 2350600704 0x402BC4: buildTree (IA.c:113)
+     n1: 2350600704 0x4025F9: aiPlay (IA.c:17)
+      n1: 2350600704 0x404984: newGame (App.c:189)
+       n0: 2350600704 0x403A94: main (App.c:35)
+    n1: 63507456 0x4025F9: aiPlay (IA.c:17)
+     n1: 63507456 0x404984: newGame (App.c:189)
+      n0: 63507456 0x403A94: main (App.c:35)
+   n0: 1787904 in 1 place, below massif's threshold (1.00%)
+  n0: 52992 in 1 place, below massif's threshold (1.00%)
+ n0: 20007300 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=51
+#-----------
+time=15207381196
+mem_heap_B=2460160420
+mem_heap_extra_B=9413212
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2460160420 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2439740160 0x402FD6: initNode (IA.c:233)
+  n2: 2439687168 0x402B3A: buildTree (IA.c:106)
+   n2: 2437876224 0x402BC4: buildTree (IA.c:113)
+    n1: 2373626880 0x402BC4: buildTree (IA.c:113)
+     n1: 2373626880 0x4025F9: aiPlay (IA.c:17)
+      n1: 2373626880 0x404984: newGame (App.c:189)
+       n0: 2373626880 0x403A94: main (App.c:35)
+    n1: 64249344 0x4025F9: aiPlay (IA.c:17)
+     n1: 64249344 0x404984: newGame (App.c:189)
+      n0: 64249344 0x403A94: main (App.c:35)
+   n0: 1810944 in 1 place, below massif's threshold (1.00%)
+  n0: 52992 in 1 place, below massif's threshold (1.00%)
+ n0: 20420260 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=52
+#-----------
+time=15388567895
+mem_heap_B=2462219320
+mem_heap_extra_B=8969784
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=15568379579
+mem_heap_B=2462219320
+mem_heap_extra_B=8969784
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=15763407627
+mem_heap_B=2462219320
+mem_heap_extra_B=8969784
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=15945493174
+mem_heap_B=2462219296
+mem_heap_extra_B=8969768
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=16126024295
+mem_heap_B=2481638104
+mem_heap_extra_B=9043872
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=16305198561
+mem_heap_B=2481638080
+mem_heap_extra_B=9043856
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=16324824513
+mem_heap_B=2485189860
+mem_heap_extra_B=9080276
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2485189860 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2465828352 0x402FD6: initNode (IA.c:233)
+  n2: 2465770752 0x402B3A: buildTree (IA.c:106)
+   n2: 2463904512 0x402BC4: buildTree (IA.c:113)
+    n1: 2398482432 0x402BC4: buildTree (IA.c:113)
+     n1: 2398482432 0x4025F9: aiPlay (IA.c:17)
+      n1: 2398482432 0x404984: newGame (App.c:189)
+       n0: 2398482432 0x403A94: main (App.c:35)
+    n1: 65422080 0x4025F9: aiPlay (IA.c:17)
+     n1: 65422080 0x404984: newGame (App.c:189)
+      n0: 65422080 0x403A94: main (App.c:35)
+   n0: 1866240 in 1 place, below massif's threshold (1.00%)
+  n0: 57600 in 1 place, below massif's threshold (1.00%)
+ n0: 19361508 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=59
+#-----------
+time=16527038183
+mem_heap_B=2507359464
+mem_heap_extra_B=9141208
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=16628547361
+mem_heap_B=2510046332
+mem_heap_extra_B=9168756
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2510046332 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2490679296 0x402FD6: initNode (IA.c:233)
+  n2: 2490619392 0x402B3A: buildTree (IA.c:106)
+   n2: 2488702464 0x402BC4: buildTree (IA.c:113)
+    n1: 2422197504 0x402BC4: buildTree (IA.c:113)
+     n1: 2422197504 0x4025F9: aiPlay (IA.c:17)
+      n1: 2422197504 0x404984: newGame (App.c:189)
+       n0: 2422197504 0x403A94: main (App.c:35)
+    n1: 66504960 0x4025F9: aiPlay (IA.c:17)
+     n1: 66504960 0x404984: newGame (App.c:189)
+      n0: 66504960 0x403A94: main (App.c:35)
+   n0: 1916928 in 1 place, below massif's threshold (1.00%)
+  n0: 59904 in 1 place, below massif's threshold (1.00%)
+ n0: 19367036 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=61
+#-----------
+time=16809246250
+mem_heap_B=2529782016
+mem_heap_extra_B=9226376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=16988824157
+mem_heap_B=2529782016
+mem_heap_extra_B=9226376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=17155143839
+mem_heap_B=2535126956
+mem_heap_extra_B=9281156
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2535126956 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2515696128 0x402FD6: initNode (IA.c:233)
+  n2: 2515633920 0x402B3A: buildTree (IA.c:106)
+   n2: 2513659392 0x402BC4: buildTree (IA.c:113)
+    n1: 2445981696 0x402BC4: buildTree (IA.c:113)
+     n1: 2445981696 0x4025F9: aiPlay (IA.c:17)
+      n1: 2445981696 0x404984: newGame (App.c:189)
+       n0: 2445981696 0x403A94: main (App.c:35)
+    n1: 67677696 0x4025F9: aiPlay (IA.c:17)
+     n1: 67677696 0x404984: newGame (App.c:189)
+      n0: 67677696 0x403A94: main (App.c:35)
+   n0: 1974528 in 1 place, below massif's threshold (1.00%)
+  n0: 62208 in 1 place, below massif's threshold (1.00%)
+ n0: 19430828 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=64
+#-----------
+time=17352261366
+mem_heap_B=2544022896
+mem_heap_extra_B=9281248
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=17531460615
+mem_heap_B=2544022896
+mem_heap_extra_B=9281248
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=17712063983
+mem_heap_B=2554099976
+mem_heap_extra_B=9320568
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=17892763114
+mem_heap_B=2554099952
+mem_heap_extra_B=9320552
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=18073425253
+mem_heap_B=2558449256
+mem_heap_extra_B=9338144
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=18232857606
+mem_heap_B=2560493780
+mem_heap_extra_B=9359124
+mem_stacks_B=0
+heap_tree=peak
+n2: 2560493780 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2541088512 0x402FD6: initNode (IA.c:233)
+  n2: 2541019392 0x402B3A: buildTree (IA.c:106)
+   n2: 2538938880 0x402BC4: buildTree (IA.c:113)
+    n1: 2469703680 0x402BC4: buildTree (IA.c:113)
+     n1: 2469703680 0x4025F9: aiPlay (IA.c:17)
+      n1: 2469703680 0x404984: newGame (App.c:189)
+       n0: 2469703680 0x403A94: main (App.c:35)
+    n1: 69235200 0x4025F9: aiPlay (IA.c:17)
+     n1: 69235200 0x404984: newGame (App.c:189)
+      n0: 69235200 0x403A94: main (App.c:35)
+   n0: 2080512 in 1 place, below massif's threshold (1.00%)
+  n0: 69120 in 1 place, below massif's threshold (1.00%)
+ n0: 19405268 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=70
+#-----------
+time=18412921379
+mem_heap_B=2561827568
+mem_heap_extra_B=9351952
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=18592792951
+mem_heap_B=2562751432
+mem_heap_extra_B=9356064
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=18772227908
+mem_heap_B=2571092296
+mem_heap_extra_B=9388832
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=18952890662
+mem_heap_B=2576583096
+mem_heap_extra_B=9410784
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=74
+#-----------
+time=19132670638
+mem_heap_B=2576583072
+mem_heap_extra_B=9410768
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=19313234423
+mem_heap_B=2576583072
+mem_heap_extra_B=9410768
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=19492481536
+mem_heap_B=2576583072
+mem_heap_extra_B=9410768
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=77
+#-----------
+time=19684048042
+mem_heap_B=2576583072
+mem_heap_extra_B=9410768
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=19864485616
+mem_heap_B=2576583072
+mem_heap_extra_B=9410768
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=20054798860
+mem_heap_B=2576675736
+mem_heap_extra_B=9411296
+mem_stacks_B=0
+heap_tree=detailed
+n2: 2576675736 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 2557281024 0x402FD6: initNode (IA.c:233)
+  n2: 2557202688 0x402B3A: buildTree (IA.c:106)
+   n2: 2555025408 0x402BC4: buildTree (IA.c:113)
+    n1: 2484635904 0x402BC4: buildTree (IA.c:113)
+     n1: 2484635904 0x4025F9: aiPlay (IA.c:17)
+      n1: 2484635904 0x404984: newGame (App.c:189)
+       n0: 2484635904 0x403A94: main (App.c:35)
+    n1: 70389504 0x4025F9: aiPlay (IA.c:17)
+     n1: 70389504 0x404984: newGame (App.c:189)
+      n0: 70389504 0x403A94: main (App.c:35)
+   n0: 2177280 in 1 place, below massif's threshold (1.00%)
+  n0: 78336 in 1 place, below massif's threshold (1.00%)
+ n0: 19394712 in 201 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=80
+#-----------
+time=20242846575
+mem_heap_B=2576675712
+mem_heap_extra_B=9411280
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=81
+#-----------
+time=20423134227
+mem_heap_B=2577599576
+mem_heap_extra_B=9415392
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=82
+#-----------
+time=20656371588
+mem_heap_B=2579492432
+mem_heap_extra_B=9423376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=83
+#-----------
+time=20835775818
+mem_heap_B=2579492432
+mem_heap_extra_B=9423376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=84
+#-----------
+time=21016151889
+mem_heap_B=2579492432
+mem_heap_extra_B=9423376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=85
+#-----------
+time=21198382804
+mem_heap_B=2579492432
+mem_heap_extra_B=9423376
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=86
+#-----------
+time=21503408966
+mem_heap_B=2579501752
+mem_heap_extra_B=9423456
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=87
+#-----------
+time=21704614759
+mem_heap_B=2579501752
+mem_heap_extra_B=9423456
+mem_stacks_B=0
+heap_tree=empty

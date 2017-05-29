@@ -1,0 +1,763 @@
+desc: (none)
+cmd: ./App
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=31272381
+mem_heap_B=15406948
+mem_heap_extra_B=24036
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=312194394
+mem_heap_B=15406948
+mem_heap_extra_B=24036
+mem_stacks_B=0
+heap_tree=peak
+n2: 15406948 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n2: 15206400 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 8294400 0x403EF4: menu (App.c:55)
+   n0: 8294400 0x403D1E: main (App.c:30)
+  n1: 6912000 0x4EEE5FD: SDL_LoadBMP_RW_REAL (SDL_bmp.c:299)
+   n1: 6912000 0x403E95: menu (App.c:54)
+    n0: 6912000 0x403D1E: main (App.c:30)
+ n0: 200548 in 182 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=3
+#-----------
+time=316455361
+mem_heap_B=8723663
+mem_heap_extra_B=23009
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=365452596
+mem_heap_B=8723675
+mem_heap_extra_B=23013
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=407327571
+mem_heap_B=8723923
+mem_heap_extra_B=22989
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=432039269
+mem_heap_B=8723923
+mem_heap_extra_B=22989
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=474937193
+mem_heap_B=8723955
+mem_heap_extra_B=22997
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=503232434
+mem_heap_B=11599088
+mem_heap_extra_B=24152
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=582544737
+mem_heap_B=11599032
+mem_heap_extra_B=24136
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=622841884
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=662323710
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043904 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246204 in 192 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=12
+#-----------
+time=688644518
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=733563399
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=767589680
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=788496110
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=815642250
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=846942498
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=883564040
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=906664496
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=934096898
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=958916755
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=997058633
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=1040529114
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=1077154817
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=1099973419
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=1123903460
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=1149763730
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=1171727709
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=29
+#-----------
+time=1202392114
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=1241917399
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=1283333004
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=1312940669
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=33
+#-----------
+time=1351591991
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=1374104035
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=1404354562
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=1427495179
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043904 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246204 in 199 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=37
+#-----------
+time=1469264877
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=1504618037
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043928 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246228 in 199 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=39
+#-----------
+time=1531320384
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=1570675424
+mem_heap_B=7043928
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=1608013624
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=1630704693
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043904 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246204 in 199 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=43
+#-----------
+time=1657187946
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=1691065555
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=1719630664
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=1737670603
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=1777596439
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=1795629863
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=1837746169
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=1842027679
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=1862819340
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=1868525874
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=1874331812
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043904 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246204 in 199 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=54
+#-----------
+time=1879464347
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=1884609144
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=1915532736
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=1920481222
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=1927463569
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=1934562896
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=1951646387
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=1957192637
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=1963136916
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=1969073639
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043928 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246228 in 199 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=64
+#-----------
+time=1974853870
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=1980465730
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=1986222904
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=67
+#-----------
+time=1991833786
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=1997504721
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=2003432882
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=2008642903
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=2013752454
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=2019356862
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=2025039516
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043928 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246228 in 199 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=74
+#-----------
+time=2030164672
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=2035362509
+mem_heap_B=7043928
+mem_heap_extra_B=21368
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=2056840765
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=77
+#-----------
+time=2062389209
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=2067882054
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=2073297565
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=80
+#-----------
+time=2082200569
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=81
+#-----------
+time=2091362025
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=82
+#-----------
+time=2096891549
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=83
+#-----------
+time=2102242139
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=detailed
+n2: 7043904 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 6797700 0x4EF746A: SDL_CreateRGBSurface_REAL (SDL_surface.c:83)
+  n1: 6494400 0x404742: newGame (App.c:142)
+   n0: 6494400 0x403D83: main (App.c:35)
+  n0: 180900 in 8 places, all below massif's threshold (1.00%)
+  n1: 122400 0x40484D: newGame (App.c:151)
+   n0: 122400 0x403D83: main (App.c:35)
+ n0: 246204 in 199 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=84
+#-----------
+time=2118429968
+mem_heap_B=7043904
+mem_heap_extra_B=21352
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=85
+#-----------
+time=2138972109
+mem_heap_B=9564340
+mem_heap_extra_B=21380
+mem_stacks_B=0
+heap_tree=empty
