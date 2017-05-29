@@ -105,13 +105,16 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 	int tokenNb = (player==1) ? g->countPlayer1 : g->countPlayer2; //depict the friendly token nb to player currently playing in simulation
 	//printf("depth %d ; tokenNb %d \n",depth, tokenNb);
 	if ((depth > 0) && (tokenNb>0)) {
+		printf("player %d ",player);
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
-		//printf("3333 %d \n",tokenNb);
+
+		//printf("tknb %d \n",tokenNb);
 
 		int i;
 		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat should have happenned
 			Coordinates c1 = friendlyTokenTab[i];
+			//printf("c1 %d :%d \n",c1.x,c1.y);
 			Coordinates* moves = showPossible(g, c1, player); //available moves
 			//printf("4444 %d \n",moves[0].x);
 			int j;
@@ -162,19 +165,20 @@ void freeTree(Tree *t) {
 Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
-	Coordinates c;
 	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*18);//there are at utter most 18 friendly tokens
-	int k = 0; //cursor of tab
+	int k;
+	k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
 			if (g->map[i][j]==player) {
-				c.x = i ; c.y = j;
-				tab[k] = c;
+				tab[k].x = i;
+				tab[k].y = j;
 				k++;
-				c.x = -1 ; c.y = -1;
 			}
+			printf("i %d : j %d | k %d \n",i,j,k);
 		}
 	}
+	//printTab(tab, 18);
 	return tab;
 }
 

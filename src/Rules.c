@@ -454,3 +454,10 @@ int checkMovement(Game *g, Coordinates c1, Coordinates c2) {
 	//printf("Invalid Movement");
 	return 0;
 }
+
+void printTab(Coordinates* t, int len) {
+	int i;
+	for (i=0; i<len ; i++) {
+		printf(" %d : %d | ",t[i].x ,t[i].y);
+	}
+} 
