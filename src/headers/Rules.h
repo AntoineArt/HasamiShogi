@@ -28,8 +28,10 @@ Coordinates* createTable(Game *g, Coordinates c, int up, int right, int down, in
 
 
 /*
-	function that show off the possible play after selection of a token
-	WARNING : Allocate memory
+	Check if a move is valid
+	1 if valid,
+	2 if on another friendly token
+	0 else
+	warning, function assume c1 and c2 are in the board, please use checkMove from Board.c to check
 */
-
-Coordinates* showPossible(Game *g, Coordinates c1);
+int checkMovement(Game *g, Coordinates c1, Coordinates c2);

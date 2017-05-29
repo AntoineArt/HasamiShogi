@@ -478,7 +478,7 @@ Coordinates* inGameEvents(Game *g, int buttonX, int buttonY, int buttonW, int bu
 			c.x=-1; c.y=-1;
 		}
 		//printf("final move %d : %d | %d -> %d : %d | %d \n", c1.x, c1.y, g->map[c1.x][c1.y], c2.x, c2.y, g->map[c2.x][c2.y]);
-		moveRight = checkMove(g, c1, c2);
+		moveRight = checkMove(g, c1, c2, g->currentPlayer);
 	}
 	movePiece(g,c1, c2); //the move has been checked so it is safe
 

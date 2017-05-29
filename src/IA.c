@@ -13,7 +13,7 @@ Coordinates* aiPlay(Game *g) {
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
-	while (checkMove(g, c1, c2) != 1) { //useless by construction but still safer
+	while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
 		buildTree(g, depth, root, g->currentPlayer);
 		double bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
 		int i;
@@ -49,7 +49,7 @@ Coordinates* aiPlay(Game *g) {
 
 double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { //a<b
 	//printf("param depth %d, a %lf, b %lf \n",depth,a,b);
-	if ((depth<=0) || (P->nbofSons==0)) //means P is a leave or is forced to be one by depth
+	if ((depth<=0) || (P->nbofSons<=0)) //means P is a leave or is forced to be one by depth
 	{
 		//printf("leaf value %lf \n",P->value);
 		return P->value; //returning value of leave
@@ -102,15 +102,18 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { 
 }
 
 void buildTree(Game* g, int depth, Tree *dad, int player) {
-	int tokenNb = (player==2) ? g->countPlayer1 : g->countPlayer2;
-	printf("depth %d ; tokennb %d \n",depth, tokenNb);
+	int tokenNb = (player==1) ? g->countPlayer1 : g->countPlayer2; //depict the friendly token nb to player currently playing in simulation
+	//printf("depth %d ; tokenNb %d \n",depth, tokenNb);
 	if ((depth > 0) && (tokenNb>0)) {
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
+		//printf("3333 %d \n",tokenNb);
+		
 		int i;
 		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat should have happenned
 			Coordinates c1 = friendlyTokenTab[i];
-			Coordinates* moves = showPossible(g, c1); //available moves
+			Coordinates* moves = showPossible(g, c1, player); //available moves
+			//printf("4444 %d \n",moves[0].x);
 			int j;
 			for (j = 1 ; j<(moves[0].x) ; j++) {
 				dad->sons[dad->nbofSons] = (Tree*) malloc(sizeof(Tree));
@@ -121,7 +124,10 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				movePiece(g, c1, moves[j]);
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
 				//recursive call
+				//printf("param depth %d, player %d \n",depth-1,3-player);
+				//printf("0000");
 				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
+				//printf("1111");
 				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH 
 				(dad->nbofSons)++; //incremente the son number accordingly
 				movePiece(g, moves[j], c1);
@@ -131,6 +137,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 		free(friendlyTokenTab);
 	} else { //depth is 0 -> dad is forced as a leave
 		//do the play
+		//printf("2222");
 		movePiece(g, dad->c1, dad->c2);
 		dad->value = evaluate(g, player); //needs to be accurate
 		dad->nbofSons = 0; //means is a leave
@@ -202,7 +209,7 @@ int nbofLigns(Game* g, int player) {
 		nb=0; //checking colomn
 		last=1; //boolean last was a friendly token
 		for (j=0 ; j<9 ; j++) { //for each colomn
-			if (g->map[j][i]==player) {
+			if (g->map[8-j][i]==player) {
 				if (last) {nb++;}
 				else { nb=1;}
 			} else { //means end of an alignment
@@ -215,6 +222,7 @@ int nbofLigns(Game* g, int player) {
 			}
 		}		
 	}
+	int decay = (player==1) ? 0 : 2;
 	//checking Left diags
 	for (i=4; i<15 ;i++) { //diag sum
 		nb=0; //checking Left diag
@@ -223,7 +231,7 @@ int nbofLigns(Game* g, int player) {
 		int min = i<10 ? 2 : i-8;
 		for (j=max; j>=min ;j--) { //case ordonate
 			//printf("%d,%d -> %d,%d \n",i,j ,j,i-j);
-			if (g->map[j][i-j]==player) {
+			if (g->map[8-(j-decay)][i-j]==player) {
 				if (last) {nb++;}
 				else { nb=1;}
 			} else { //means end of an alignment
@@ -243,8 +251,8 @@ int nbofLigns(Game* g, int player) {
 		int max = i>8 ? 8 : i;
 		int min = i<10 ? 2 : i-8;
 		for (j=max; j>=min ;j--) { //case ordonate
-			printf("%d,%d -> %d,%d \n",i,j,j,8-(i-j));
-			if (g->map[j][8-(i-j)]==player) {
+			//printf("%d,%d -> %d,%d \n",i,j,j,8-(i-j));
+			if (g->map[8-(j-decay)][8-(i-j)]==player) {
 				if (last) {nb++;}
 				else { nb=1;}
 			} else { //means end of an alignment
