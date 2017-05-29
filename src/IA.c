@@ -108,8 +108,9 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 		//printf("player %d ",player);
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
+
 		//printf("tknb %d \n",tokenNb);
-		
+
 		int i;
 		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat should have happenned
 			Coordinates c1 = friendlyTokenTab[i];
@@ -130,7 +131,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				//printf("0000");
 				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
 				//printf("1111");
-				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH 
+				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH
 				(dad->nbofSons)++; //incremente the son number accordingly
 				movePiece(g, moves[j], c1);
 			}
