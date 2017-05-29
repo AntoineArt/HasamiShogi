@@ -32,5 +32,5 @@ CMakeLists.txt
 *.tex
 src/Makefile~
 src/ReadMe.txt~
-
+*massif*
 
