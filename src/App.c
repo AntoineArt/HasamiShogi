@@ -187,7 +187,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 		|| ((g->gameMode==2)&&(g->currentPlayer==2)) )
 		{ //human plays
 			printf("human play \n");
-			updatedCases = inGameEvents(g, buttonX, buttonY, buttonText->w, buttonText->h);
+			updatedCases = inGameEvents(g, pWinGame, buttonX, buttonY, buttonText->w, buttonText->h);
 		} else { //IA plays
 			printf("AI play \n");
 			updatedCases = aiPlay(g);
@@ -350,6 +350,7 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 									pWindow, p2nd);  //Positioning black token
 		}
 	}
+
 	SDL_FreeSurface(p1st);
 	SDL_FreeSurface(p2nd);
 	//SDL_FreeSurface(pBlackPiece);
@@ -400,11 +401,12 @@ void victoryDisplay(int winner){
 	SDL_DestroyWindow(pWinGame);
 }
 
-Coordinates* inGameEvents(Game *g, int buttonX, int buttonY, int buttonW, int buttonH){
+Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY, int buttonW, int buttonH){
 	int depth;
 	Coordinates c;
 	Coordinates c1;
 	Coordinates c2;
+	Coordinates* tmpArray;
 
 	int moveRight = 0;
 	while (moveRight!=1) {// no valid move has been done 1 : true 0 : false 2 : another friendly token
@@ -457,24 +459,30 @@ Coordinates* inGameEvents(Game *g, int buttonX, int buttonY, int buttonW, int bu
 					}
 				}
 			}
+
 			if (c.x != -1 && c.y != -1) {//assure we clicked on the board
 				if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
 					c1.x=-1; c1.y=-1;
 					depth=0;
+					printf("yolo\n");
+					hidePossibilities(g, pWindow, tmpArray);
 				}
 				if ((depth==1) && (g->map[c.x][c.y]==0) ){//means destination is empty
 					c2.x = c.x ; c2.y = c.y ; depth=2;
-					//printf("second clic %d : %d \n",c2.x, c2.y);
+					printf("second clic %d : %d \n",c2.x, c2.y);
 				}
 
 				if ((depth==0) && (g->map[c.x][c.y]==g->currentPlayer)) {
 					c1.x = c.x ; c1.y = c.y ; depth=1;
+					tmpArray = showPossible(g, c1, g->currentPlayer);
+					displayPossibilities(g, pWindow, tmpArray);
 					//todo display available mouvement and catchs
 					//printf("first clic %d : %d \n",c1.x, c1.y);
 				}
 			}
 			c.x=-1; c.y=-1;
 		}
+		hidePossibilities(g, pWindow, tmpArray);
 		//printf("final move %d : %d | %d -> %d : %d | %d \n", c1.x, c1.y, g->map[c1.x][c1.y], c2.x, c2.y, g->map[c2.x][c2.y]);
 		moveRight = checkMove(g, c1, c2, g->currentPlayer);
 	}
@@ -499,6 +507,29 @@ Coordinates* inGameEvents(Game *g, int buttonX, int buttonY, int buttonW, int bu
 	return tab;
 }
 
+void displayPossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord){
+	int n = coord[0].x;
+	for(int i = 1; i<n; i++){
+		SDL_Surface* src = SDL_LoadBMP("./resources/images/Green.bmp");
+		SDL_Surface* pGreenCase = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+		SDL_FillRect(pGreenCase, NULL, SDL_MapRGB(pGreenCase->format, 255, 0, 0));
+		SDL_BlitScaled(src, NULL, pGreenCase, NULL);
+		SDL_FreeSurface(src);
+		updateWindow((DECAY_PIECES + 68 + 8 + coord[i].x*(115+4))*SCALE_FACTOR,(68+8 + coord[i].y*(131+4))*SCALE_FACTOR, pWindow, pGreenCase);
+	}
+}
+
+void hidePossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord){
+	int n = coord[0].x;
+	for(int i = 1; i<n; i++){
+		SDL_Surface* src = SDL_LoadBMP("./resources/images/Yellow.bmp");
+		SDL_Surface* pYellowCase = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+		SDL_FillRect(pYellowCase, NULL, SDL_MapRGB(pYellowCase->format, 255, 0, 0));
+		SDL_BlitScaled(src, NULL, pYellowCase, NULL);
+		SDL_FreeSurface(src);
+		updateWindow((DECAY_PIECES + 68 + 8 + coord[i].x*(115+4))*SCALE_FACTOR,(68+8 + coord[i].y*(131+4))*SCALE_FACTOR, pWindow, pYellowCase);
+	}
+}
 
 
 Parameters initParameters(int lang, int resX, int resY){

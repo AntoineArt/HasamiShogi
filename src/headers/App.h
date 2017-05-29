@@ -95,7 +95,16 @@ void victoryDisplay(int winner);
 /*
   Fonction that handle the turn of currentPlayer from the beggining thil the end returning a tab who contains the move c1->c2 and the eventualy caught token. length of the tab in first coordinate x.
 */
-Coordinates* inGameEvents(Game *g, int buttonX, int buttonY, int buttonW, int buttonH);
+Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY, int buttonW, int buttonH);
+/*
+	Displays green cases on cases in coord when a piece is selected
+*/
+void displayPossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord);
+
+/*
+	Hides the green cases (set yellow cases on cases in coord)
+*/
+void hidePossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord);
 
 
 /*
