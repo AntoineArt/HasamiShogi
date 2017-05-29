@@ -161,22 +161,22 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pBlackPiece, NULL);
-	
+
 	SDL_FreeSurface(src);
-	
+
 	src = SDL_LoadBMP("./resources/images/RedPiece.bmp");
 	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pRedPiece, NULL);
-	
+
 	SDL_FreeSurface(src);
-		
+
 	src = SDL_LoadBMP("./resources/images/Yellow.bmp");
 	SDL_Surface* pYellow = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pYellow, NULL, SDL_MapRGB(pYellow->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pYellow, NULL);
 	SDL_FreeSurface(src);
-	
+
 	//victory contains the player who won this turn (0 if none of them, 3 if both loosed)
 	int victory = 0;
 	Coordinates* updatedCases;
@@ -212,7 +212,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 		//SDL_FreeSurface(pToken);
 	}
 	(g->currentPlayer) = 3-(g->currentPlayer); //switch the current player , I think it is needed because of the last switch of the while
-	
+
 	if(victory == 1){victoryDisplay(1);}
 	else if (victory == 2){victoryDisplay(2);}
 	else if (victory == 3){defeatDisplay();} //both loosed
@@ -222,11 +222,9 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_FreeSurface(pBlackPiece);
 	SDL_FreeSurface(pRedPiece);
 	SDL_FreeSurface(pYellow);
-	
 	SDL_FreeSurface(pBackgroundGame);
 	SDL_FreeSurface(pButton);
 	SDL_FreeSurface(buttonText);
-	
 	SDL_DestroyWindow(pWinGame);
 }
 
@@ -332,7 +330,7 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pBlackPiece, NULL);
 	SDL_FreeSurface(src);
-	
+
 	src = SDL_LoadBMP("./resources/images/RedPiece.bmp");
 	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
@@ -341,7 +339,7 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 
 	SDL_Surface* p1st = (g->gameMode == 2) ? pBlackPiece : pRedPiece;
 	SDL_Surface* p2nd = (g->gameMode == 2) ? pRedPiece : pBlackPiece;
-	
+
 	for(int i = 0; i<9; i++){
 		for(int j = 0; j<(g->var)+1; j++){
 			updateWindow((DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR,
