@@ -174,8 +174,8 @@ Coordinates* friendlyToken(Game* g, int player) {
 				tab[k].x = i;
 				tab[k].y = j;
 				k++;
+				printf("i %d : j %d | k %d \n",i,j,k);
 			}
-			printf("i %d : j %d | k %d \n",i,j,k);
 		}
 	}
 	//printTab(tab, 18);

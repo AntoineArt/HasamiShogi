@@ -450,7 +450,7 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 						else{
 							for(int i=0; i<9; i++){
 								for(int j=0; j<9; j++){
-									if(isIn(xM, yM, (DECAY_PIECES + 67 + i*(115+5))*SCALE_FACTOR, (68+8 + j*131)*SCALE_FACTOR, 98, 120)){
+									if(isIn(xM, yM, (DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR, (68+8 + j*(131+4))*SCALE_FACTOR, 98, 120)){
 										c.x = i ; c.y = j;
 									}
 								}
