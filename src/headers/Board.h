@@ -24,16 +24,14 @@ void catchPiece(Game *g, Coordinates *tab);
 	includes checkMovement
 */
 
-int checkMove(Game *g, Coordinates c1, Coordinates c2);
+int checkMove(Game *g, Coordinates c1, Coordinates c2, int player);
+
 
 /*
-	Check if a move is valid
-	1 if valid,
-	2 if on another friendly token
-	0 else
-	warning, function assume c1 and c2 are in the board, please use checkMove from Board.c to check
+	function that show off the possible play after selection of a token
+	WARNING : Allocate memory
 */
-int checkMovement(Game *g, Coordinates c1, Coordinates c2);
+Coordinates* showPossible(Game *g, Coordinates c1, int player);
 
 /*
 	print the board in console

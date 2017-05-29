@@ -269,18 +269,20 @@ Coordinates* checkCatch(Game *g, Coordinates c2)
 
 Coordinates* createTable(Game *g, Coordinates c, int up, int right, int down, int left, int catching){
 
-	int i = up + right + down + left;
+	int tot = up + right + down + left;
 	Coordinates *tab;
-	tab = (Coordinates*) malloc(sizeof(Coordinates)*(i+1));
-	Coordinates ct;
-	ct.x = i+1;
-	tab[0] = ct;
+	tab = (Coordinates*) malloc(sizeof(Coordinates)*(tot+1));
+	
+	tab[0].x =  tot+1;
+	tab[0].y = -1;
+	
+	int i;
 
 	//Up
 	if ( (catching==0)&&(up==1)&&(g->map[c.x][c.y-1]!=0) )
 	{
-		tab[i].x = c.x;
-		tab[i].y = c.y-2;
+		tab[1].x = c.x;
+		tab[1].y = c.y-2;
 	}
 	else{
 		for(i=1;i<=up;i++)
@@ -293,48 +295,47 @@ Coordinates* createTable(Game *g, Coordinates c, int up, int right, int down, in
 	//Right
 	if ( (catching==0)&&(right==1)&&(g->map[c.x+1][c.y]!=0) )
 	{
-		tab[i].x = c.x+2;
-		tab[i].y = c.y;
+		tab[1+up].x = c.x+2;
+		tab[1+up].y = c.y;
 	}
 	else
 	{
 		for(i=1;i<=right;i++)
 		{
-		tab[i+up].x = c.x+i;
-		tab[i+up].y = c.y;
+			tab[i+up].x = c.x+i;
+			tab[i+up].y = c.y;
 		}
 	}
 
 	//Down
 	if ( (catching==0)&&(down==1)&&(g->map[c.x][c.y+1]!=0) )
 	{
-		tab[i].x = c.x;
-		tab[i].y = c.y+2;
+		tab[1+up+right].x = c.x;
+		tab[1+up+right].y = c.y+2;
 	}
 	else
 	{
 		for(i=1;i<=down;i++)
 		{
-		tab[i+up+right].x = c.x;
-		tab[i+up+right].y = c.y+i;
+			tab[i+up+right].x = c.x;
+			tab[i+up+right].y = c.y+i;
 		}
 	}
 
 	//Left
 	if ( (catching==0)&&(left==1)&&(g->map[c.x-1][c.y]!=0) )
 	{
-		tab[i].x = c.x-2;
-		tab[i].y = c.y;
+		tab[1+up+right+down].x = c.x-2;
+		tab[1+up+right+down].y = c.y;
 	}
 	else
 	{
 		for(i=1;i<=left;i++)
 		{
-		tab[i+up+right+down].x = c.x-i;
-		tab[i+up+right+down].y = c.y;
+			tab[i+up+right+down].x = c.x-i;
+			tab[i+up+right+down].y = c.y;
 		}
 	}
-
 	return tab;
 }
 

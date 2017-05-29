@@ -25,7 +25,7 @@ void catchPiece(Game *g, Coordinates *tab)
 		}
 }
 
-int checkMove(Game *g, Coordinates c1, Coordinates c2)
+int checkMove(Game *g, Coordinates c1, Coordinates c2, int player)
 {
 	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8))
 	{
@@ -35,13 +35,13 @@ int checkMove(Game *g, Coordinates c1, Coordinates c2)
 	{
 		//printf("Invalid Movement (Destination not in the board !)");
 		return 0;
-	} else if ((g->map[c1.x][c1.y]) != (g->currentPlayer))
+	} else if ((g->map[c1.x][c1.y]) != (player))
 	{
 		//printf("Invalid Movement (Not your token !");
 		return 0;
 	}
 	//Check if the destination is friendly
-	else if((g->map[c2.x][c2.y]) == (g->currentPlayer))
+	else if((g->map[c2.x][c2.y]) == (player))
 	{
 	//printf("Invalid Movement (Destination is a friendly token)");
 	return 2;
@@ -52,56 +52,61 @@ int checkMove(Game *g, Coordinates c1, Coordinates c2)
 
 }
 
-Coordinates* showPossible(Game *g, Coordinates c1)
+Coordinates* showPossible(Game *g, Coordinates c1, int player)
 {
 	//We identifie the number of available case in each direction
 	int i=0; int up=0; int right=0; int down=0; int left=0;
 	Coordinates c2;
-
+	c2.x=-1;
+	c2.y=-1;
 	//Up
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.y)-i >= 0 ; i++)
 	{
 		c2.y = (c1.y)-i;
-		if (checkMove(g,c1,c2)==1) {
+		if (checkMove(g,c1,c2,player)==1) {
 			up++;
 		} else {break;}
 	}
-
+	c2.x=-1;
+	c2.y=-1;
 	//Right
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.x)+i <= 8 ; i++)
 	{
 		c2.x = (c1.x)+i;
-		if (checkMove(g,c1,c2)==1) {
+		if (checkMove(g,c1,c2,player)==1) {
 			right++;
 		} else {break;}
 	}
-
+	c2.x=-1;
+	c2.y=-1;
 	//Down
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.y)+i <= 8 ; i++)
 	{
 		c2.y = (c1.y)+i;
-		if (checkMove(g,c1,c2)==1) {
+		if (checkMove(g,c1,c2,player)==1) {
 			down++;
 		} else {break;}
 	}
-
+	c2.x=-1;
+	c2.y=-1;
 	//Left
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.x)-i >= 0 ; i++)
 	{
 		c2.x = (c1.x)-i;
-		if (checkMove(g,c1,c2)==1) {
+		//printf("%d : %d -> %d : %d | %d \n",c1.x, c1.y, c2.x , c2.y , i);
+		if (checkMove(g,c1,c2,player)==1) {
 			left++;
 		} else {break;}
 	}
-
+	//printf(" %d : %d | %d ; %d ; %d ; %d \n",c1.x, c1.y, up, right, down, left);
 	return createTable(g, c1, up, right, down, left, 0);
 }
 
