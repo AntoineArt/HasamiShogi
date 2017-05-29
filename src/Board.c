@@ -69,8 +69,6 @@ Coordinates* showPossible(Game *g, Coordinates c1, int player)
 			up++;
 		} else {break;}
 	}
-	c2.x=-1;
-	c2.y=-1;
 	//Right
 	c2.x = c1.x;
 	c2.y = c1.y;
@@ -81,8 +79,6 @@ Coordinates* showPossible(Game *g, Coordinates c1, int player)
 			right++;
 		} else {break;}
 	}
-	c2.x=-1;
-	c2.y=-1;
 	//Down
 	c2.x = c1.x;
 	c2.y = c1.y;
@@ -93,8 +89,6 @@ Coordinates* showPossible(Game *g, Coordinates c1, int player)
 			down++;
 		} else {break;}
 	}
-	c2.x=-1;
-	c2.y=-1;
 	//Left
 	c2.x = c1.x;
 	c2.y = c1.y;
