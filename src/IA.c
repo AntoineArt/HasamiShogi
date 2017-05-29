@@ -89,7 +89,7 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { 
 				break; // α cut-off
 			}*/
 		}
-
+		
 		P->value=min; //saving the value
 		/*
 		for (i=0; i<(16*18); i++) {
@@ -105,7 +105,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 	int tokenNb = (player==1) ? g->countPlayer1 : g->countPlayer2; //depict the friendly token nb to player currently playing in simulation
 	//printf("depth %d ; tokenNb %d \n",depth, tokenNb);
 	if ((depth > 0) && (tokenNb>0)) {
-		printf("player %d ",player);
+		//printf("player %d ",player);
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
 		//printf("tknb %d \n",tokenNb);
@@ -129,12 +129,8 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				//printf("param depth %d, player %d \n",depth-1,3-player);
 				//printf("0000");
 				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
-<<<<<<< HEAD
-				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH
-=======
 				//printf("1111");
 				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH 
->>>>>>> 8a0adf4a60b6df0960cea9217d0d546fda033c6d
 				(dad->nbofSons)++; //incremente the son number accordingly
 				movePiece(g, moves[j], c1);
 			}
@@ -168,6 +164,10 @@ Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
 	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*18);//there are at utter most 18 friendly tokens
+	for (i=0; i<18; i++) { //filling tab
+		tab[i].x=-1;
+		tab[i].y=-1;
+	}
 	int k;
 	k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
@@ -176,11 +176,12 @@ Coordinates* friendlyToken(Game* g, int player) {
 				tab[k].x = i;
 				tab[k].y = j;
 				k++;
+				printf("%d : %d | %d \n",i,j,k);
 			}
-			printf("i %d : j %d | k %d \n",i,j,k);
+			
 		}
 	}
-	//printTab(tab, 18);
+	printTab(tab, 18);
 	return tab;
 }
 
@@ -188,16 +189,16 @@ double evaluate(Game *g, int player) {
 	double res;
 	res = 0;
 	//attribuate value
-
+	
 	//having more tokens
 	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
 	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
 	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
-
+	
 	//having aligned tokens including victory condition
 	res = res + 10 * nbofLigns(g, player);
-	res = res - 10 * nbofLigns(g, 3-player);
-
+	res = res - 10 * nbofLigns(g, 3-player); 
+	
 	//return the value
 	printf("res val : %lf \n",res);
 	return res;
@@ -220,14 +221,14 @@ int nbofLigns(Game* g, int player) {
 				if (last) {nb++;}
 				else { nb=1;}
 			} else { //means end of an alignment
-				if (nb==3)
+				if (nb==3) 
 				{ mem++; }
-				else if (nb==4)
+				else if (nb==4) 
 				{ mem = mem + 10; }
-				else if (nb>=5)
+				else if (nb>=5) 
 				{ mem = mem + 100; }
 			}
-		}
+		}		
 	}
 	int decay = (player==1) ? 0 : 2;
 	//checking Left diags
@@ -242,11 +243,11 @@ int nbofLigns(Game* g, int player) {
 				if (last) {nb++;}
 				else { nb=1;}
 			} else { //means end of an alignment
-				if (nb==3)
+				if (nb==3) 
 				{ mem++; }
-				else if (nb==4)
+				else if (nb==4) 
 				{ mem = mem + 10; }
-				else if (nb>=5)
+				else if (nb>=5) 
 				{ mem = mem + 100; }
 			}
 		}
@@ -263,11 +264,11 @@ int nbofLigns(Game* g, int player) {
 				if (last) {nb++;}
 				else { nb=1;}
 			} else { //means end of an alignment
-				if (nb==3)
+				if (nb==3) 
 				{ mem++; }
-				else if (nb==4)
+				else if (nb==4) 
 				{ mem = mem + 10; }
-				else if (nb>=5)
+				else if (nb>=5) 
 				{ mem = mem + 100; }
 			}
 		}
@@ -299,25 +300,25 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play tokens
 	res = res + (tab[0].x-1) * 100; //-1 because of the false first coordinates
 	free(tab);
-
+	
 	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
 	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
 
 	//having more tokens
 	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
 
-
+	
 	//be close to ennemy
 	res = res + (15 * nbofEnnemy(g, c2));
 	//but also close to friends
 	res = res - 20 * nbofFriends(g, c2);
-
+	
 	// X shape is strong
 	res = res + 12 * nbXShape(g, c2);
-
+				
 	// / or \ or | shapes are strong
 	res = res + 45 * nbLignShape(g, c2);
-
+			
 	// _ shape is weak
 	res = res - 30 * nb_Shape(g, c2);
 
@@ -330,7 +331,7 @@ double evaluate(Game *g, Coordinates c1, Coordinates c2) {
 
 	//if protect friends then good
 	//I don't fucking know how to implement this
-
+	
 	//reverse the play
 	movePiece(g, c2, c1); //a ashami shogi play can always be reversed
 	return res;

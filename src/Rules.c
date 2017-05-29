@@ -460,4 +460,5 @@ void printTab(Coordinates* t, int len) {
 	for (i=0; i<len ; i++) {
 		printf(" %d : %d | ",t[i].x ,t[i].y);
 	}
+	printf("\n");
 } 

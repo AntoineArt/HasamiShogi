@@ -18,7 +18,7 @@ const int DEFEAT_WIDTH = 894;
 const int DEFEAT_HEIGTH = 762;
 const int PREVIOUS_BUTTON_WIDTH = 2400/8;
 const int PREVIOUS_BUTTON_HEIGTH = 821/8;
-const double SCALE_FACTOR = 1;
+const double SCALE_FACTOR = 0.65;
 
 const int GAME_MODE_DEFAULT = 1; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
