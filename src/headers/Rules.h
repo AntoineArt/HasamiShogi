@@ -35,3 +35,5 @@ Coordinates* createTable(Game *g, Coordinates c, int up, int right, int down, in
 	warning, function assume c1 and c2 are in the board, please use checkMove from Board.c to check
 */
 int checkMovement(Game *g, Coordinates c1, Coordinates c2);
+
+void printTab(Coordinates* t, int len);

@@ -105,7 +105,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 	int tokenNb = (player==1) ? g->countPlayer1 : g->countPlayer2; //depict the friendly token nb to player currently playing in simulation
 	//printf("depth %d ; tokenNb %d \n",depth, tokenNb);
 	if ((depth > 0) && (tokenNb>0)) {
-		printf("player %d ",player);
+		//printf("player %d ",player);
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
 
@@ -130,7 +130,6 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				//printf("param depth %d, player %d \n",depth-1,3-player);
 				//printf("0000");
 				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
-
 				//printf("1111");
 				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH
 				(dad->nbofSons)++; //incremente the son number accordingly
@@ -166,6 +165,10 @@ Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
 	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*18);//there are at utter most 18 friendly tokens
+	for (i=0; i<18; i++) { //filling tab
+		tab[i].x=-1;
+		tab[i].y=-1;
+	}
 	int k;
 	k = 0; //cursor of tab
 	for (i=0; i<9; i++) {
@@ -178,7 +181,7 @@ Coordinates* friendlyToken(Game* g, int player) {
 			}
 		}
 	}
-	//printTab(tab, 18);
+	printTab(tab, 18);
 	return tab;
 }
 
