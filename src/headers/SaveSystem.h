@@ -1,4 +1,4 @@
-#include "./headers/SaveSystem.h"
+#include "./Types.h"
 
 /*
 	Create a .txt save the name given
@@ -13,7 +13,7 @@ void createSave(char* name, Game* g);
 	- The current player
 	- The play (a couple of coordonates)
 	- The opponent's token who was catched
-	
+
 	The arguments "x" and "y" are respectively the initial and the final location of the moving token
 	The argument tab correspond to a "checkCatch" call
 */
@@ -33,10 +33,9 @@ int playPlayed(char* name, int n);
 /*
 	Return the play of the input (only works if the string is a play)
 */
-coordinates* analysePlay(char* input);
+Coordinates* analysePlay(char* input);
 
 /*
 	Return a Game* ; We will create a new game using it
 */
 Game* loadSave(char* name);
-

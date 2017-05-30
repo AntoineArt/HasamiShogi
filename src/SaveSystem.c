@@ -1,7 +1,7 @@
 #include  <stdio.h>
 #include <string.h>
 #include <math.h>
-#include "./headers/Types.h"
+#include "./headers/SaveSystem.h"
 
 void createSave(char* name, Game* g){
 
@@ -52,17 +52,17 @@ int readSave(char* name, int n){
 
     FILE* fichier = NULL;
     char chaine[1000] = "";
- 
+
     fichier = fopen("destination.txt", "r");
     int i = 0;
- 
+
     if (fichier != NULL)
     {
         while ((fgets(chaine, TAILLE_MAX, fichier) != NULL)&&(i<n)) // The file is read while fgets doesn't return an error (NULL)
         {
             i++;
         }
- 
+
         fclose(fichier);
     }
 
@@ -74,10 +74,10 @@ int playPlayed(char* name, int n){
 	return analysePlay(string);
 }
 
-coordinates* analysePlay(char* input){
+Coordinates* analysePlay(char* input){
 
 	int count=0; // used to count the number of "/"
-	int count2=0; // used to fill the coordinates datas
+	int count2=0; // used to fill the Coordinates datas
 	Coordinates *tab;
 	tab = (Coordinates*) malloc(sizeof(Coordinates)*(???)); // DETERMINER TAILLE POUR LE PLAY PLUS LES PIECES PRISES
 	//why not use updatedCases from App.c:182 for writing
@@ -105,7 +105,7 @@ coordinates* analysePlay(char* input){
 	}
 
 	return tab;
-	
+
 }
 
 Game* loadSave(char* name){
@@ -115,9 +115,9 @@ Game* loadSave(char* name){
 	FILE* fichier = NULL;
     	char chaine[1000] = "";
     	fichier = fopen(name, "r");
- 
+
 	fgets(chaine, TAILLE_MAX, fichier); // Is used for the first lign
-	
+
 	//S'EN SERVIR POUR LES OPTIONS :
 	//game->gameMode
 	//game->var
@@ -128,7 +128,7 @@ Game* loadSave(char* name){
 	resetBoard(game); // it initialise the board
 	int i = 0;
 	while (
-	
+
 	//FOR I IN RANGE LE RESTE DES PLAYS
 		//RECUPERER LE PLAY A L'AIDE DES FONCTIONS PRECEDENTES
 		//UTILISER LA FONCTION WRITE DE RULES POUR ECRIRE DIRECTEMENT SUR LE BOARD (PAS LA PEINE DE VERIFIER)
