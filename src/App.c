@@ -134,7 +134,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Color textColor){
 	SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED,
-	(BOARD_WIDTH + PREVIOUS_BUTTON_WIDTH)*SCALE_FACTOR,
+	(BOARD_WIDTH + ORANGE_BUTTON_WIDTH)*SCALE_FACTOR,
 	BOARD_HEIGTH*SCALE_FACTOR,
 	0.);
 
@@ -146,16 +146,26 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	// Menu display
 	updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
 	setupBoard(g, pWinGame);
- 
+
 	src = SDL_LoadBMP("./resources/images/orangeButton.bmp");
-	SDL_Surface* pButton = SDL_CreateRGBSurface(0, PREVIOUS_BUTTON_WIDTH*SCALE_FACTOR, PREVIOUS_BUTTON_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_Surface* pButton = SDL_CreateRGBSurface(0, ORANGE_BUTTON_WIDTH*SCALE_FACTOR, ORANGE_BUTTON_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pButton, NULL, SDL_MapRGB(pButton->format, 0, 0, 0));
 	SDL_BlitScaled(src, NULL, pButton, NULL);
-	updateWindow(BOARD_WIDTH*SCALE_FACTOR, SCALE_FACTOR*(BOARD_HEIGTH - PREVIOUS_BUTTON_HEIGTH)/2, pWinGame, pButton); //Positioning the button
+	updateWindow(BOARD_WIDTH*SCALE_FACTOR, SCALE_FACTOR*BOARD_HEIGTH/2 - ORANGE_BUTTON_HEIGTH, pWinGame, pButton); //Positioning the button
+	updateWindow(BOARD_WIDTH*SCALE_FACTOR, SCALE_FACTOR*BOARD_HEIGTH/2 + ORANGE_BUTTON_HEIGTH, pWinGame, pButton); //Positioning the button
+
 	SDL_Surface* buttonText = TTF_RenderText_Blended(police, texts[param.lang].inGame[1], textColor);
 	int buttonX = SCALE_FACTOR*(BOARD_WIDTH+(pButton->w-buttonText->w)/2);
-	int buttonY = SCALE_FACTOR*(BOARD_HEIGTH - buttonText->h)/2;
+	int buttonY = SCALE_FACTOR*BOARD_HEIGTH/2 - ORANGE_BUTTON_HEIGTH + buttonText->h/2;
+
 	updateWindow(buttonX,	buttonY, pWinGame, buttonText); //Centering the text in the middle of the button
+
+	buttonX = SCALE_FACTOR*(BOARD_WIDTH+(pButton->w-buttonText->w)/2);
+	buttonY = SCALE_FACTOR*BOARD_HEIGTH/2 - ORANGE_BUTTON_HEIGTH + buttonText->h/2;
+
+	buttonText = TTF_RenderText_Blended(police, texts[param.lang].inGame[0], textColor);
+	updateWindow(buttonX,	buttonY+2*ORANGE_BUTTON_HEIGTH, pWinGame, buttonText); //Centering the text in the middle of the button
+
 	SDL_FreeSurface(src);
 	src = SDL_LoadBMP("./resources/images/BlackPiece.bmp");
 	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
@@ -176,6 +186,9 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_FillRect(pYellow, NULL, SDL_MapRGB(pYellow->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pYellow, NULL);
 	SDL_FreeSurface(src);
+
+	createSave("sauvegarde yolo", g);
+
 
 	//victory contains the player who won this turn (0 if none of them, 3 if both loosed)
 	int victory = 0;
@@ -246,7 +259,7 @@ void parametersMenu(SDL_Window* pWindow, TTF_Font* police, Texts* texts, Paramet
 
 	// Menu display
 	updateWindow(0, 0, pWinParam, pBackgroundParameters); // BackgroundMenu display
-	SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=previous;
+	SDL_Surface *textsParameters[6]; //0=*french, 1=*english, 2=*fullscreen, 3=*sound, 4=*texturePack, 5=ORANGE;
 	SDL_Color textColor ;
 	textColor.r = 255;
 	textColor.g = 255;
@@ -440,7 +453,7 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 						int xM = event.button.x;
 						int yM = event.button.y;
 						if(isIn(xM, yM, buttonX, buttonY, buttonW, buttonH)){
-							c1.x = 100; c1.y = 100; c2.x = 100; c2.y = 100;				//todo : Réussir à court-circuiter l'analyse de clic pour lancer le previous
+							c1.x = 100; c1.y = 100; c2.x = 100; c2.y = 100;				//todo : Réussir à court-circuiter l'analyse de clic pour lancer le ORANGE
 						}
 						/*
 						//things like this could work more efficiently
