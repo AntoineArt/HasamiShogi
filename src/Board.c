@@ -110,7 +110,7 @@ Coordinates* showPossible(Game *g, Coordinates c1, int player)
 			left++;
 		}
 	}
-	printf(" %d : %d | %d ; %d ; %d ; %d \n",c1.x, c1.y, up, right, down, left);
+	//printf(" %d : %d | %d ; %d ; %d ; %d \n",c1.x, c1.y, up, right, down, left);
 	return createTable(g, c1, up, right, down, left, 0);
 }
 

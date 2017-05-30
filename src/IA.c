@@ -5,8 +5,8 @@ Coordinates* aiPlay(Game *g) {
 	int depth = 1; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
 	initNode(root);
-	double ninf=-INFINITY;
-	double pinf=INFINITY;
+	int ninf=-1000000;
+	int pinf=1000000;
 	Coordinates c1;
 	Coordinates c2;
 	c1.x=-1;
@@ -15,7 +15,7 @@ Coordinates* aiPlay(Game *g) {
 	c2.y=-1;
 	while (!(checkMove(g, c1, c2, g->currentPlayer) == 1)) { //useless by construction but still safer
 		buildTree(g, depth, root, g->currentPlayer);
-		double bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
+		int bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
 		int i;
 		for (i=0; i<(root->nbofSons)-1; i++) {//finding the selected move between the available one
 			if (((root->sons[i])->value)==bestmove) {
@@ -26,7 +26,7 @@ Coordinates* aiPlay(Game *g) {
 				//break; //not usefull to go further
 			}
 		}
-		printf("%d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y,bestmove);
+		//printf("%d : %d -> %d : %d with value %d \n",c1.x,c1.y,c2.x,c2.y,bestmove);
 	}
 	Coordinates *tab;
 	movePiece(g, c1, c2); //the move is safe by construction
@@ -49,17 +49,17 @@ Coordinates* aiPlay(Game *g) {
 }
 
 
-double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { //a<b
+int alphabeta(Game *g, Tree *P, int depth, int a, int b, int player) { //a<b
 	//printf("param depth %d, a %lf, b %lf \n",depth,a,b);
 	if ((depth<=0) || (P->nbofSons<=0)) //means P is a leave or is forced to be one by depth
 	{
 		//printf("leaf value %lf \n",P->value);
 		return P->value; //returning value of leave
 	} else if (g->currentPlayer==player) {//ai play (max)
-		double max = -INFINITY;
+		int max = -1000000;
 		int i;
 		for (i=0; i<(P->nbofSons)-1; i++) {
-			double val;
+			int val;
 			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
 			max = (max < val) ? val : max; //max= max(val, max)
 			a = (a < val) ? val : a ; //α = max(α, v)
@@ -78,10 +78,10 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { 
 		*/
 		return max; //continuing the recursive search
 	} else { //opponant play (min)
-		double min = +INFINITY;
+		int min = 1000000;
 		int i;
 		for (i=0; i<(P->nbofSons)-1; i++) {
-			double val;
+			int val;
 			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
 			min = (min > val) ? val : min; //min = min(min,val)
 			b = (b > val) ? val : b ; //β := min(β, v)
@@ -113,9 +113,8 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 		//printf("tknb %d \n",tokenNb);
 		int i;
 		for (i=1; i<friendlyTokenTab[0].x; i++) { //always at least 1 token else defeat should have happenned
-			printf("%d \n",depth);
 			Coordinates c1 = friendlyTokenTab[i];
-			printf("c1 %d :%d \n",c1.x,c1.y);
+			//printf("c1 %d :%d \n",c1.x,c1.y);
 			Coordinates* moves = showPossible(g, c1, player); //available moves
 			//printf("4444 %d \n",moves[0].x);
 			int j;
@@ -136,6 +135,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				//recursive call
 				//printf("param depth %d, player %d \n",depth-1,3-player);
 				//printf("0000");
+				printf("%d \n",depth);
 				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
 				//printf("1111");
 				(dad->nbofSons)++; //incremente the son number accordingly
