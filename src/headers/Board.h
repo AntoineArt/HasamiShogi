@@ -19,11 +19,15 @@ void movePiece(Game *g, Coordinates c1, Coordinates c2);
 void catchPiece(Game *g, Coordinates *tab);
 
 /*
+	Reverse catchPiece
+*/
+void releasePiece(Game *g, Coordinates *tab, int player);
+
+/*
 	Update the board with the player's move from c1 to c2 including catching pieces.
 	return a coordinates* tab that contains is own length, c1, c2 and the eventual list of caught piece.
 	includes checkMovement
 */
-
 int checkMove(Game *g, Coordinates c1, Coordinates c2, int player);
 
 

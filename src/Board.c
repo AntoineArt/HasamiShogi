@@ -25,6 +25,14 @@ void catchPiece(Game *g, Coordinates *tab)
 		}
 }
 
+void releasePiece(Game *g, Coordinates *tab, int player)
+{
+	int i;
+	for (i = 1; i<tab[0].x; i++) {
+		write(g,player,tab[i]);
+	}
+}
+
 int checkMove(Game *g, Coordinates c1, Coordinates c2, int player)
 {
 	if (!(c1.x>=0 && c1.x<=8 && c1.y>=0 && c1.y<=8))
@@ -55,11 +63,11 @@ int checkMove(Game *g, Coordinates c1, Coordinates c2, int player)
 Coordinates* showPossible(Game *g, Coordinates c1, int player)
 {
 	//We identifie the number of available case in each direction
-	int i=0; int up=0; int right=0; int down=0; int left=0;
+	int i; 
 	Coordinates c2;
-	c2.x=-1;
-	c2.y=-1;
+	
 	//Up
+	int up = 0;   
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.y)-i >= 0 ; i++)
@@ -67,9 +75,10 @@ Coordinates* showPossible(Game *g, Coordinates c1, int player)
 		c2.y = (c1.y)-i;
 		if (checkMove(g,c1,c2,player)==1) {
 			up++;
-		} else {break;}
+		}
 	}
 	//Right
+	int right = 0;
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.x)+i <= 8 ; i++)
@@ -77,9 +86,10 @@ Coordinates* showPossible(Game *g, Coordinates c1, int player)
 		c2.x = (c1.x)+i;
 		if (checkMove(g,c1,c2,player)==1) {
 			right++;
-		} else {break;}
+		}
 	}
 	//Down
+	int down=0;
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.y)+i <= 8 ; i++)
@@ -87,20 +97,20 @@ Coordinates* showPossible(Game *g, Coordinates c1, int player)
 		c2.y = (c1.y)+i;
 		if (checkMove(g,c1,c2,player)==1) {
 			down++;
-		} else {break;}
+		}
 	}
 	//Left
+	int left = 0;
 	c2.x = c1.x;
 	c2.y = c1.y;
 	for(i=1 ; (c1.x)-i >= 0 ; i++)
 	{
 		c2.x = (c1.x)-i;
-		//printf("%d : %d -> %d : %d | %d \n",c1.x, c1.y, c2.x , c2.y , i);
 		if (checkMove(g,c1,c2,player)==1) {
 			left++;
-		} else {break;}
+		}
 	}
-	//printf(" %d : %d | %d ; %d ; %d ; %d \n",c1.x, c1.y, up, right, down, left);
+	printf(" %d : %d | %d ; %d ; %d ; %d \n",c1.x, c1.y, up, right, down, left);
 	return createTable(g, c1, up, right, down, left, 0);
 }
 

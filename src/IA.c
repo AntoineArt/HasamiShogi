@@ -2,7 +2,7 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 5; //warning depth 0 create infinite loop
+	int depth = 1; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
 	initNode(root);
 	double ninf=-INFINITY;
@@ -13,15 +13,17 @@ Coordinates* aiPlay(Game *g) {
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
-	while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
+	while (!(checkMove(g, c1, c2, g->currentPlayer) == 1)) { //useless by construction but still safer
 		buildTree(g, depth, root, g->currentPlayer);
 		double bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
 		int i;
-		for (i=0; i<(root->nbofSons); i++) {//finding the selected move between the available one
+		for (i=0; i<(root->nbofSons)-1; i++) {//finding the selected move between the available one
 			if (((root->sons[i])->value)==bestmove) {
-				c1 = (((root->sons)[i])->c1);
-				c2 = (((root->sons)[i])->c2);
-				break; //not usefull to go further
+				c1.x = (((root->sons)[i])->c1.x);
+				c1.y = (((root->sons)[i])->c1.y);
+				c2.x = (((root->sons)[i])->c2.x);
+				c2.y = (((root->sons)[i])->c2.y);
+				//break; //not usefull to go further
 			}
 		}
 		printf("%d : %d -> %d : %d with value %lf \n",c1.x,c1.y,c2.x,c2.y,bestmove);
@@ -56,7 +58,7 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { 
 	} else if (g->currentPlayer==player) {//ai play (max)
 		double max = -INFINITY;
 		int i;
-		for (i=0; i<(P->nbofSons); i++) {
+		for (i=0; i<(P->nbofSons)-1; i++) {
 			double val;
 			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
 			max = (max < val) ? val : max; //max= max(val, max)
@@ -78,7 +80,7 @@ double alphabeta(Game *g, Tree *P, int depth, double a, double b, int player) { 
 	} else { //opponant play (min)
 		double min = +INFINITY;
 		int i;
-		for (i=0; i<(P->nbofSons); i++) {
+		for (i=0; i<(P->nbofSons)-1; i++) {
 			double val;
 			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
 			min = (min > val) ? val : min; //min = min(min,val)
@@ -108,13 +110,12 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 		//printf("player %d ",player);
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
-
 		//printf("tknb %d \n",tokenNb);
-
 		int i;
-		for (i=0; i<tokenNb; i++) { //always at least 1 token else defeat should have happenned
+		for (i=1; i<friendlyTokenTab[0].x; i++) { //always at least 1 token else defeat should have happenned
+			printf("%d \n",depth);
 			Coordinates c1 = friendlyTokenTab[i];
-			//printf("c1 %d :%d \n",c1.x,c1.y);
+			printf("c1 %d :%d \n",c1.x,c1.y);
 			Coordinates* moves = showPossible(g, c1, player); //available moves
 			//printf("4444 %d \n",moves[0].x);
 			int j;
@@ -124,16 +125,25 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				(dad->sons[dad->nbofSons])->value = 0 ; //is overwritten by alpha beta
 				(dad->sons[dad->nbofSons])->c1 = c1;
 				(dad->sons[dad->nbofSons])->c2 = moves[j];
+				
+				//doing the play
 				movePiece(g, c1, moves[j]);
+				Coordinates *tabCatch;
+				tabCatch = checkCatch(g, moves[j]); //the tab of to be caught token
+				catchPiece(g,tabCatch);
+				
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
 				//recursive call
 				//printf("param depth %d, player %d \n",depth-1,3-player);
 				//printf("0000");
 				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
 				//printf("1111");
-				//RECURSION DOES NOT WORK AS EXPECTED : ONLY LAUNCH ONCE INSTEAD OF DEPTH
 				(dad->nbofSons)++; //incremente the son number accordingly
+				
+				//reverting the play
 				movePiece(g, moves[j], c1);
+				releasePiece(g,tabCatch,player);
+				
 			}
 			free(moves);
 		}
@@ -164,25 +174,26 @@ void freeTree(Tree *t) {
 Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
-	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*18);//there are at utter most 18 friendly tokens
-	for (i=0; i<18; i++) { //filling tab
+	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*19);//there are at utter most 18 friendly tokens
+	for (i=0; i<19; i++) { //filling tab
 		tab[i].x=-1;
 		tab[i].y=-1;
 	}
 	int k;
-	k = 0; //cursor of tab
+	k = 1; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
 			if (g->map[i][j]==player) {
 				tab[k].x = i;
 				tab[k].y = j;
 				k++;
-				printf("%d : %d | %d \n",i,j,k);
+				//printf("%d : %d | %d \n",i,j,k);
 			}
 			
 		}
 	}
-	printTab(tab, 18);
+	tab[0].x=k;
+	//printTab(tab, 18);
 	return tab;
 }
 
@@ -201,7 +212,7 @@ double evaluate(Game *g, int player) {
 	res = res - 10 * nbofLigns(g, 3-player); 
 	
 	//return the value
-	printf("res val : %lf \n",res);
+	//printf("res val : %lf \n",res);
 	return res;
 }
 
