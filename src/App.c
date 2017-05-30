@@ -146,7 +146,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	// Menu display
 	updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
 	setupBoard(g, pWinGame);
-
+ 
 	src = SDL_LoadBMP("./resources/images/orangeButton.bmp");
 	SDL_Surface* pButton = SDL_CreateRGBSurface(0, PREVIOUS_BUTTON_WIDTH*SCALE_FACTOR, PREVIOUS_BUTTON_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pButton, NULL, SDL_MapRGB(pButton->format, 0, 0, 0));
