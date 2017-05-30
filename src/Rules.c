@@ -272,10 +272,10 @@ Coordinates* createTable(Game *g, Coordinates c, int up, int right, int down, in
 	int tot = up + right + down + left;
 	Coordinates *tab;
 	tab = (Coordinates*) malloc(sizeof(Coordinates)*(tot+1));
-	
+
 	tab[0].x =  tot+1;
 	tab[0].y = -1;
-	
+
 	int i;
 
 	//Up
@@ -461,4 +461,4 @@ void printTab(Coordinates* t, int len) {
 		printf(" %d : %d | ",t[i].x ,t[i].y);
 	}
 	printf("\n");
-} 
+}

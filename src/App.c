@@ -146,15 +146,15 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	// Menu display
 	updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
 	setupBoard(g, pWinGame);
-
+ 
 	src = SDL_LoadBMP("./resources/images/orangeButton.bmp");
 	SDL_Surface* pButton = SDL_CreateRGBSurface(0, PREVIOUS_BUTTON_WIDTH*SCALE_FACTOR, PREVIOUS_BUTTON_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pButton, NULL, SDL_MapRGB(pButton->format, 0, 0, 0));
 	SDL_BlitScaled(src, NULL, pButton, NULL);
-	updateWindow(BOARD_WIDTH, (BOARD_HEIGTH*SCALE_FACTOR - PREVIOUS_BUTTON_HEIGTH)/2, pWinGame, pButton); //Positioning the button
+	updateWindow(BOARD_WIDTH*SCALE_FACTOR, SCALE_FACTOR*(BOARD_HEIGTH - PREVIOUS_BUTTON_HEIGTH)/2, pWinGame, pButton); //Positioning the button
 	SDL_Surface* buttonText = TTF_RenderText_Blended(police, texts[param.lang].inGame[1], textColor);
-	int buttonX = BOARD_WIDTH+(pButton->w-buttonText->w)/2;
-	int buttonY = ((BOARD_HEIGTH)*SCALE_FACTOR - buttonText->h)/2;
+	int buttonX = SCALE_FACTOR*(BOARD_WIDTH+(pButton->w-buttonText->w)/2);
+	int buttonY = SCALE_FACTOR*(BOARD_HEIGTH - buttonText->h)/2;
 	updateWindow(buttonX,	buttonY, pWinGame, buttonText); //Centering the text in the middle of the button
 	SDL_FreeSurface(src);
 	src = SDL_LoadBMP("./resources/images/BlackPiece.bmp");
@@ -450,7 +450,7 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 						else{
 							for(int i=0; i<9; i++){
 								for(int j=0; j<9; j++){
-									if(isIn(xM, yM, (DECAY_PIECES + 67 + i*(115+5))*SCALE_FACTOR, (68+8 + j*131)*SCALE_FACTOR, 98, 120)){
+									if(isIn(xM, yM, (DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR, (68+8 + j*(131+4))*SCALE_FACTOR, 98, 120)){
 										c.x = i ; c.y = j;
 									}
 								}
