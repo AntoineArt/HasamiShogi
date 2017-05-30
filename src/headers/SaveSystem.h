@@ -2,7 +2,7 @@
 
 /*
 	Create a .txt save the name given
-	The first line is reserved for the game presets
+	The first line is reserved for the game presets gameMode and var (variant of the game)
 */
 void createSave(char* name, Game* g);
 
@@ -10,32 +10,34 @@ void createSave(char* name, Game* g);
 	It will be used after each valid turn.
 	At each line, it will write the following informations in this order :
 	- The number of the turn
-	- The current player
-	- The play (a couple of coordonates)
-	- The opponent's token who was catched
-
-	The arguments "x" and "y" are respectively the initial and the final location of the moving token
-	The argument tab correspond to a "checkCatch" call
+	- The play piece c1 goes to c2
+	- An array with coordinates of caught token during the turn
 */
-void addToSave(char* name, Game* g, Coordinates x, Coordinates y, Coordinates* tab);
+void addToSave(char* name, Coordinates c1, Coordinates c2, Coordinates* takenPiecesTab, int turn);
 
 /*
 	It return an char* who store the line number n of the file
 */
-int readSave(char* name, int n);
+int loadSafe(Game* g, char* name);
 
 /*
 	return the play number n
 	WARNING : allocate memory
 */
-int playPlayed(char* name, int n);
+//int playPlayed(char* name, int n);
 
 /*
 	Return the play of the input (only works if the string is a play)
 */
-Coordinates* analysePlay(char* input);
+//Coordinates* analysePlay(char* input);
 
 /*
 	Return a Game* ; We will create a new game using it
 */
-Game* loadSave(char* name);
+//Game* loadSave(char* name);
+
+/*
+	return int corresponding to a[] value
+	copied from http://www.programmingsimplified.com/c/source-code/c-program-convert-string-to-integer-without-using-atoi-function
+*/
+int strToInt(char a[]);
