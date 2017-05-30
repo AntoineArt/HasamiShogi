@@ -2,7 +2,7 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 1; //warning depth 0 create infinite loop
+	int depth = 4; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
 	initNode(root);
 	int ninf=-1000000;
@@ -23,7 +23,7 @@ Coordinates* aiPlay(Game *g) {
 				c1.y = (((root->sons)[i])->c1.y);
 				c2.x = (((root->sons)[i])->c2.x);
 				c2.y = (((root->sons)[i])->c2.y);
-				//break; //not usefull to go further
+				break; //not usefull to go further
 			}
 		}
 		//printf("%d : %d -> %d : %d with value %d \n",c1.x,c1.y,c2.x,c2.y,bestmove);

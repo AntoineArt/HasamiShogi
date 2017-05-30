@@ -144,7 +144,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_BlitScaled(src, NULL, pBackgroundGame, NULL);
 	SDL_FreeSurface(src);
 	// Menu display
-	updateWindow(DECAY_PIECES, 0, pWinGame, pBackgroundGame);
+	updateWindow(0, 0, pWinGame, pBackgroundGame);
 	setupBoard(g, pWinGame);
 
 	src = SDL_LoadBMP("./resources/images/orangeButton.bmp");
@@ -213,9 +213,9 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 			for(i=1; i<updatedCases[0].x; i++) {
 				if (i==2)
 				{
-					updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR, (68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR, pWinGame, pToken);
+					updateWindow((DECAY_PIECES + OUTBORDER + updatedCases[i].x*(CASE_WIDTH + INBORDER))*SCALE_FACTOR, (DECAY_PIECES + OUTBORDER + updatedCases[i].y*(CASE_HEIGTH + INBORDER))*SCALE_FACTOR, pWinGame, pToken);
 				} else {
-					updateWindow((DECAY_PIECES + 68 + 8 + updatedCases[i].x*(115+4))*SCALE_FACTOR, (68+8 + updatedCases[i].y*(131+4))*SCALE_FACTOR, pWinGame, pYellow);
+					updateWindow((DECAY_PIECES + OUTBORDER + updatedCases[i].x*(CASE_WIDTH + INBORDER))*SCALE_FACTOR, (DECAY_PIECES + OUTBORDER + updatedCases[i].y*(CASE_HEIGTH + INBORDER))*SCALE_FACTOR, pWinGame, pYellow);
 				}
 			}
 			victory = checkVictory(g, updatedCases[2]);
@@ -355,11 +355,11 @@ void setupBoard(Game *g, SDL_Window* pWindow){
 
 	for(int i = 0; i<9; i++){
 		for(int j = 0; j<(g->var)+1; j++){
-			updateWindow((DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR,
-									(68+8 + j*(131+4))*SCALE_FACTOR,
+			updateWindow((DECAY_PIECES + OUTBORDER + i*(CASE_WIDTH + INBORDER ))*SCALE_FACTOR,
+									(DECAY_PIECES + OUTBORDER + j*(CASE_HEIGTH + INBORDER))*SCALE_FACTOR,
 									pWindow, p1st);  //Positioning red token
-			updateWindow((DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR,
-									(68+8 + 8 * (131+4) - j*(131+4))*SCALE_FACTOR,
+			updateWindow((DECAY_PIECES + OUTBORDER + i*(CASE_WIDTH + INBORDER))*SCALE_FACTOR,
+									(DECAY_PIECES + OUTBORDER + 8 * (CASE_HEIGTH + INBORDER) - j*(CASE_HEIGTH + INBORDER))*SCALE_FACTOR,
 									pWindow, p2nd);  //Positioning black token
 		}
 	}
@@ -463,7 +463,7 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 						else{
 							for(int i=0; i<9; i++){
 								for(int j=0; j<9; j++){
-									if(isIn(xM, yM, (DECAY_PIECES + 68 + 8 + i*(115+4))*SCALE_FACTOR, (68+8 + j*(131+4))*SCALE_FACTOR, 98, 120)){
+									if(isIn(xM, yM, (DECAY_PIECES + OUTBORDER + i*(CASE_WIDTH + INBORDER))*SCALE_FACTOR, (DECAY_PIECES + OUTBORDER + j*(CASE_HEIGTH + INBORDER))*SCALE_FACTOR, PIECE_WIDTH, PIECE_HEIGTH)){
 										c.x = i ; c.y = j;
 									}
 								}
@@ -477,7 +477,6 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 				if(c.x==c1.x && c.y==c1.y){ //player clicked twice on the same token
 					c1.x=-1; c1.y=-1;
 					depth=0;
-					printf("yolo\n");
 					hidePossibilities(g, pWindow, tmpArray);
 				}
 				if ((depth==1) && (g->map[c.x][c.y]==0) ){//means destination is empty
@@ -489,8 +488,8 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 					c1.x = c.x ; c1.y = c.y ; depth=1;
 					tmpArray = showPossible(g, c1, g->currentPlayer);
 					displayPossibilities(g, pWindow, tmpArray);
-					//todo display available mouvement and catchs
-					//printf("first clic %d : %d \n",c1.x, c1.y);
+					
+					printf("first clic %d : %d \n",c1.x, c1.y);
 				}
 			}
 			c.x=-1; c.y=-1;
@@ -504,6 +503,8 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 	Coordinates *tabCatch;
 	tabCatch = checkCatch(g, c2); //the tab of to be caught token
 	catchPiece(g,tabCatch);
+	
+	//here comes the save
 
 	//creating the returned tab for graphical
 	Coordinates *tab;
@@ -524,11 +525,11 @@ void displayPossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord){
 	int n = coord[0].x;
 	for(int i = 1; i<n; i++){
 		SDL_Surface* src = SDL_LoadBMP("./resources/images/Green.bmp");
-		SDL_Surface* pGreenCase = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+		SDL_Surface* pGreenCase = SDL_CreateRGBSurface(0, CASE_WIDTH*SCALE_FACTOR, CASE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 		SDL_FillRect(pGreenCase, NULL, SDL_MapRGB(pGreenCase->format, 255, 0, 0));
 		SDL_BlitScaled(src, NULL, pGreenCase, NULL);
 		SDL_FreeSurface(src);
-		updateWindow((DECAY_PIECES + 68 + 8 + coord[i].x*(115+4))*SCALE_FACTOR,(68+8 + coord[i].y*(131+4))*SCALE_FACTOR, pWindow, pGreenCase);
+		updateWindow((DECAY_PIECES  + coord[i].x*(CASE_WIDTH + INBORDER))*SCALE_FACTOR,(DECAY_PIECES + INBORDER + coord[i].y*(CASE_HEIGTH + INBORDER))*SCALE_FACTOR, pWindow, pGreenCase);
 	}
 }
 
@@ -536,11 +537,11 @@ void hidePossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord){
 	int n = coord[0].x;
 	for(int i = 1; i<n; i++){
 		SDL_Surface* src = SDL_LoadBMP("./resources/images/Yellow.bmp");
-		SDL_Surface* pYellowCase = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
+		SDL_Surface* pYellowCase = SDL_CreateRGBSurface(0, CASE_WIDTH*SCALE_FACTOR, CASE_HEIGTH*SCALE_FACTOR, 32, 0, 0, 0, 0);
 		SDL_FillRect(pYellowCase, NULL, SDL_MapRGB(pYellowCase->format, 255, 0, 0));
 		SDL_BlitScaled(src, NULL, pYellowCase, NULL);
 		SDL_FreeSurface(src);
-		updateWindow((DECAY_PIECES + 68 + 8 + coord[i].x*(115+4))*SCALE_FACTOR,(68+8 + coord[i].y*(131+4))*SCALE_FACTOR, pWindow, pYellowCase);
+		updateWindow((DECAY_PIECES + coord[i].x*(CASE_WIDTH + INBORDER))*SCALE_FACTOR,(DECAY_PIECES  + INBORDER + coord[i].y*(CASE_HEIGTH + INBORDER))*SCALE_FACTOR, pWindow, pYellowCase);
 	}
 }
 
