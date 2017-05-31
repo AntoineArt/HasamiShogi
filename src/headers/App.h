@@ -30,7 +30,7 @@ const int CASE_HEIGHT=131;
 const int PIECE_WIDTH = 98;
 const int PIECE_HEIGHT = 120;
 
-const double SCALE_FACTOR = 0.65;
+const double SCALE_FACTOR = 1;
 
 const int GAME_MODE_DEFAULT = 1; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
@@ -69,12 +69,12 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage);
 /*
   Launches a new game
 */
-void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Color textColor);
+void launchGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Color textColor, int newOrSave);
 
 /*
   Loads an ancient game and launches it
 */
-void continueGame();
+void setupSavedBoard(Game* g, SDL_Window* pWindow);
 
 /*
   Displays the parameters menu
@@ -90,7 +90,7 @@ int eventDetectionParameters(SDL_Window* pWindow, SDL_Surface** texts);
 /*
   Sets up the display for a new game
 */
-void setupBoard(Game *g, SDL_Window *pWindow);
+void setupNewBoard(Game *g, SDL_Window *pWindow);
 
 /*
   Displays the defeat screen

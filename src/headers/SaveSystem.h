@@ -11,10 +11,11 @@ void createSave(char* name, Game* g);
 	It will be used after each valid turn.
 	At each line, it will write the following informations in this order :
 	- The number of the turn
+	- The player id
 	- The play piece c1 goes to c2
 	- An array with coordinates of caught token during the turn
 */
-void addToSave(char* name, Coordinates c1, Coordinates c2, Coordinates* takenPiecesTab, int turn);
+void addToSave(char* name, Coordinates c1, Coordinates c2, Coordinates* takenPiecesTab, int turn, int player);
 
 /*
 	It return an char* who store the line number n of the file

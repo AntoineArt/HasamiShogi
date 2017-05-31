@@ -31,11 +31,11 @@ void createSave(char* name, Game* g){
 	fclose(save);
 }
 
-void addToSave(char* name, Coordinates c1, Coordinates c2, Coordinates* takenPiecesTab, int turn){
+void addToSave(char* name, Coordinates c1, Coordinates c2, Coordinates* takenPiecesTab, int turn, int player){
 	FILE *save;
 	save = fopen(name, "a"); //"a" for "append"
 	if(save){
-		fprintf(save, "%d/%d/%d/%d/%d", turn, c1.x, c1.y, c2.x, c2.y);
+		fprintf(save, "%d/%d/%d/%d/%d/%d/", turn, player, c1.x, c1.y, c2.x, c2.y);
 
 		for(int i=1 ; i<takenPiecesTab[0].x ; i++) //tab[0].x is the total size of the array
 		{
@@ -48,22 +48,31 @@ void addToSave(char* name, Coordinates c1, Coordinates c2, Coordinates* takenPie
 }
 
 void loadSave(Game* g, char* name){
+  FILE* save;
+	save = fopen(name, "r"); //"r" for "read"
+	printf("1");
 
-  FILE* save = fopen(name, "r"); //"r" for "read"
 	if(save){
+		printf("2");
+
 		//Declaration zone
-		const char del = "/";
+		const char *del = "/";
 		int lineSize = 100;
 		char line[lineSize];
-		char* charElt = NULL;
+		char* charElt;
 		int* gvars = malloc(sizeof(int)*lineSize);
 		if (gvars==NULL) {exit(0);}
 		int i;
+
 		//First line get
-		if (fgets(line, lineSize, save)!=NULL) { //this lineSize might be shorter or longer tha others because it is the first and has different purpose
+		printf("truc");
+
+		if (fgets(line, lineSize, save)!=NULL) { //this lineSize might be shorter or longer than others because it is the first and has different purpose
 			i=1;
-			while((charElt = strtok(line, &del)) != NULL){ //not completly sure about the pointer and addresses we're giving, but strsep is not C99 but gnu99 which is affecting the portability
+			charElt = strtok(line, del);
+			while(charElt != NULL){ //not completly sure about the pointer and addresses we're giving, but strsep is not C99 but gnu99 which is affecting the portability
         			gvars[i] = strToInt(charElt);
+							charElt = strtok(line, del);
         			i++;
     			}
     			gvars[0]=i;
@@ -71,41 +80,44 @@ void loadSave(Game* g, char* name){
 			g->var = gvars[2];
 		}
 		free(gvars);
-		
+
 		//Movements get
-		int player;
 		Coordinates c1;
 		Coordinates c2;
 		Coordinates *tabCatch;
+		printf("trucbidule");
+
 		int* elt = malloc(sizeof(int)*lineSize);
 		if (elt==NULL) {exit(0);}
  		while(fgets(line, lineSize, save)!=NULL){
 			i=1;
-			while((charElt = strtok(line, &del)) != NULL){
-        			elt[i] = strToInt(charElt);
-        			i++;
-    			}
-    			elt[0]=i;
-    			player = elt[1];
-    			c1.x = elt[2];
-    			c1.y = elt[3];
-    			c2.x = elt[4];
-    			c2.y = elt[5];
-    			tabCatch = (Coordinates*) malloc(sizeof(Coordinates)*(elt[0]-6)/2); 
+			while((charElt = strtok(line, del)) != NULL){
+        elt[i] = strToInt(charElt);
+        i++;
+			}
+			elt[0]=i;
+			//int player = elt[1];
+			g->currentPlayer = elt[1];
+			c1.x = elt[2];
+			c1.y = elt[3];
+			c2.x = elt[4];
+			c2.y = elt[5];
+			/*tabCatch = (Coordinates*) malloc(sizeof(Coordinates)*(elt[0]-6)/2); //C'est quoi ce elt[0]-6/2 ?
 			if (tabCatch == NULL) {exit(0);} // if alloc failed, immediatly quit
 			int j = 0;
-    			for (i=0; i<elt[0]-6; i=i+2) {
-    				tabCatch[j].x = elt[i+6];
-    				tabCatch[j].y = elt[i+1+6];
-    				j++;
-    			}
-    			movePiece(g, c1, c2);
-    			catchPiece(g, tabCatch);
-    			free(tabCatch);
+			for (i=0; i<elt[0]-6; i=i+2) {
+				tabCatch[j].x = elt[i+6];
+				tabCatch[j].y = elt[i+1+6];
+				j++;
+			}*/
+			tabCatch = checkCatch(g, c2);
+			//free(elt);
+			movePiece(g, c1, c2);
+			catchPiece(g, tabCatch);
+			free(tabCatch);
 		}
 		free(elt);
 	}
-
   fclose(save);
 }
 
