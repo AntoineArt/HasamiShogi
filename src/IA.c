@@ -17,7 +17,7 @@ Coordinates* aiPlay(Game *g) {
 	printf("building tree for %d...",g->currentPlayer);
 	buildTree(g, depth, root, g->currentPlayer);
 	printf("done \n");
-	printBoard(g);
+	//printBoard(g);
 	while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
 		//printf("selecting best move ...");
 		int bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
@@ -39,7 +39,7 @@ Coordinates* aiPlay(Game *g) {
 	movePiece(g, c1, c2); //the move is safe by construction
 	Coordinates *tabCatch;
 	tabCatch = checkCatch(g, c2); //the tab of to be caught token
-	printTab(tabCatch,tabCatch[0].x);
+	//printTab(tabCatch,tabCatch[0].x);
 	catchPiece(g,tabCatch);
 	//here comes the save
 	
@@ -148,18 +148,18 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				(dad->sons[dad->nbofSons])->c2 = moves[j];
 				
 				//doing the play
-				printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
+				//printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
 				movePiece(g, c1, moves[j]);
 				Coordinates *tabCatch;
 				tabCatch = checkCatch(g, moves[j]); //the tab of to be caught token
-				printTab(tabCatch,tabCatch[0].x);
+				//printTab(tabCatch,tabCatch[0].x);
 				catchPiece(g,tabCatch);
 				
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
 				//recursive call
-				printf("--> %d ",depth);
+				//printf("--> %d ",depth);
 				buildTree(g, depth-1, (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
-				printf("<-- %d \n",depth);
+				//printf("<-- %d \n",depth);
 				(dad->nbofSons)++; //incremente the son number accordingly
 				
 				//reverting the play
@@ -194,21 +194,21 @@ void freeTree(Tree *t) {
 Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
-	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*19);//there are at utter most 18 friendly tokens
+	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*36);//there are at utter most 18 friendly tokens
 	if (tab == NULL) {exit(0);} // if alloc failed, immediatly quit
-	int kkk;
-	kkk = 1; //cursor of tab
+	int k;
+	k = 1; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
 			if (g->map[i][j]==player) {
-				tab[kkk].x = i;
-				tab[kkk].y = j;
-				kkk++;
+				tab[k].x = i;
+				tab[k].y = j;
+				k++;
 				//printf("%d",kkk);
 			}
 		}
 	}
-	tab[0].x=kkk;
+	tab[0].x=k;
 	return tab;
 }
 
@@ -223,8 +223,8 @@ double evaluate(Game *g, int player) {
 	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
 
 	//having aligned tokens including victory condition
-	res = res + 10 * nbofLigns(g, player);
-	res = res - 10 * nbofLigns(g, 3-player);
+	res = res + 30 * nbofLigns(g, player);
+	res = res - 30 * nbofLigns(g, 3-player);
 
 	//return the value
 	return res;
