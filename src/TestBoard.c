@@ -14,13 +14,13 @@ int main(void){
 	return 0;
 }
 
-void TestWrite();{
+void TestWrite(){
 
 	Game* g;
-	Coordinates* c;
+	Coordinates c;
 	int TestPassed = 1;
-	c1->x=4;
-	c1->y=4;
+	c.x=4;
+	c.y=4;
 
 	write(g, 0, c);
 	if(g->map[4][4]!=0){TestPassed = 0;}
@@ -38,11 +38,11 @@ void TestMovePiece(){
 	Coordinates c1;
 	Coordinates c2;
 	int TestPassed = 1;
-	c1->x=4;
-	c1->y=4;
-	c2->x=5
-	c2->y=4;
-	g->map[4][4]=1
+	c1.x=4;
+	c1.y=4;
+	c2.x=5;
+	c2.y=4;
+	g->map[4][4]=1;
 
 	movePiece(g, c1, c2);
 	if(g->map[4][4]!=0){TestPassed = 0;}

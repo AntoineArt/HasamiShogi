@@ -82,7 +82,7 @@ void TestResetBoard0(){
 	printf("ResetBoard/var1 = %d",testPassed1);
 }
 
-void TestCheckVictory();
+void TestCheckVictory()
 {
 
 	Game *g0;
@@ -174,11 +174,11 @@ void TestCheckCatch(){
 	Coordinates c;
 	int up; int right; int down; int left;
 	int catching;
-	testPassed = 1;
+	int testPassed = 1;
 
 
 
-	printf("CheckCatch = %d",testPassed1);
+	printf("CheckCatch = %d",testPassed);
 }
 
 void TestCheckMovement(){
