@@ -174,10 +174,11 @@ void TestCheckCatch(){
 	Coordinates c;
 	int up; int right; int down; int left;
 	int catching;
+	testPassed = 1;
 
 
 
-
+	printf("CheckCatch = %d",testPassed1);
 }
 
 void TestCheckMovement(){

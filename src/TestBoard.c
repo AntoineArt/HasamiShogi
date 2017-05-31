@@ -5,13 +5,12 @@
 void TestWrite();
 void TestMovePiece();
 void TestCatchPiece();
-void TestReleasePiece();
 void TestCheckMove();
-void TestShowPossible();
 
 int main(void){
 
-	TestInitGame();
+	TestWrite();
+	TestMovePiece();
 	return 0;
 }
 
@@ -53,15 +52,14 @@ void TestMovePiece(){
 }
 
 void TestCatchPiece(){
-
-
-
-
-
+	//This function execute the catch of a token
+	//It erase the token from the board, and decrease the countPlayer counter
 }
 
 
-
+void TestCheckMove(){
+	//This function just give the checkMovement one more security
+}
 
 
 
