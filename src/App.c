@@ -16,10 +16,12 @@ int main(void){
 	//Language choice
 	Texts* texts;
 	texts = (Texts*) malloc(sizeof(Texts));
+	if (texts == NULL) {exit(0);} // if alloc failed, immediatly quit
 	*texts = frText;
 	// Launching the menu window
 	int mode;
 	Game *g = (Game*) malloc(sizeof(Game));
+	if (g == NULL) {exit(0);} // if alloc failed, immediatly quit
 	initGame(g, GAME_MODE_DEFAULT, VARIANT_DEFAULT);
 
 	SDL_Color textColor ;
@@ -163,6 +165,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	buttonX = SCALE_FACTOR*(BOARD_WIDTH+(pButton->w-buttonText->w)/2);
 	buttonY = SCALE_FACTOR*BOARD_HEIGTH/2 - ORANGE_BUTTON_HEIGTH + buttonText->h/2;
 
+	SDL_FreeSurface(buttonText);
 	buttonText = TTF_RenderText_Blended(police, texts[param.lang].inGame[0], textColor);
 	updateWindow(buttonX,	buttonY+2*ORANGE_BUTTON_HEIGTH, pWinGame, buttonText); //Centering the text in the middle of the button
 
@@ -389,7 +392,12 @@ void defeatDisplay(){//when both loosed
 }
 
 void victoryDisplay(int winner){
-	SDL_Surface* src = SDL_LoadBMP("./resources/images/victory.bmp");
+	SDL_Surface* src;
+	if (winner==1) {
+		src = SDL_LoadBMP("./resources/images/BlackVictory.bmp");
+	} else {
+		src = SDL_LoadBMP("./resources/images/RedVictory.bmp");
+	}
 	SDL_Surface* pVictory = SDL_CreateRGBSurface(0, VICTORY_WIDTH*SCALE_FACTOR, VICTORY_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pVictory, NULL, SDL_MapRGB(pVictory->format, 255, 0, 0));
 	SDL_BlitScaled(src, NULL, pVictory, NULL);
@@ -401,15 +409,7 @@ void victoryDisplay(int winner){
 	VICTORY_HEIGHT*SCALE_FACTOR,
 	0.);
 	updateWindow(0, 0, pWinGame, pVictory);
-
-	SDL_Surface* pName;
-	if (winner==1) {
-		pName = SDL_LoadBMP("./resources/images/J1.bmp");
-	} else {
-		pName = SDL_LoadBMP("./resources/images/J2.bmp");
-	}
-	updateWindow(0, 0, pWinGame, pName); //todo should be aligned
-	SDL_Delay(3000);//waiting for a click ? add button ?
+	SDL_Delay(2000);//waiting for a click ? add button ?
 	SDL_FreeSurface(pVictory);
 	SDL_DestroyWindow(pWinGame);
 }
@@ -443,6 +443,7 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 					if (event.window.event == SDL_WINDOWEVENT_CLOSE){ // Red cross pressed
 						Coordinates *tab;
 						tab = (Coordinates*) malloc(sizeof(Coordinates)*(1));
+						if (tab == NULL) {exit(0);} // if alloc failed, immediatly quit
 						tab[0].y=4;
 						return tab;
 					}
@@ -509,6 +510,7 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 	//creating the returned tab for graphical
 	Coordinates *tab;
 	tab = (Coordinates*) malloc(sizeof(Coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
+	if (tab == NULL) {exit(0);} // if alloc failed, immediatly quit
 	tab[0].x = tabCatch[0].x+2;
 	tab[0].y = 0;
 	tab[1] = c1;

@@ -6,9 +6,11 @@ void initGame(Game *g, int gameMode, int var)
 	g->var = var;
 	g->currentPlayer=1; //means black first
 	g->map = (int **) malloc(sizeof(int*)*9);
+	if (g->map == NULL) {exit(0);} // if alloc failed, immediatly quit
 	int i;
 	for (i=0; i<9; i++) {
 		g->map[i] = (int *) malloc(sizeof(int)*9);
+		if (g->map[i] == NULL) {exit(0);} // if alloc failed, immediatly quit
 		}
 
 	int j;

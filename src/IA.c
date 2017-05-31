@@ -2,9 +2,10 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 4; //warning depth 0 create infinite loop
+	int depth = 2; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
-	initNode(root);
+	if (root == NULL) {exit(0);} // if alloc failed, immediatly quit
+    	initNode(root);
 	int ninf=-1000000;
 	int pinf=1000000;
 	Coordinates c1;
@@ -13,8 +14,8 @@ Coordinates* aiPlay(Game *g) {
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
-	while (!(checkMove(g, c1, c2, g->currentPlayer) == 1)) { //useless by construction but still safer
-		buildTree(g, depth, root, g->currentPlayer);
+	buildTree(g, depth, root, g->currentPlayer);
+	while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
 		int bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
 		int i;
 		for (i=0; i<(root->nbofSons)-1; i++) {//finding the selected move between the available one
@@ -33,8 +34,11 @@ Coordinates* aiPlay(Game *g) {
 	Coordinates *tabCatch;
 	tabCatch = checkCatch(g, c2); //the tab of to be caught token
 	catchPiece(g,tabCatch);
+	//here comes the save
+	
 	//creating the returned tab for graphical update
 	tab = (Coordinates*) malloc(sizeof(Coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
+	if (tab == NULL) {exit(0);} // if alloc failed, immediatly quit
 	tab[0].x = tabCatch[0].x+2;
 	tab[0].y = 0;
 	tab[1] = c1;
@@ -58,16 +62,17 @@ int alphabeta(Game *g, Tree *P, int depth, int a, int b, int player) { //a<b
 	} else if (g->currentPlayer==player) {//ai play (max)
 		int max = -1000000;
 		int i;
-		for (i=0; i<(P->nbofSons)-1; i++) {
+		for (i=0; i<(P->nbofSons); i++) {
 			int val;
-			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
+			//printf("depth %d",depth);
+			val = alphabeta(g, P->sons[i], (depth-1), -b, -a, 3-player);
+			//printf(" depth %d \n",depth);
 			max = (max < val) ? val : max; //max= max(val, max)
 			a = (a < val) ? val : a ; //α = max(α, v)
 			//printf("max %lf, val %lf, a %lf, b %lf \n",max,val,a,b);
-			/*
 			if (b <= a) {
 				break; // β cut-off
-			}*/
+			}
 		}
 		P->value=max; //saving the value
 		/*
@@ -80,16 +85,17 @@ int alphabeta(Game *g, Tree *P, int depth, int a, int b, int player) { //a<b
 	} else { //opponant play (min)
 		int min = 1000000;
 		int i;
-		for (i=0; i<(P->nbofSons)-1; i++) {
+		for (i=0; i<(P->nbofSons); i++) {
 			int val;
+			//printf("depth %d",depth);
 			val = alphabeta(g, P->sons[i], depth-1,-b,-a, 3-player);
+			//printf(" depth %d \n",depth);
 			min = (min > val) ? val : min; //min = min(min,val)
 			b = (b > val) ? val : b ; //β := min(β, v)
 			//printf("min %lf, val %lf, a %lf, b %lf \n",min,val,a,b);
-			/*
 			if (b <= a) {
 				break; // α cut-off
-			}*/
+			}
 		}
 
 		P->value=min; //saving the value
@@ -109,17 +115,20 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 	if ((depth > 0) && (tokenNb>0)) {
 		//printf("player %d ",player);
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
-		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*18);//should handle every possible move (tab of pointer toward Trees) 16*18 possible plays
+		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*friendlyTokenTab[0].x);//should handle every possible move (tab of pointer toward Trees) 16*friendlyTokenTab[0].x possible plays
+		if (dad->sons == NULL) {exit(0);} // if alloc failed, immediatly quit
+		
 		//printf("tknb %d \n",tokenNb);
 		int i;
-		for (i=1; i<friendlyTokenTab[0].x; i++) { //always at least 1 token else defeat should have happenned
+		for (i=1; i<friendlyTokenTab[0].x; i++) {
 			Coordinates c1 = friendlyTokenTab[i];
-			//printf("c1 %d :%d \n",c1.x,c1.y);
+			printf("\n c1 %d :%d \n",c1.x,c1.y);
 			Coordinates* moves = showPossible(g, c1, player); //available moves
-			//printf("4444 %d \n",moves[0].x);
+			printTab(moves,moves[0].x);
 			int j;
 			for (j = 1 ; j<(moves[0].x) ; j++) {
 				dad->sons[dad->nbofSons] = (Tree*) malloc(sizeof(Tree));
+				if (dad->sons[dad->nbofSons] == NULL) {exit(0);} // if alloc failed, immediatly quit
 				initNode(dad->sons[dad->nbofSons]);
 				(dad->sons[dad->nbofSons])->value = 0 ; //is overwritten by alpha beta
 				(dad->sons[dad->nbofSons])->c1 = c1;
@@ -133,30 +142,38 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
 				//recursive call
-				//printf("param depth %d, player %d \n",depth-1,3-player);
-				//printf("0000");
-				printf("%d \n",depth);
-				buildTree(g, (depth-1), (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
-				//printf("1111");
+				printf("--> %d ",depth);
+				buildTree(g, depth-1, (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
+				printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
+				printf("<-- %d \n",depth);
 				(dad->nbofSons)++; //incremente the son number accordingly
 				
 				//reverting the play
-				movePiece(g, moves[j], c1);
 				releasePiece(g,tabCatch,player);
+				movePiece(g, moves[j], c1);
+				free(tabCatch);
 				
 			}
 			free(moves);
 		}
 		free(friendlyTokenTab);
 	} else { //depth is 0 -> dad is forced as a leave
+		printf("depth %d",depth);
 		//do the play
-		//printf("2222");
 		movePiece(g, dad->c1, dad->c2);
+		printf(" c1 %d : %d -> c2 %d : %d \n",dad->c1.x,dad->c1.y,dad->c2.x,dad->c2.y);
+		Coordinates *tabCatch;
+		tabCatch = checkCatch(g, dad->c2); //the tab of to be caught token
+		catchPiece(g,tabCatch);
+				
 		dad->value = evaluate(g, player); //needs to be accurate
 		dad->nbofSons = 0; //means is a leave
 		dad->sons = NULL; //be carefull
+		
 		//reverse the play
+		releasePiece(g,tabCatch,player);
 		movePiece(g, dad->c2, dad->c1); //a ashami shogi play can always be reversed
+		free(tabCatch);
 	}
 }
 
@@ -175,10 +192,7 @@ Coordinates* friendlyToken(Game* g, int player) {
 	int i;
 	int j;
 	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*19);//there are at utter most 18 friendly tokens
-	for (i=0; i<19; i++) { //filling tab
-		tab[i].x=-1;
-		tab[i].y=-1;
-	}
+	if (tab == NULL) {exit(0);} // if alloc failed, immediatly quit
 	int k;
 	k = 1; //cursor of tab
 	for (i=0; i<9; i++) {
@@ -187,12 +201,10 @@ Coordinates* friendlyToken(Game* g, int player) {
 				tab[k].x = i;
 				tab[k].y = j;
 				k++;
-				//printf("%d : %d | %d \n",i,j,k);
 			}
 		}
 	}
 	tab[0].x=k;
-	//printTab(tab, 18);
 	return tab;
 }
 
@@ -211,7 +223,6 @@ double evaluate(Game *g, int player) {
 	res = res - 10 * nbofLigns(g, 3-player);
 
 	//return the value
-	//printf("res val : %lf \n",res);
 	return res;
 }
 
@@ -287,68 +298,6 @@ int nbofLigns(Game* g, int player) {
 	return mem;
 }
 
-
-/*
-double evaluate(Game *g, Coordinates c1, Coordinates c2) {
-	double res;
-	res = 0;
-	if (checkMove(g, c1, c2)!=1) {return -INFINITY;} //means incorrect move
-	//do the play
-	movePiece(g, c1, c2);
-	//attribuate value
-	//victory cases
-	if (checkVictory(g, c2)==(g->currentPlayer)) //currentPlayer is AI player
-	{ res = res + 1000; }
-	else if (checkVictory(g, c2)==(3-(g->currentPlayer))) //means ennemy wins
-	{ res = res - 1000; }
-	else if (checkVictory(g, c2)==3) //means both loosed
-	{
-		int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
-		int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
-		res = res - (100 * (friendTokenNb - ennemyTokenNb)); //ones wants draw if ones has less token
-	}
-	//caugth cases
-	Coordinates* tab = checkCatch(g, c2); //the tab of to-be-caught-by-this-play tokens
-	res = res + (tab[0].x-1) * 100; //-1 because of the false first coordinates
-	free(tab);
-
-	int friendTokenNb = g->currentPlayer==1 ? g->countPlayer1 : g->countPlayer2 ; //nb of tokens of the currentPlayer
-	int ennemyTokenNb = g->currentPlayer==1 ? g->countPlayer2 : g->countPlayer1 ; //nb of tokens of the currentPlayer
-
-	//having more tokens
-	res = res + (100 * (friendTokenNb - ennemyTokenNb)); //ones wants to have more token
-
-
-	//be close to ennemy
-	res = res + (15 * nbofEnnemy(g, c2));
-	//but also close to friends
-	res = res - 20 * nbofFriends(g, c2);
-
-	// X shape is strong
-	res = res + 12 * nbXShape(g, c2);
-
-	// / or \ or | shapes are strong
-	res = res + 45 * nbLignShape(g, c2);
-
-	// _ shape is weak
-	res = res - 30 * nb_Shape(g, c2);
-
-	// xox or (xox)t shapes are strong
-
-	res = res + 5 * nbSShape(g, c2);
-
-	// contact
-	res = res + 3 * nbofEnnemy(g, c2);
-
-	//if protect friends then good
-	//I don't fucking know how to implement this
-
-	//reverse the play
-	movePiece(g, c2, c1); //a ashami shogi play can always be reversed
-	return res;
-
-}
-*/
 void initNode(Tree* t) {
 	Coordinates c;
 	c.x = -1;
@@ -357,117 +306,5 @@ void initNode(Tree* t) {
 	t->c1 = c;
 	t->c2 = c;
 	t->nbofSons = 0;
-}
-
-int nbofFriends(Game *g, Coordinates c) {
-	int n = 0;
-	int i;
-	int j;
-	for (i=-1; i<=1; i++){
-		for (j=-1; j<=1 ;j++) {
-			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+j && c.y+j<=8) { //in the board
-				if (g->map[c.x+i][c.y+j]==g->map[c.x][c.y]) {
-					n++;
-				}
-			}
-		}
-	}
-	return n-1; //because this stupid machine is counting himself
-}
-
-int nbofEnnemy(Game *g, Coordinates c) {
-	int n = 0;
-	int i;
-	int j;
-	for (i=-1; i<=1; i++){
-		for (j=-1; j<=1 ;j++) {
-			//printf(" %d ; %d \n",c.x+i,c.y+j);
-			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+j && c.y+j<=8) { //in the board
-				if (g->map[c.x+i][c.y+j]==(3-(g->map[c.x][c.y]))) {
-					n++;
-				}
-			}
-		}
-	}
-	//printf(" %d :%d Ennemy  %d \n",c.x,c.y, n);
-	return n;
-}
-
-
-int nbXShape(Game *g, Coordinates c) {
-	int n = 0;
-	int i;
-	int j;
-	for (i=-1; i<=1; i=i+2){
-		for (j=-1; j<=1 ;j=j+2) {
-			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+j && c.y+j<=8) { //in the board
-				if (g->map[c.x+i][c.y+j]==g->map[c.x][c.y]) {
-					n++;
-				}
-			}
-		}
-	}
-	return n;
-}
-
-int nb_Shape(Game *g, Coordinates c) {
-	int n = 0;
-	int i;
-	for (i=-1; i<=1; i=i+2){
-		if (0<=c.x+i && c.x+i<=8) { //in the board
-			if (g->map[c.x+i][c.y]==(g->map[c.x][c.y])) {
-				n++;
-			}
-		}
-
-	}
-	return n;
-}
-
-int nbSShape(Game *g, Coordinates c) {
-	int n = 0;
-	int i;
-	for (i=-1; i<=1; i=i+2){
-		if (0<=c.x+i && c.x+i<=8) { //in the board
-			if (g->map[c.x+i][c.y]==(3-(g->map[c.x][c.y]))) {
-				n++;
-			}
-			if (0<=c.y+i && c.y+i<=8) {
-				if (g->map[c.x][c.y+i]==(3-(g->map[c.x][c.y]))) {
-					n++;
-				}
-			}
-			if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) { //in the board
-				if (g->map[c.x+i][c.y+i]==(3-(g->map[c.x][c.y]))) {
-					n++;
-				}
-			}
-
-		}
-	}
-	return n;
-}
-
-int nbLignShape(Game *g, Coordinates c) {
-	int n = 0;
-	int i;
-	for (i=-1; i<=1; i=i+2){
-		if (0<=c.y+i && c.y+i<=8) {
-			if (g->map[c.x][c.y+i]==(g->map[c.x][c.y])) { // | shape
-				n++;
-			}
-		}
-		if (0<=c.x+i && c.x+i<=8 && 0<=c.y+i && c.y+i<=8) {
-			if (g->map[c.x+i][c.y+i]==(g->map[c.x][c.y])) { // \ shape
-				n++;
-			}
-		}
-		if (0<=c.x-i && c.x-i<=8 && 0<=c.y+i && c.y+i<=8) {
-			if (g->map[c.x-i][c.y+i]==(g->map[c.x][c.y])) { // / shape
-				n++;
-			}
-		}
-
-	}
-	return n;
+	t->sons=NULL;
 }
