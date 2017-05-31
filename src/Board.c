@@ -31,6 +31,12 @@ void releasePiece(Game *g, Coordinates *tab, int player)
 	for (i = 1; i<tab[0].x; i++) {
 		write(g,player,tab[i]);
 	}
+	if(player==1){
+		g->countPlayer1 = g->countPlayer1 + tab[0]-1;
+	}
+	else{
+		g->countPlayer2 = g->countPlayer2 + tab[0]-1;
+	}
 }
 
 int checkMove(Game *g, Coordinates c1, Coordinates c2, int player)
@@ -120,7 +126,7 @@ void printBoard(Game *g)
 	for (i=0; i<9; i++) {
 		int j;
 		for (j=0; j<9 ; j++) {
-			printf("| %d |",g->map[i][j]);
+			printf("| %d |",g->map[j][i]);
 		}
 		printf(" \n");
 	}

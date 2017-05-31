@@ -2,7 +2,7 @@
 
 Coordinates* aiPlay(Game *g) {
 	// int difficulty might control depth
-	int depth = 2; //warning depth 0 create infinite loop
+	int depth = 1; //warning depth 0 create infinite loop
 	Tree* root = (Tree*) malloc(sizeof(Tree));
 	if (root == NULL) {exit(0);} // if alloc failed, immediatly quit
     	initNode(root);
@@ -14,12 +14,14 @@ Coordinates* aiPlay(Game *g) {
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
-	printf("building tree ...");
+	printf("building tree for %d...",g->currentPlayer);
 	buildTree(g, depth, root, g->currentPlayer);
 	printf("done \n");
-	//while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
-		printf("selecting best move ...");
+	printBoard(g);
+	while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
+		//printf("selecting best move ...");
 		int bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
+		
 		int n;
 		for (n=0; n<(root->nbofSons)-1; n++) {//finding the selected move between the available one
 			if (((root->sons[n])->value)==bestmove) {
@@ -30,13 +32,14 @@ Coordinates* aiPlay(Game *g) {
 				break; //not usefull to go further
 			}
 		}
-		printf("done \n");
-		printf("%d : %d -> %d : %d with value %d \n",c1.x,c1.y,c2.x,c2.y,bestmove);
-	//}
+		//printf("done \n");
+		//printf("%d : %d -> %d : %d with value %d \n",c1.x,c1.y,c2.x,c2.y,bestmove);
+	}
 	Coordinates *tab;
 	movePiece(g, c1, c2); //the move is safe by construction
 	Coordinates *tabCatch;
 	tabCatch = checkCatch(g, c2); //the tab of to be caught token
+	printTab(tabCatch,tabCatch[0].x);
 	catchPiece(g,tabCatch);
 	//here comes the save
 	
@@ -117,18 +120,24 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 	int tokenNb = (player==1) ? g->countPlayer1 : g->countPlayer2; //depict the friendly token nb to player currently playing in simulation
 	//printf("depth %d ; tokenNb %d \n",depth, tokenNb);
 	if ((depth > 0) && (tokenNb>0)) {
+		//printf("if");
 		//printf("player %d ",player);
 		Coordinates* friendlyTokenTab = friendlyToken(g, player);
 		dad->sons = (Tree**) malloc(sizeof(Tree*)*16*friendlyTokenTab[0].x);//should handle every possible move (tab of pointer toward Trees) 16*friendlyTokenTab[0].x possible plays
 		if (dad->sons == NULL) {exit(0);} // if alloc failed, immediatly quit
-		
+		//printf("plop");
 		//printf("tknb %d \n",tokenNb);
 		int i;
+		//printf("i : %d -> %d",i,friendlyTokenTab[0].x);
 		for (i=1; i<friendlyTokenTab[0].x; i++) {
-			Coordinates c1 = friendlyTokenTab[i];
+			//printf("plip");
+			Coordinates c1;
+			c1.x = friendlyTokenTab[i].x;
+			c1.y = friendlyTokenTab[i].y;
+			//printf("friendlytoken");
 			//printf("\n c1 %d :%d \n",c1.x,c1.y);
 			Coordinates* moves = showPossible(g, c1, player); //available moves
-			printTab(moves,moves[0].x);
+			
 			int j;
 			for (j = 1 ; j<(moves[0].x) ; j++) {
 				dad->sons[dad->nbofSons] = (Tree*) malloc(sizeof(Tree));
@@ -139,16 +148,17 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				(dad->sons[dad->nbofSons])->c2 = moves[j];
 				
 				//doing the play
+				printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
 				movePiece(g, c1, moves[j]);
 				Coordinates *tabCatch;
 				tabCatch = checkCatch(g, moves[j]); //the tab of to be caught token
+				printTab(tabCatch,tabCatch[0].x);
 				catchPiece(g,tabCatch);
 				
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
 				//recursive call
 				printf("--> %d ",depth);
 				buildTree(g, depth-1, (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
-				//printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
 				printf("<-- %d \n",depth);
 				(dad->nbofSons)++; //incremente the son number accordingly
 				
@@ -161,23 +171,12 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 			free(moves);
 		}
 		free(friendlyTokenTab);
-	} else { //depth is 0 -> dad is forced as a leave
-		//printf("depth %d",depth);
-		//do the play
-		movePiece(g, dad->c1, dad->c2);
-		//printf(" c1 %d : %d -> c2 %d : %d \n",dad->c1.x,dad->c1.y,dad->c2.x,dad->c2.y);
-		Coordinates *tabCatch;
-		tabCatch = checkCatch(g, dad->c2); //the tab of to be caught token
-		catchPiece(g,tabCatch);
-				
+	} else { //depth is 0 -> dad is forced as a leave				
 		dad->value = evaluate(g, player); //needs to be accurate
 		dad->nbofSons = 0; //means is a leave
 		dad->sons = NULL; //be carefull
 		
-		//reverse the play
-		releasePiece(g,tabCatch, 3-player);
-		movePiece(g, dad->c2, dad->c1); //a ashami shogi play can always be reversed
-		free(tabCatch);
+		//free(tabCatch);
 	}
 }
 
@@ -197,18 +196,19 @@ Coordinates* friendlyToken(Game* g, int player) {
 	int j;
 	Coordinates* tab = (Coordinates*) malloc(sizeof(Coordinates)*19);//there are at utter most 18 friendly tokens
 	if (tab == NULL) {exit(0);} // if alloc failed, immediatly quit
-	int k;
-	k = 1; //cursor of tab
+	int kkk;
+	kkk = 1; //cursor of tab
 	for (i=0; i<9; i++) {
 		for (j=0; j<9; j++) {
 			if (g->map[i][j]==player) {
-				tab[k].x = i;
-				tab[k].y = j;
-				k++;
+				tab[kkk].x = i;
+				tab[kkk].y = j;
+				kkk++;
+				//printf("%d",kkk);
 			}
 		}
 	}
-	tab[0].x=k;
+	tab[0].x=kkk;
 	return tab;
 }
 
