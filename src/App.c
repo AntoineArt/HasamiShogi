@@ -34,10 +34,10 @@ int main(void){
 	Parameters param = initParameters(LANG_DEFAULT, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
 	switch(mode){
-		case 0: SDL_DestroyWindow(pWindow); newGame(g, param, police, texts, textColor); break;
-		case 1: SDL_DestroyWindow(pWindow); continueGame(); break;
+		case 0: SDL_DestroyWindow(pWindow); launchGame(g, param, police, texts, textColor, 0); break;
+		case 1: SDL_DestroyWindow(pWindow); launchGame(g, param, police, texts, textColor, 1); break;
 		case 2: parametersMenu(pWindow, police, texts, param); break;
-		case 3: //SDL_DestroyWindow(pWindow); 
+		case 3: //SDL_DestroyWindow(pWindow);
 		rules(g, "./resources/Rules.txt",texts, textColor, param); break;
 		case 4: SDL_DestroyWindow(pWindow); break; //quit
 		default : SDL_DestroyWindow(pWindow); break;
@@ -134,7 +134,7 @@ void updateWindow(int x, int y, SDL_Window* pWindow, SDL_Surface* pImage){
 	SDL_FreeSurface(pWinSurf);
 }
 
-void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Color textColor){
+void launchGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Color textColor, int newOrLoad){
 	SDL_Window* pWinGame = SDL_CreateWindow("Hasami Shogi",  SDL_WINDOWPOS_CENTERED,
 	SDL_WINDOWPOS_CENTERED,
 	(BOARD_WIDTH + ORANGE_BUTTON_WIDTH)*SCALE_FACTOR,
@@ -148,7 +148,9 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_FreeSurface(src);
 	// Menu display
 	updateWindow(0, 0, pWinGame, pBackgroundGame);
-	setupBoard(g, pWinGame);
+
+	if(!newOrLoad){setupNewBoard(g, pWinGame);}
+	else{setupSavedBoard(g, pWinGame);}
 
 	src = SDL_LoadBMP("./resources/images/orangeButton.bmp");
 	SDL_Surface* pButton = SDL_CreateRGBSurface(0, ORANGE_BUTTON_WIDTH*SCALE_FACTOR, ORANGE_BUTTON_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
@@ -191,7 +193,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_BlitScaled(src, NULL, pYellow, NULL);
 	SDL_FreeSurface(src);
 
-	createSave("sauvegarde", g);
+	newOrLoad == 0 ? createSave("sauvegarde", g) : NULL;
 
 
 	//victory contains the player who won this turn (0 if none of them, 3 if both loosed)
@@ -245,7 +247,43 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	SDL_DestroyWindow(pWinGame);
 }
 
-void continueGame(){}
+void setupSavedBoard(Game* g, SDL_Window* pWindow){
+	loadSave(g, "GoodSave");
+	SDL_Surface* src = SDL_LoadBMP("./resources/images/BlackPiece.bmp");
+	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pBlackPiece, NULL);
+	SDL_FreeSurface(src);
+
+	src = SDL_LoadBMP("./resources/images/RedPiece.bmp");
+	SDL_Surface* pRedPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
+	SDL_FillRect(pRedPiece, NULL, SDL_MapRGB(pRedPiece->format, 255, 0, 0));
+	SDL_BlitScaled(src, NULL, pRedPiece, NULL);
+	SDL_FreeSurface(src);
+
+	SDL_Surface* p1st = (g->gameMode == 2) ? pBlackPiece : pRedPiece;
+	SDL_Surface* p2nd = (g->gameMode == 2) ? pRedPiece : pBlackPiece;
+
+	for(int i = 0; i<9; i++){
+		for(int j = 0; j<9; j++){
+			if(g->map[i][j]==1){
+				printf("kikouyolo");
+
+				updateWindow((DECAY_PIECES + OUTBORDER + i*(CASE_WIDTH + INBORDER ))*SCALE_FACTOR,
+										(DECAY_PIECES + OUTBORDER + j*(CASE_HEIGHT + INBORDER))*SCALE_FACTOR,
+										pWindow, p1st);  //Positioning 1st player token
+			}
+			updateWindow((DECAY_PIECES + OUTBORDER + i*(CASE_WIDTH + INBORDER))*SCALE_FACTOR,
+									(DECAY_PIECES + OUTBORDER + 8 * (CASE_HEIGHT + INBORDER) - j*(CASE_HEIGHT + INBORDER))*SCALE_FACTOR,
+									pWindow, p2nd);  //Positioning 2nd player token
+		}
+	}
+
+	SDL_FreeSurface(p1st);
+	SDL_FreeSurface(p2nd);
+	SDL_FreeSurface(pBlackPiece);
+	SDL_FreeSurface(pRedPiece);
+}
 
 void rules(Game* g, char* name, Texts* texts, SDL_Color textColor, Parameters param){
 	FILE* rules = fopen(name, "r"); //"r" for "read"
@@ -268,9 +306,9 @@ void rules(Game* g, char* name, Texts* texts, SDL_Color textColor, Parameters pa
 	SDL_FillRect(pButton, NULL, SDL_MapRGB(pButton->format, 0, 0, 0));
 	SDL_BlitScaled(src, NULL, pButton, NULL);
 	updateWindow(RULES_WIDTH*SCALE_FACTOR, SCALE_FACTOR*RULES_HEIGHT/2 - ORANGE_BUTTON_HEIGHT, pWinRules, pButton); //Positioning the button
-	
+
 	TTF_Font* police = TTF_OpenFont("./resources/asman.ttf", 15*SCALE_FACTOR);
-	
+
 	SDL_Surface* buttonText = TTF_RenderText_Blended(police, texts[param.lang].inGame[1], textColor);
 	int buttonX = SCALE_FACTOR*(RULES_WIDTH+(pButton->w-buttonText->w)/2);
 	int buttonY = SCALE_FACTOR*RULES_HEIGHT/2 - ORANGE_BUTTON_HEIGHT + buttonText->h/2;
@@ -279,7 +317,7 @@ void rules(Game* g, char* name, Texts* texts, SDL_Color textColor, Parameters pa
 	int lineSize = 200;
 	char line[lineSize];
 	while(fgets(line, lineSize, rules)!=NULL){
-		
+
 	}
 	//events
 	while(1){
@@ -295,12 +333,12 @@ void rules(Game* g, char* name, Texts* texts, SDL_Color textColor, Parameters pa
 				if (event.button.button == SDL_BUTTON_LEFT){
 					int xM = event.button.x;
 					int yM = event.button.y;
-					if(isIn(xM, yM, buttonX, buttonY, pButton->w, pButton->h)){ 
+					if(isIn(xM, yM, buttonX, buttonY, pButton->w, pButton->h)){
 						break;
 					}
 				}
 		}
-	
+
 	}
 	}
 	//never used but safer
@@ -404,7 +442,7 @@ char isIn(int xM, int yM, int x, int y, int w, int h){
 	return ((xM > x && xM < x+w) && (yM > y && yM < y+h));
 }
 
-void setupBoard(Game *g, SDL_Window* pWindow){
+void setupNewBoard(Game *g, SDL_Window* pWindow){
 	SDL_Surface* src = SDL_LoadBMP("./resources/images/BlackPiece.bmp");
 	SDL_Surface* pBlackPiece = SDL_CreateRGBSurface(0, PIECE_WIDTH*SCALE_FACTOR, PIECE_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
 	SDL_FillRect(pBlackPiece, NULL, SDL_MapRGB(pBlackPiece->format, 255, 0, 0));
@@ -545,7 +583,7 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 					tmpArray = showPossible(g, c1, g->currentPlayer);
 					displayPossibilities(g, pWindow, tmpArray);
 					printf("new first clic %d : %d \n",c1.x,c1.y);
-					
+
 				}else if (depth==1){
 					c2.x = c.x ; c2.y = c.y ; depth=2;
 					printf("second clic %d : %d \n",c2.x, c2.y);
@@ -568,8 +606,9 @@ Coordinates* inGameEvents(Game *g, SDL_Window* pWindow, int buttonX, int buttonY
 	Coordinates *tabCatch;
 	tabCatch = checkCatch(g, c2); //the tab of to be caught token
 	catchPiece(g,tabCatch);
-	
+
 	//here comes the save
+	addToSave("sauvegarde", c1, c2, tabCatch, g->turn, g->currentPlayer);
 
 	//creating the returned tab for graphical
 	Coordinates *tab;
@@ -591,7 +630,7 @@ void displayPossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord){
 	int n = coord[0].x;
 	for(int i = 1; i<n; i++){
 		SDL_Surface* src = SDL_LoadBMP("./resources/images/Green.bmp");
-		SDL_Surface* pGreenCase = SDL_CreateRGBSurface(0, CASE_WIDTH*SCALE_FACTOR, CASE_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
+		SDL_Surface* pGreenCase = SDL_CreateRGBSurface(0, CASE_WIDTH*SCALE_FACTOR-4, CASE_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
 		SDL_FillRect(pGreenCase, NULL, SDL_MapRGB(pGreenCase->format, 255, 0, 0));
 		SDL_BlitScaled(src, NULL, pGreenCase, NULL);
 		SDL_FreeSurface(src);
@@ -603,7 +642,7 @@ void hidePossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord){
 	int n = coord[0].x;
 	for(int i = 1; i<n; i++){
 		SDL_Surface* src = SDL_LoadBMP("./resources/images/Yellow.bmp");
-		SDL_Surface* pYellowCase = SDL_CreateRGBSurface(0, CASE_WIDTH*SCALE_FACTOR, CASE_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
+		SDL_Surface* pYellowCase = SDL_CreateRGBSurface(0, CASE_WIDTH*SCALE_FACTOR-4, CASE_HEIGHT*SCALE_FACTOR, 32, 0, 0, 0, 0);
 		SDL_FillRect(pYellowCase, NULL, SDL_MapRGB(pYellowCase->format, 255, 0, 0));
 		SDL_BlitScaled(src, NULL, pYellowCase, NULL);
 		SDL_FreeSurface(src);
