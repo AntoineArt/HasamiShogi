@@ -21,7 +21,7 @@ Coordinates* aiPlay(Game *g) {
 	while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
 		//printf("selecting best move ...");
 		int bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
-		
+
 		int n;
 		for (n=0; n<(root->nbofSons)-1; n++) {//finding the selected move between the available one
 			if (((root->sons[n])->value)==bestmove) {
@@ -42,7 +42,7 @@ Coordinates* aiPlay(Game *g) {
 	printTab(tabCatch,tabCatch[0].x);
 	catchPiece(g,tabCatch);
 	//here comes the save
-	
+
 	//creating the returned tab for graphical update
 	tab = (Coordinates*) malloc(sizeof(Coordinates)*(tabCatch[0].x+2)); //adding 2 for c1 and c2
 	if (tab == NULL) {exit(0);} // if alloc failed, immediatly quit
@@ -137,7 +137,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 			//printf("friendlytoken");
 			//printf("\n c1 %d :%d \n",c1.x,c1.y);
 			Coordinates* moves = showPossible(g, c1, player); //available moves
-			
+
 			int j;
 			for (j = 1 ; j<(moves[0].x) ; j++) {
 				dad->sons[dad->nbofSons] = (Tree*) malloc(sizeof(Tree));
@@ -146,7 +146,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				(dad->sons[dad->nbofSons])->value = 0 ; //is overwritten by alpha beta
 				(dad->sons[dad->nbofSons])->c1 = c1;
 				(dad->sons[dad->nbofSons])->c2 = moves[j];
-				
+
 				//doing the play
 				printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
 				movePiece(g, c1, moves[j]);
@@ -154,28 +154,28 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				tabCatch = checkCatch(g, moves[j]); //the tab of to be caught token
 				printTab(tabCatch,tabCatch[0].x);
 				catchPiece(g,tabCatch);
-				
+
 				(dad->sons[dad->nbofSons])->nbofSons = 0; //initialize the value
 				//recursive call
 				printf("--> %d ",depth);
 				buildTree(g, depth-1, (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
 				printf("<-- %d \n",depth);
 				(dad->nbofSons)++; //incremente the son number accordingly
-				
+
 				//reverting the play
 				releasePiece(g, tabCatch, 3-player);
 				movePiece(g, moves[j], c1);
 				free(tabCatch);
-				
+
 			}
 			free(moves);
 		}
 		free(friendlyTokenTab);
-	} else { //depth is 0 -> dad is forced as a leave				
+	} else { //depth is 0 -> dad is forced as a leave
 		dad->value = evaluate(g, player); //needs to be accurate
 		dad->nbofSons = 0; //means is a leave
 		dad->sons = NULL; //be carefull
-		
+
 		//free(tabCatch);
 	}
 }
@@ -188,7 +188,6 @@ void freeTree(Tree *t) {
 	free(t->sons);
 	free(t);
 }
-
 
 
 Coordinates* friendlyToken(Game* g, int player) {
