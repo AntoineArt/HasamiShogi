@@ -6,31 +6,33 @@
 #include "../resources/lang.c"
 
 const int DEFAULT_WIDTH = 1920;
-const int DEFAULT_HEIGTH = 1080;
+const int DEFAULT_HEIGHT = 1080;
 const int BOARD_WIDTH = 1200;
-const int BOARD_HEIGTH = 1353;
+const int BOARD_HEIGHT = 1353;
 
 const int VICTORY_WIDTH = 600;
 const int VICTORY_HEIGHT = 600;
 const int DEFEAT_WIDTH = 894;
-const int DEFEAT_HEIGTH = 762;
+const int DEFEAT_HEIGHT = 762;
+const int RULES_WIDTH = 600;
+const int RULES_HEIGHT = 800;
 
 const int ORANGE_BUTTON_WIDTH = 2400/8;
-const int ORANGE_BUTTON_HEIGTH = 821/8;
+const int ORANGE_BUTTON_HEIGHT = 821/8;
 
 const int DECAY_PIECES = 68;
 const int OUTBORDER = 8;
 const int INBORDER = 4;
 
 const int CASE_WIDTH=115;
-const int CASE_HEIGTH=131;
+const int CASE_HEIGHT=131;
 
 const int PIECE_WIDTH = 98;
-const int PIECE_HEIGTH = 120;
+const int PIECE_HEIGHT = 120;
 
 const double SCALE_FACTOR = 0.65;
 
-const int GAME_MODE_DEFAULT = 0; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
+const int GAME_MODE_DEFAULT = 1; // 0 : JcJ, 1: JvC, 2 : CvJ, 3 : CvC (watch mode)
 const int VARIANT_DEFAULT = 1; // 0 : 9 pieces, 1 : 18 pieces
 const int LANG_DEFAULT = 0; // 0 means english , 1 means french
 
@@ -119,7 +121,7 @@ void hidePossibilities(Game* g, SDL_Window* pWindow, Coordinates* coord);
 /*
   Fonction who display the rules in a separate window
 */
-void rules();
+void rules(Game* g, char* name, Texts* texts, SDL_Color textColor, Parameters param);
 
 /*
   Checks if (xM, yM) is in the box defined by x, y, w and h

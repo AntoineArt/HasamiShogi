@@ -52,9 +52,9 @@ void loadSave(Game* g, char* name){
   FILE* save = fopen(name, "r"); //"r" for "read"
 	if(save){
 		//Declaration zone
+		const char del = "/";
 		int lineSize = 100;
 		char line[lineSize];
-		char* eltsArray[30];
 		char* charElt = NULL;
 		int* gvars = malloc(sizeof(int)*lineSize);
 		if (gvars==NULL) {exit(0);}
@@ -62,7 +62,7 @@ void loadSave(Game* g, char* name){
 		//First line get
 		if (fgets(line, lineSize, save)!=NULL) { //this lineSize might be shorter or longer tha others because it is the first and has different purpose
 			i=1;
-			while((charElt = strsep(eltsArray, "/")) != NULL){
+			while((charElt = strtok(line, &del)) != NULL){ //not completly sure about the pointer and addresses we're giving, but strsep is not C99 but gnu99 which is affecting the portability
         			gvars[i] = strToInt(charElt);
         			i++;
     			}
@@ -81,7 +81,7 @@ void loadSave(Game* g, char* name){
 		if (elt==NULL) {exit(0);}
  		while(fgets(line, lineSize, save)!=NULL){
 			i=1;
-			while((charElt = strsep(eltsArray, "/")) != NULL){
+			while((charElt = strtok(line, &del)) != NULL){
         			elt[i] = strToInt(charElt);
         			i++;
     			}
