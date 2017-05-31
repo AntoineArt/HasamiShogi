@@ -199,6 +199,7 @@ void newGame(Game *g, Parameters param, TTF_Font* police, Texts* texts, SDL_Colo
 	Coordinates* updatedCases;
 	int i;
 	while (victory==0){
+		//printBoard(g);
 		if ( (g->gameMode==0)
 		|| ((g->gameMode==1)&&(g->currentPlayer==1))
 		|| ((g->gameMode==2)&&(g->currentPlayer==2)) )

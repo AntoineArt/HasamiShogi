@@ -26,7 +26,6 @@ void initGame(Game *g, int gameMode, int var)
 		}
 	}
 
-
 	switch (g->var)
 	{
 		case 0: //classical ashami shogi

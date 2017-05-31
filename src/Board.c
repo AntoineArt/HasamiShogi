@@ -120,7 +120,7 @@ void printBoard(Game *g)
 	for (i=0; i<9; i++) {
 		int j;
 		for (j=0; j<9 ; j++) {
-			printf("| %d |",g->map[i][j]);
+			printf("| %d |",g->map[j][i]);
 		}
 		printf(" \n");
 	}
