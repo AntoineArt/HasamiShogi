@@ -32,10 +32,10 @@ void releasePiece(Game *g, Coordinates *tab, int player)
 		write(g,player,tab[i]);
 	}
 	if(player==1){
-		g->countPlayer1 = g->countPlayer1 + tab[0]-1;
+		g->countPlayer1 = g->countPlayer1 + tab[0].x-1;
 	}
 	else{
-		g->countPlayer2 = g->countPlayer2 + tab[0]-1;
+		g->countPlayer2 = g->countPlayer2 + tab[0].x-1;
 	}
 }
 
