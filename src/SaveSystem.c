@@ -1,6 +1,7 @@
-#include  <stdio.h>
+#include <stdio.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <math.h>
 #include "./headers/SaveSystem.h"
 
@@ -48,31 +49,61 @@ void addToSave(char* name, Coordinates c1, Coordinates c2, Coordinates* takenPie
 
 void loadSave(Game* g, char* name){
 
-  FILE* save = fopen(name, "r");
+  FILE* save = fopen(name, "r"); //"r" for "read"
 	if(save){
 		//Declaration zone
 		int lineSize = 100;
 		char line[lineSize];
 		char* eltsArray[30];
-
-
+		char* charElt = NULL;
+		int* gvars = malloc(sizeof(int)*lineSize);
+		if (gvars==NULL) {exit(0);}
+		int i;
 		//First line get
-		fgets(line, lineSize, save);
-		strsep(eltsArray, "/");
-		g->gameMode = strToInt(eltsArray[0]);
-		g->var = strToInt(eltsArray[1]);
-
-		//Movements get
-		char element[10];
-		int i = 0;
-		while(fgets(line, lineSize, save)){
-			char *eltsArray[30]; //reinitializing eltsArray
-			strsep(eltsArray, "/");
-			while(strcmp(eltsArray[i], "stop") != 1){ //we check the assignation worked
-
-
-			}
+		if (fgets(line, lineSize, save)!=NULL) { //this lineSize might be shorter or longer tha others because it is the first and has different purpose
+			i=1;
+			while((charElt = strsep(eltsArray, "/")) != NULL){
+        			gvars[i] = strToInt(charElt);
+        			i++;
+    			}
+    			gvars[0]=i;
+			g->gameMode = gvars[1];
+			g->var = gvars[2];
 		}
+		free(gvars);
+		
+		//Movements get
+		int player;
+		Coordinates c1;
+		Coordinates c2;
+		Coordinates *tabCatch;
+		int* elt = malloc(sizeof(int)*lineSize);
+		if (elt==NULL) {exit(0);}
+ 		while(fgets(line, lineSize, save)!=NULL){
+			i=1;
+			while((charElt = strsep(eltsArray, "/")) != NULL){
+        			elt[i] = strToInt(charElt);
+        			i++;
+    			}
+    			elt[0]=i;
+    			player = elt[1];
+    			c1.x = elt[2];
+    			c1.y = elt[3];
+    			c2.x = elt[4];
+    			c2.y = elt[5];
+    			tabCatch = (Coordinates*) malloc(sizeof(Coordinates)*(elt[0]-6)/2); 
+			if (tabCatch == NULL) {exit(0);} // if alloc failed, immediatly quit
+			int j = 0;
+    			for (i=0; i<elt[0]-6; i=i+2) {
+    				tabCatch[j].x = elt[i+6];
+    				tabCatch[j].y = elt[i+1+6];
+    				j++;
+    			}
+    			movePiece(g, c1, c2);
+    			catchPiece(g, tabCatch);
+    			free(tabCatch);
+		}
+		free(elt);
 	}
 
   fclose(save);

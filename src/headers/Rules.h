@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "Types.h"
-#include "../SaveSystem.c"
+#include "Types.h"
 
 /*
 	Reset the board b to it's basic state

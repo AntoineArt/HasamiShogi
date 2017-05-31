@@ -1,4 +1,5 @@
-#include "./Types.h"
+#include "../Board.c"
+#include <string.h>
 
 /*
 	Create a .txt save the name given

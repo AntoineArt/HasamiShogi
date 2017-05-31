@@ -1,4 +1,4 @@
-#include "../Board.c"
+#include "../SaveSystem.c"
 #include <math.h> //needed for infinite value
 
 /*

@@ -14,21 +14,25 @@ Coordinates* aiPlay(Game *g) {
 	c1.y=-1;
 	c2.x=-1;
 	c2.y=-1;
+	printf("building tree ...");
 	buildTree(g, depth, root, g->currentPlayer);
-	while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
+	printf("done \n");
+	//while (checkMove(g, c1, c2, g->currentPlayer) != 1) { //useless by construction but still safer
+		printf("selecting best move ...");
 		int bestmove = alphabeta(g, root, depth, ninf, pinf, g->currentPlayer); //find the path through victory
-		int i;
-		for (i=0; i<(root->nbofSons)-1; i++) {//finding the selected move between the available one
-			if (((root->sons[i])->value)==bestmove) {
-				c1.x = (((root->sons)[i])->c1.x);
-				c1.y = (((root->sons)[i])->c1.y);
-				c2.x = (((root->sons)[i])->c2.x);
-				c2.y = (((root->sons)[i])->c2.y);
+		int n;
+		for (n=0; n<(root->nbofSons)-1; n++) {//finding the selected move between the available one
+			if (((root->sons[n])->value)==bestmove) {
+				c1.x = (((root->sons)[n])->c1.x);
+				c1.y = (((root->sons)[n])->c1.y);
+				c2.x = (((root->sons)[n])->c2.x);
+				c2.y = (((root->sons)[n])->c2.y);
 				break; //not usefull to go further
 			}
 		}
-		//printf("%d : %d -> %d : %d with value %d \n",c1.x,c1.y,c2.x,c2.y,bestmove);
-	}
+		printf("done \n");
+		printf("%d : %d -> %d : %d with value %d \n",c1.x,c1.y,c2.x,c2.y,bestmove);
+	//}
 	Coordinates *tab;
 	movePiece(g, c1, c2); //the move is safe by construction
 	Coordinates *tabCatch;
@@ -122,7 +126,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 		int i;
 		for (i=1; i<friendlyTokenTab[0].x; i++) {
 			Coordinates c1 = friendlyTokenTab[i];
-			printf("\n c1 %d :%d \n",c1.x,c1.y);
+			//printf("\n c1 %d :%d \n",c1.x,c1.y);
 			Coordinates* moves = showPossible(g, c1, player); //available moves
 			printTab(moves,moves[0].x);
 			int j;
@@ -144,12 +148,12 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 				//recursive call
 				printf("--> %d ",depth);
 				buildTree(g, depth-1, (dad->sons[dad->nbofSons]), (3-player)); //creates the subtree of the new son
-				printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
+				//printf(" c1 %d : %d -> c2 %d : %d \n",c1.x,c1.y,moves[j].x,moves[j].y);
 				printf("<-- %d \n",depth);
 				(dad->nbofSons)++; //incremente the son number accordingly
 				
 				//reverting the play
-				releasePiece(g,tabCatch,player);
+				releasePiece(g, tabCatch, 3-player);
 				movePiece(g, moves[j], c1);
 				free(tabCatch);
 				
@@ -158,10 +162,10 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 		}
 		free(friendlyTokenTab);
 	} else { //depth is 0 -> dad is forced as a leave
-		printf("depth %d",depth);
+		//printf("depth %d",depth);
 		//do the play
 		movePiece(g, dad->c1, dad->c2);
-		printf(" c1 %d : %d -> c2 %d : %d \n",dad->c1.x,dad->c1.y,dad->c2.x,dad->c2.y);
+		//printf(" c1 %d : %d -> c2 %d : %d \n",dad->c1.x,dad->c1.y,dad->c2.x,dad->c2.y);
 		Coordinates *tabCatch;
 		tabCatch = checkCatch(g, dad->c2); //the tab of to be caught token
 		catchPiece(g,tabCatch);
@@ -171,7 +175,7 @@ void buildTree(Game* g, int depth, Tree *dad, int player) {
 		dad->sons = NULL; //be carefull
 		
 		//reverse the play
-		releasePiece(g,tabCatch,player);
+		releasePiece(g,tabCatch, 3-player);
 		movePiece(g, dad->c2, dad->c1); //a ashami shogi play can always be reversed
 		free(tabCatch);
 	}
